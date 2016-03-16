@@ -1,29 +1,43 @@
+body {
+	padding-top: 60px;
+}
+
 .mainContainer .panel{
 	float: left;
 	margin-right: 5px;
 	border: 1px solid gray;
-	min-height: 520px;
+	min-height: 538px;
 }
 
 .mainContainer .memeContainer{
 	width:200px;
-	
+	position: fixed;
 }
 .mainContainer .toolsContainer{
 	width:200px;
-	
+	height: 562px;
+	overflow: auto;
+	position: fixed;
+	margin-left: 860px;
 }
 .mainContainer .canvasContainer{
-	width:560px;
+	width:650px;
+	margin-left: 205px;
+}
+.mainContainer .footerText{
+	margin: 10px 220px;
+	width:650px;
+}
+.drawingTools{
+	padding: 5px;
 }
 
-.drawingTools{
-	min-height: 30px;
+.panelTools{
 	padding: 5px;
 }
 
 .canvasArea{
-	height: 460px;
+	min-height: 484px;
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
 }
@@ -46,7 +60,7 @@
 }
 .searchLoading{
 	float: right;
-	padding-top: 26px;
+	padding-top: 13px;
 	padding-right: 5px;
 }
 .loadingGif{
@@ -54,11 +68,29 @@
 }
 .memeContainer .memeList{
 	overflow: auto;
-	height: 440px;
+	height: 421px;
 }
-.memeImage{
+.memeContainer .templateTool{
+	padding: 5px;
+	border-top: 1px solid black;
+}
+.memeContainer .templateTool select{
+	width:190px;
+}
+.memeImage {
 	width: 77px;
 	height: 77px;
+	margin-left: 13px;
+	margin-top: 10px;
+	z-index: 100;
+}
+.ui-draggable-dragging {
+	max-width: 650px;
+	max-height: 250px;
+}
+.categoryImage {
+	width: 64px;
+	height: 64px;
 	margin-left: 13px;
 	margin-top: 10px;
 	z-index: 100;
@@ -69,23 +101,26 @@
 .tinyButtons{
 	padding: 1px;
 }
-.layesTable .selected td{
+.layesTable .selected td, .framesTable .selected{
 	background: #EEE;
 }
 .layesTable th:first-child{
 	width: 160px;
 }
-.textTool {
+.textTool, .freeHand , .animateTool {
 	padding: 5px;
 	display: none;
 }
-.textTool input{
+.toolContainer input[type=text], textarea{
 	width: 175px;
 }
-.textTool select{
+.toolContainer select{
 	width: 185px;
 }
-
 .rightBtn{
 	float:right;
+	margin-left: 5px;
+}
+.selectObject, .categoryImage, .frameData {
+	cursor: pointer;
 }

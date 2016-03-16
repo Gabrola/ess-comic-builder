@@ -1,7 +1,4121 @@
 /* Fabric.js Copyright 2008-2012, Bitsonnet (Juriy Zaytsev, Maxim Chernyak) */
-var fabric=fabric||{version:"0.8.8"};if(typeof exports!="undefined"){exports.fabric=fabric}if(typeof document!="undefined"&&typeof window!="undefined"){fabric.document=document;fabric.window=window}else{fabric.document=require("jsdom").jsdom("<!DOCTYPE html><html><head></head><body></body></html>");fabric.window=fabric.document.createWindow()}fabric.isTouchSupported="ontouchstart" in fabric.document.documentElement;if(!this.JSON){this.JSON={}}(function(){function f(n){return n<10?"0"+n:n}if(typeof Date.prototype.toJSON!=="function"){Date.prototype.toJSON=function(key){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null};String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(key){return this.valueOf()}}var cx=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={"\b":"\\b","\t":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},rep;function quote(string){escapable.lastIndex=0;return escapable.test(string)?'"'+string.replace(escapable,function(a){var c=meta[a];return typeof c==="string"?c:"\\u"+("0000"+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+string+'"'}function str(key,holder){var i,k,v,length,mind=gap,partial,value=holder[key];if(value&&typeof value==="object"&&typeof value.toJSON==="function"){value=value.toJSON(key)}if(typeof rep==="function"){value=rep.call(holder,key,value)}switch(typeof value){case"string":return quote(value);case"number":return isFinite(value)?String(value):"null";case"boolean":case"null":return String(value);case"object":if(!value){return"null"}gap+=indent;partial=[];if(Object.prototype.toString.apply(value)==="[object Array]"){length=value.length;for(i=0;i<length;i+=1){partial[i]=str(i,value)||"null"}v=partial.length===0?"[]":gap?"[\n"+gap+partial.join(",\n"+gap)+"\n"+mind+"]":"["+partial.join(",")+"]";gap=mind;return v}if(rep&&typeof rep==="object"){length=rep.length;for(i=0;i<length;i+=1){k=rep[i];if(typeof k==="string"){v=str(k,value);if(v){partial.push(quote(k)+(gap?": ":":")+v)}}}}else{for(k in value){if(Object.hasOwnProperty.call(value,k)){v=str(k,value);if(v){partial.push(quote(k)+(gap?": ":":")+v)}}}}v=partial.length===0?"{}":gap?"{\n"+gap+partial.join(",\n"+gap)+"\n"+mind+"}":"{"+partial.join(",")+"}";gap=mind;return v}}if(typeof JSON.stringify!=="function"){JSON.stringify=function(value,replacer,space){var i;gap="";indent="";if(typeof space==="number"){for(i=0;i<space;i+=1){indent+=" "}}else{if(typeof space==="string"){indent=space}}rep=replacer;if(replacer&&typeof replacer!=="function"&&(typeof replacer!=="object"||typeof replacer.length!=="number")){throw new Error("JSON.stringify")}return str("",{"":value})}}if(typeof JSON.parse!=="function"){JSON.parse=function(text,reviver){var j;function walk(holder,key){var k,v,value=holder[key];if(value&&typeof value==="object"){for(k in value){if(Object.hasOwnProperty.call(value,k)){v=walk(value,k);if(v!==undefined){value[k]=v}else{delete value[k]}}}}return reviver.call(holder,key,value)}text=String(text);cx.lastIndex=0;if(cx.test(text)){text=text.replace(cx,function(a){return"\\u"+("0000"+a.charCodeAt(0).toString(16)).slice(-4)})}if(/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,"@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,"]").replace(/(?:^|:|,)(?:\s*\[)+/g,""))){j=eval("("+text+")");return typeof reviver==="function"?walk({"":j},""):j}throw new SyntaxError("JSON.parse")}}}());
-/*
- * Copyright (c) 2009 Simo Kinnunen.
- * Licensed under the MIT license.
- */
-var Cufon=(function(){var k=function(){return k.replace.apply(null,arguments)};var u=k.DOM={ready:(function(){var z=false,B={loaded:1,complete:1};var y=[],A=function(){if(z){return}z=true;for(var C;C=y.shift();C()){}};if(fabric.document.addEventListener){fabric.document.addEventListener("DOMContentLoaded",A,false);fabric.window.addEventListener("pageshow",A,false)}if(!fabric.window.opera&&fabric.document.readyState){(function(){B[fabric.document.readyState]?A():setTimeout(arguments.callee,10)})()}if(fabric.document.readyState&&fabric.document.createStyleSheet){(function(){try{fabric.document.body.doScroll("left");A()}catch(C){setTimeout(arguments.callee,1)}})()}o(fabric.window,"load",A);return function(C){if(!arguments.length){A()}else{z?C():y.push(C)}}})()};var l=k.CSS={Size:function(z,y){this.value=parseFloat(z);this.unit=String(z).match(/[a-z%]*$/)[0]||"px";this.convert=function(A){return A/y*this.value};this.convertFrom=function(A){return A/this.value*y};this.toString=function(){return this.value+this.unit}},getStyle:function(y){return new a(y.style)},quotedList:i(function(B){var A=[],z=/\s*((["'])([\s\S]*?[^\\])\2|[^,]+)\s*/g,y;while(y=z.exec(B)){A.push(y[3]||y[1])}return A}),ready:(function(){var A=false;var z=[],B=function(){A=true;for(var D;D=z.shift();D()){}};var y=Object.prototype.propertyIsEnumerable?f("style"):{length:0};var C=f("link");u.ready(function(){var G=0,F;for(var E=0,D=C.length;F=C[E],E<D;++E){if(!F.disabled&&F.rel.toLowerCase()=="stylesheet"){++G}}if(fabric.document.styleSheets.length>=y.length+G){B()}else{setTimeout(arguments.callee,10)}});return function(D){if(A){D()}else{z.push(D)}}})(),supports:function(A,z){var y=fabric.document.createElement("span").style;if(y[A]===undefined){return false}y[A]=z;return y[A]===z},textAlign:function(B,A,y,z){if(A.get("textAlign")=="right"){if(y>0){B=" "+B}}else{if(y<z-1){B+=" "}}return B},textDecoration:function(D,C){if(!C){C=this.getStyle(D)}var z={underline:null,overline:null,"line-through":null};for(var y=D;y.parentNode&&y.parentNode.nodeType==1;){var B=true;for(var A in z){if(z[A]){continue}if(C.get("textDecoration").indexOf(A)!=-1){z[A]=C.get("color")}B=false}if(B){break}C=this.getStyle(y=y.parentNode)}return z},textShadow:i(function(C){if(C=="none"){return null}var B=[],D={},y,z=0;var A=/(#[a-f0-9]+|[a-z]+\(.*?\)|[a-z]+)|(-?[\d.]+[a-z%]*)|,/ig;while(y=A.exec(C)){if(y[0]==","){B.push(D);D={},z=0}else{if(y[1]){D.color=y[1]}else{D[["offX","offY","blur"][z++]]=y[2]}}}B.push(D);return B}),color:i(function(z){var y={};y.color=z.replace(/^rgba\((.*?),\s*([\d.]+)\)/,function(B,A,C){y.opacity=parseFloat(C);return"rgb("+A+")"});return y}),textTransform:function(z,y){return z[{uppercase:"toUpperCase",lowercase:"toLowerCase"}[y.get("textTransform")]||"toString"]()}};function q(z){var y=this.face=z.face;this.glyphs=z.glyphs;this.w=z.w;this.baseSize=parseInt(y["units-per-em"],10);this.family=y["font-family"].toLowerCase();this.weight=y["font-weight"];this.style=y["font-style"]||"normal";this.viewBox=(function(){var B=y.bbox.split(/\s+/);var A={minX:parseInt(B[0],10),minY:parseInt(B[1],10),maxX:parseInt(B[2],10),maxY:parseInt(B[3],10)};A.width=A.maxX-A.minX,A.height=A.maxY-A.minY;A.toString=function(){return[this.minX,this.minY,this.width,this.height].join(" ")};return A})();this.ascent=-parseInt(y.ascent,10);this.descent=-parseInt(y.descent,10);this.height=-this.ascent+this.descent}function e(){var z={},y={oblique:"italic",italic:"oblique"};this.add=function(A){(z[A.style]||(z[A.style]={}))[A.weight]=A};this.get=function(E,F){var D=z[E]||z[y[E]]||z.normal||z.italic||z.oblique;if(!D){return null}F={normal:400,bold:700}[F]||parseInt(F,10);if(D[F]){return D[F]}var B={1:1,99:0}[F%100],H=[],C,A;if(B===undefined){B=F>400}if(F==500){F=400}for(var G in D){G=parseInt(G,10);if(!C||G<C){C=G}if(!A||G>A){A=G}H.push(G)}if(F<C){F=C}if(F>A){F=A}H.sort(function(J,I){return(B?(J>F&&I>F)?J<I:J>I:(J<F&&I<F)?J>I:J<I)?-1:1});return D[H[0]]}}function p(){function A(C,D){if(C.contains){return C.contains(D)}return C.compareDocumentPosition(D)&16}function y(D){var C=D.relatedTarget;if(!C||A(this,C)){return}z(this)}function B(C){z(this)}function z(C){setTimeout(function(){k.replace(C,d.get(C).options,true)},10)}this.attach=function(C){if(C.onmouseenter===undefined){o(C,"mouseover",y);o(C,"mouseout",y)}else{o(C,"mouseenter",B);o(C,"mouseleave",B)}}}function x(){var A={},y=0;function z(B){return B.cufid||(B.cufid=++y)}this.get=function(B){var C=z(B);return A[C]||(A[C]={})}}function a(y){var A={},z={};this.get=function(B){return A[B]!=undefined?A[B]:y[B]};this.getSize=function(C,B){return z[C]||(z[C]=new l.Size(this.get(C),B))};this.extend=function(B){for(var C in B){A[C]=B[C]}return this}}function o(z,y,A){if(z.addEventListener){z.addEventListener(y,A,false)}else{if(z.attachEvent){z.attachEvent("on"+y,function(){return A.call(z,fabric.window.event)})}}}function r(z,y){var A=d.get(z);if(A.options){return z}if(y.hover&&y.hoverables[z.nodeName.toLowerCase()]){b.attach(z)}A.options=y;return z}function i(y){var z={};return function(A){if(!z.hasOwnProperty(A)){z[A]=y.apply(null,arguments)}return z[A]}}function c(D,C){if(!C){C=l.getStyle(D)}var z=l.quotedList(C.get("fontFamily").toLowerCase()),B;for(var A=0,y=z.length;A<y;++A){B=z[A];if(h[B]){return h[B].get(C.get("fontStyle"),C.get("fontWeight"))}}return null}function f(y){return fabric.document.getElementsByTagName(y)}function g(){var y={},B;for(var A=0,z=arguments.length;A<z;++A){for(B in arguments[A]){y[B]=arguments[A][B]}}return y}function m(B,J,z,K,C,A){var I=K.separate;if(I=="none"){return w[K.engine].apply(null,arguments)}var H=fabric.document.createDocumentFragment(),E;var F=J.split(n[I]),y=(I=="words");if(y&&s){if(/^\s/.test(J)){F.unshift("")}if(/\s$/.test(J)){F.push("")}}for(var G=0,D=F.length;G<D;++G){E=w[K.engine](B,y?l.textAlign(F[G],z,G,D):F[G],z,K,C,A,G<D-1);if(E){H.appendChild(E)}}return H}function j(z,G){var A,y,D,F;for(var B=r(z,G).firstChild;B;B=D){D=B.nextSibling;F=false;if(B.nodeType==1){if(!B.firstChild){continue}if(!/cufon/.test(B.className)){arguments.callee(B,G);continue}else{F=true}}if(!y){y=l.getStyle(z).extend(G)}if(!A){A=c(z,y)}if(!A){continue}if(F){w[G.engine](A,null,y,G,B,z);continue}var E=B.data;if(typeof G_vmlCanvasManager!="undefined"){E=E.replace(/\r/g,"\n")}if(E===""){continue}var C=m(A,E,y,G,B,z);if(C){B.parentNode.replaceChild(C,B)}else{B.parentNode.removeChild(B)}}}var s=" ".split(/\s+/).length==0;var d=new x();var b=new p();var v=[];var w={},h={},t={engine:null,hover:false,hoverables:{a:true},printable:true,selector:(fabric.window.Sizzle||(fabric.window.jQuery&&function(y){return jQuery(y)})||(fabric.window.dojo&&dojo.query)||(fabric.window.$$&&function(y){return $$(y)})||(fabric.window.$&&function(y){return $(y)})||(fabric.document.querySelectorAll&&function(y){return fabric.document.querySelectorAll(y)})||f),separate:"words",textShadow:"none"};var n={words:/\s+/,characters:""};k.now=function(){u.ready();return k};k.refresh=function(){var A=v.splice(0,v.length);for(var z=0,y=A.length;z<y;++z){k.replace.apply(null,A[z])}return k};k.registerEngine=function(z,y){if(!y){return k}w[z]=y;return k.set("engine",z)};k.registerFont=function(A){var y=new q(A),z=y.family;if(!h[z]){h[z]=new e()}h[z].add(y);return k.set("fontFamily",'"'+z+'"')};k.replace=function(A,z,y){z=g(t,z);if(!z.engine){return k}if(typeof z.textShadow=="string"&&z.textShadow){z.textShadow=l.textShadow(z.textShadow)}if(!y){v.push(arguments)}if(A.nodeType||typeof A=="string"){A=[A]}l.ready(function(){for(var C=0,B=A.length;C<B;++C){var D=A[C];if(typeof D=="string"){k.replace(z.selector(D),z,true)}else{j(D,z)}}});return k};k.replaceElement=function(z,y){y=g(t,y);if(typeof y.textShadow=="string"&&y.textShadow){y.textShadow=l.textShadow(y.textShadow)}return j(z,y)};k.engines=w;k.fonts=h;k.getOptions=function(){return g(t)};k.set=function(y,z){t[y]=z;return k};return k})();Cufon.registerEngine("canvas",(function(){var a=Cufon.CSS.supports("display","inline-block");var g=!a&&(fabric.document.compatMode=="BackCompat"||/frameset|transitional/i.test(fabric.document.doctype.publicId));var h=fabric.document.createElement("style");h.type="text/css";var f=fabric.document.createTextNode(".cufon-canvas{text-indent:0}@media screen,projection{.cufon-canvas{display:inline;display:inline-block;position:relative;vertical-align:middle"+(g?"":";font-size:1px;line-height:1px")+"}.cufon-canvas .cufon-alt{display:-moz-inline-box;display:inline-block;width:0;height:0;overflow:hidden}"+(a?".cufon-canvas canvas{position:relative}":".cufon-canvas canvas{position:absolute}")+"}@media print{.cufon-canvas{padding:0 !important}.cufon-canvas canvas{display:none}.cufon-canvas .cufon-alt{display:inline}}");try{h.appendChild(f)}catch(d){h.setAttribute("type","text/css");h.styleSheet.cssText=f.data}fabric.document.getElementsByTagName("head")[0].appendChild(h);function c(q,j){var o=0,n=0;var e=[],p=/([mrvxe])([^a-z]*)/g,l;generate:for(var k=0;l=p.exec(q);++k){var m=l[2].split(",");switch(l[1]){case"v":e[k]={m:"bezierCurveTo",a:[o+~~m[0],n+~~m[1],o+~~m[2],n+~~m[3],o+=~~m[4],n+=~~m[5]]};break;case"r":e[k]={m:"lineTo",a:[o+=~~m[0],n+=~~m[1]]};break;case"m":e[k]={m:"moveTo",a:[o=~~m[0],n=~~m[1]]};break;case"x":e[k]={m:"closePath",a:[]};break;case"e":break generate}j[e[k].m].apply(j,e[k].a)}return e}function b(n,m){for(var k=0,j=n.length;k<j;++k){var e=n[k];m[e.m].apply(m,e.a)}}return function(ab,E,W,A,J,ac){var n=(E===null);var H=ab.viewBox;var o=W.getSize("fontSize",ab.baseSize);var U=W.get("letterSpacing");U=(U=="normal")?0:o.convertFrom(parseInt(U,10));var I=0,V=0,T=0,C=0;var G=A.textShadow,R=[];Cufon.textOptions.shadowOffsets=[];Cufon.textOptions.shadows=null;if(G){Cufon.textOptions.shadows=G;for(var aa=0,X=G.length;aa<X;++aa){var N=G[aa];var Q=o.convertFrom(parseFloat(N.offX));var P=o.convertFrom(parseFloat(N.offY));R[aa]=[Q,P];if(P<I){I=P}if(Q>V){V=Q}if(P>T){T=P}if(Q<C){C=Q}}}var ag=Cufon.CSS.textTransform(n?J.alt:E,W).split("");var e=0,D=null;var z=0,M=1,L=[];for(var aa=0,X=ag.length;aa<X;++aa){if(ag[aa]==="\n"){M++;if(e>z){z=e}L.push(e);e=0;continue}var B=ab.glyphs[ag[aa]]||ab.missingGlyph;if(!B){continue}e+=D=Number(B.w||ab.w)+U}L.push(e);e=Math.max(z,e);var m=[];for(var aa=L.length;aa--;){m[aa]=e-L[aa]}if(D===null){return null}V+=(H.width-D);C+=H.minX;var v,p;if(n){v=J;p=J.firstChild}else{v=fabric.document.createElement("span");v.className="cufon cufon-canvas";v.alt=E;p=fabric.document.createElement("canvas");v.appendChild(p);if(A.printable){var Y=fabric.document.createElement("span");Y.className="cufon-alt";Y.appendChild(fabric.document.createTextNode(E));v.appendChild(Y)}}var ah=v.style;var O=p.style||{};var k=o.convert(H.height-I+T);var af=Math.ceil(k);var S=af/k;p.width=Math.ceil(o.convert(e+V-C)*S);p.height=af;I+=H.minY;O.top=Math.round(o.convert(I-ab.ascent))+"px";O.left=Math.round(o.convert(C))+"px";var j=Math.ceil(o.convert(e*S));var t=j+"px";var s=o.convert(ab.height);var F=(A.lineHeight-1)*o.convert(-ab.ascent/5)*(M-1);Cufon.textOptions.width=j;Cufon.textOptions.height=(s*M)+F;Cufon.textOptions.lines=M;Cufon.textOptions.totalLineHeight=F;if(a){ah.width=t;ah.height=s+"px"}else{ah.paddingLeft=t;ah.paddingBottom=(s-1)+"px"}var ad=Cufon.textOptions.context||p.getContext("2d"),K=af/H.height;Cufon.textOptions.fontAscent=ab.ascent*K;Cufon.textOptions.boundaries=null;for(var w=Cufon.textOptions.shadowOffsets,aa=R.length;aa--;){w[aa]=[R[aa][0]*K,R[aa][1]*K]}ad.save();ad.scale(K,K);ad.translate(-C-((1/K*p.width)/ 2) + (Cufon.fonts[ab.family].offsetLeft || 0), -I - ((Cufon.textOptions.height/K)/2)-(Cufon.fonts[ab.family].offsetBottom||0));ad.lineWidth=ab.face["underline-thickness"];ad.save();function q(l,i){ad.strokeStyle=i;ad.beginPath();ad.moveTo(0,l);ad.lineTo(e,l);ad.stroke()}var r=Cufon.getTextDecoration(A),u=A.fontStyle==="italic";function ae(){ad.save();ad.fillStyle=A.backgroundColor;var aj=0,an=0,y=[{left:0}];if(A.textAlign==="right"){ad.translate(m[an],0);y[0].left=m[an]*K}else{if(A.textAlign==="center"){ad.translate(m[an]/2,0);y[0].left=m[an]/2*K}}for(var al=0,ak=ag.length;al<ak;++al){if(ag[al]==="\n"){an++;var am=-ab.ascent-((ab.ascent/5)*A.lineHeight);var x=y[y.length-1];var ai={left:0};x.width=aj*K;x.height=(-ab.ascent+ab.descent)*K;if(A.textAlign==="right"){ad.translate(-e,am);ad.translate(m[an],0);ai.left=m[an]*K}else{if(A.textAlign==="center"){ad.translate(-aj-(m[an-1]/2),am);ad.translate(m[an]/2,0);ai.left=m[an]/2*K}else{ad.translate(-aj,am)}}y.push(ai);aj=0;continue}var ap=ab.glyphs[ag[al]]||ab.missingGlyph;if(!ap){continue}var ao=Number(ap.w||ab.w)+U;if(A.backgroundColor){ad.save();ad.translate(0,ab.ascent);ad.fillRect(0,0,ao+10,-ab.ascent+ab.descent);ad.restore()}ad.translate(ao,0);aj+=ao;if(al==ak-1){y[y.length-1].width=aj*K;y[y.length-1].height=(-ab.ascent+ab.descent)*K}}ad.restore();Cufon.textOptions.boundaries=y}function Z(ai){ad.fillStyle=ai||Cufon.textOptions.color||W.get("color");var am=0,an=0;if(A.textAlign==="right"){ad.translate(m[an],0)}else{if(A.textAlign==="center"){ad.translate(m[an]/2,0)}}for(var ak=0,y=ag.length;ak<y;++ak){if(ag[ak]==="\n"){an++;var aj=-ab.ascent-((ab.ascent/5)*A.lineHeight);if(A.textAlign==="right"){ad.translate(-e,aj);ad.translate(m[an],0)}else{if(A.textAlign==="center"){ad.translate(-am-(m[an-1]/2),aj);ad.translate(m[an]/2,0)}else{ad.translate(-am,aj)}}am=0;continue}var al=ab.glyphs[ag[ak]]||ab.missingGlyph;if(!al){continue}var x=Number(al.w||ab.w)+U;if(r){ad.save();ad.strokeStyle=ad.fillStyle;ad.lineWidth+=ad.lineWidth;ad.beginPath();if(r.underline){ad.moveTo(0,-ab.face["underline-position"]+0.5);ad.lineTo(x,-ab.face["underline-position"]+0.5)}if(r.overline){ad.moveTo(0,ab.ascent+0.5);ad.lineTo(x,ab.ascent+0.5)}if(r["line-through"]){ad.moveTo(0,-ab.descent+0.5);ad.lineTo(x,-ab.descent+0.5)}ad.stroke();ad.restore()}if(u){ad.save();ad.transform(1,0,-0.25,1,0,0)}ad.beginPath();if(al.d){if(al.code){b(al.code,ad)}else{al.code=c("m"+al.d,ad)}}ad.fill();if(A.strokeStyle){ad.closePath();ad.save();ad.lineWidth=A.strokeWidth;ad.strokeStyle=A.strokeStyle;ad.stroke();ad.restore()}if(u){ad.restore()}ad.translate(x,0);am+=x}}if(G){for(var aa=0,X=G.length;aa<X;++aa){var N=G[aa];ad.save();ad.translate.apply(ad,R[aa]);Z(N.color);ad.restore()}}ad.save();ae();Z();ad.restore();ad.restore();ad.restore();return v}})());Cufon.registerEngine("vml",(function(){if(!fabric.document.namespaces){return}var d=fabric.document.createElement("canvas");if(d&&d.getContext&&d.getContext.apply){return}if(fabric.document.namespaces.cvml==null){fabric.document.namespaces.add("cvml","urn:schemas-microsoft-com:vml")}var b=fabric.document.createElement("cvml:shape");b.style.behavior="url(#default#VML)";if(!b.coordsize){return}b=null;fabric.document.write('<style type="text/css">.cufon-vml-canvas{text-indent:0}@media screen{cvml\\:shape,cvml\\:shadow{behavior:url(#default#VML);display:block;antialias:true;position:absolute}.cufon-vml-canvas{position:absolute;text-align:left}.cufon-vml{display:inline-block;position:relative;vertical-align:middle}.cufon-vml .cufon-alt{position:absolute;left:-10000in;font-size:1px}a .cufon-vml{cursor:pointer}}@media print{.cufon-vml *{display:none}.cufon-vml .cufon-alt{display:inline}}</style>');function c(e,f){return a(e,/(?:em|ex|%)$/i.test(f)?"1em":f)}function a(h,i){if(/px$/i.test(i)){return parseFloat(i)}var g=h.style.left,f=h.runtimeStyle.left;h.runtimeStyle.left=h.currentStyle.left;h.style.left=i;var e=h.style.pixelLeft;h.style.left=g;h.runtimeStyle.left=f;return e}return function(T,z,O,w,D,U,M){var h=(z===null);if(h){z=D.alt}var B=T.viewBox;var j=O.computedFontSize||(O.computedFontSize=new Cufon.CSS.Size(c(U,O.get("fontSize"))+"px",T.baseSize));var L=O.computedLSpacing;if(L==undefined){L=O.get("letterSpacing");O.computedLSpacing=L=(L=="normal")?0:~~j.convertFrom(a(U,L))}var t,m;if(h){t=D;m=D.firstChild}else{t=fabric.document.createElement("span");t.className="cufon cufon-vml";t.alt=z;m=fabric.document.createElement("span");m.className="cufon-vml-canvas";t.appendChild(m);if(w.printable){var R=fabric.document.createElement("span");R.className="cufon-alt";R.appendChild(fabric.document.createTextNode(z));t.appendChild(R)}if(!M){t.appendChild(fabric.document.createElement("cvml:shape"))}}var Z=t.style;var G=m.style;var f=j.convert(B.height),W=Math.ceil(f);var K=W/f;var J=B.minX,I=B.minY;G.height=W;G.top=Math.round(j.convert(I-T.ascent));G.left=Math.round(j.convert(J));Z.height=j.convert(T.height)+"px";var p=Cufon.getTextDecoration(w);var y=O.get("color");var X=Cufon.CSS.textTransform(z,O).split("");var e=0,H=0,q=null;var x,r,A=w.textShadow;for(var S=0,Q=0,P=X.length;S<P;++S){x=T.glyphs[X[S]]||T.missingGlyph;if(x){e+=q=~~(x.w||T.w)+L}}if(q===null){return null}var s=-J+e+(B.width-q);var Y=j.convert(s*K),N=Math.round(Y);var F=s+","+B.height,g;var C="r"+F+"nsnf";for(S=0;S<P;++S){x=T.glyphs[X[S]]||T.missingGlyph;if(!x){continue}if(h){r=m.childNodes[Q];if(r.firstChild){r.removeChild(r.firstChild)}}else{r=fabric.document.createElement("cvml:shape");m.appendChild(r)}r.stroked="f";r.coordsize=F;r.coordorigin=g=(J-H)+","+I;r.path=(x.d?"m"+x.d+"xe":"")+"m"+g+C;r.fillcolor=y;var V=r.style;V.width=N;V.height=W;if(A){var o=A[0],n=A[1];var v=Cufon.CSS.color(o.color),u;var E=fabric.document.createElement("cvml:shadow");E.on="t";E.color=v.color;E.offset=o.offX+","+o.offY;if(n){u=Cufon.CSS.color(n.color);E.type="double";E.color2=u.color;E.offset2=n.offX+","+n.offY}E.opacity=v.opacity||(u&&u.opacity)||1;r.appendChild(E)}H+=~~(x.w||T.w)+L;++Q}Z.width=Math.max(Math.ceil(j.convert(e*K)),0);return t}})());Cufon.getTextDecoration=function(a){return{underline:a.textDecoration==="underline",overline:a.textDecoration==="overline","line-through":a.textDecoration==="line-through"}};if(typeof exports!="undefined"){exports.Cufon=Cufon}fabric.log=function(){};fabric.warn=function(){};if(typeof console!=="undefined"){if(typeof console.log!=="undefined"&&console.log.apply){fabric.log=function(){return console.log.apply(console,arguments)}}if(typeof console.warn!=="undefined"&&console.warn.apply){fabric.warn=function(){return console.warn.apply(console,arguments)}}}fabric.Observable={observe:function(a,b){if(!this.__eventListeners){this.__eventListeners={}}if(arguments.length===1){for(var c in a){this.observe(c,a[c])}}else{if(!this.__eventListeners[a]){this.__eventListeners[a]=[]}this.__eventListeners[a].push(b)}},stopObserving:function(a,b){if(!this.__eventListeners){this.__eventListeners={}}if(this.__eventListeners[a]){fabric.util.removeFromArray(this.__eventListeners[a],b)}},fire:function(c,d){if(!this.__eventListeners){this.__eventListeners={}}var b=this.__eventListeners[c];if(!b){return}for(var e=0,a=b.length;e<a;e++){b[e](d||{})}}};(function(){fabric.util={};function g(l,k){var j=l.indexOf(k);if(j!==-1){l.splice(j,1)}return l}function e(k,j){return Math.floor(Math.random()*(j-k+1))+k}var f=Math.PI/180;function b(j){return j*f}function d(k,j){return parseFloat(Number(k).toFixed(j))}function i(){return false}function c(u){u||(u={});var k=+new Date(),m=u.duration||500,t=k+m,l,s,p=u.onChange||function(){},n=u.abort||function(){return false},q=u.easing||function(w,v,y,x){return-y*Math.cos(w/x*(Math.PI/2))+y+v},j="startValue"in u?u.startValue:0,r="endValue"in u?u.endValue:100;byValue=u.byValue||r-j;u.onStart&&u.onStart();(function o(){l=+new Date();currentTime=l>t?m:(l-k);p(q(currentTime,j,byValue,m));if(l>t||n()){u.onComplete&&u.onComplete();return}h(o)})()}var h=(function(){return fabric.window.requestAnimationFrame||fabric.window.webkitRequestAnimationFrame||fabric.window.mozRequestAnimationFrame||fabric.window.oRequestAnimationFrame||fabric.window.msRequestAnimationFrame||function(k,j){fabric.window.setTimeout(k,1000/60)}})();function a(k,m,l){if(k){var j=new Image();j.onload=function(){m&&m.call(l,j);j=j.onload=null};j.src=k}else{m&&m.call(l,k)}}fabric.util.removeFromArray=g;fabric.util.degreesToRadians=b;fabric.util.toFixed=d;fabric.util.getRandomInt=e;fabric.util.falseFunction=i;fabric.util.animate=c;fabric.util.requestAnimFrame=h;fabric.util.loadImage=a})();(function(){fabric.util.ease={};function d(F,E,H,G){return H*(F/=G)*F+E}function l(F,E,H,G){return-H*(F/=G)*(F-2)+E}function r(F,E,H,G){if((F/=G/2)<1){return H/2*F*F+E}return-H/2*((--F)*(F-2)-1)+E}function B(F,E,H,G){return H*(F/=G)*F*F+E}function q(F,E,H,G){return H*((F=F/G-1)*F*F+1)+E}function u(F,E,H,G){if((F/=G/2)<1){return H/2*F*F*F+E}return H/2*((F-=2)*F*F+2)+E}function t(F,E,H,G){return H*(F/=G)*F*F*F+E}function g(F,E,H,G){return-H*((F=F/G-1)*F*F*F-1)+E}function k(F,E,H,G){if((F/=G/2)<1){return H/2*F*F*F*F+E}return-H/2*((F-=2)*F*F*F-2)+E}function y(F,E,H,G){return H*(F/=G)*F*F*F*F+E}function j(F,E,H,G){return H*((F=F/G-1)*F*F*F*F+1)+E}function n(F,E,H,G){if((F/=G/2)<1){return H/2*F*F*F*F*F+E}return H/2*((F-=2)*F*F*F*F+2)+E}function f(F,E,H,G){return-H*Math.cos(F/G*(Math.PI/2))+H+E}function o(F,E,H,G){return H*Math.sin(F/G*(Math.PI/2))+E}function v(F,E,H,G){return-H/2*(Math.cos(Math.PI*F/G)-1)+E}function D(F,E,H,G){return(F==0)?E:H*Math.pow(2,10*(F/G-1))+E}function c(F,E,H,G){return(F==G)?E+H:H*(-Math.pow(2,-10*F/G)+1)+E}function i(F,E,H,G){if(F==0){return E}if(F==G){return E+H}if((F/=G/2)<1){return H/2*Math.pow(2,10*(F-1))+E}return H/2*(-Math.pow(2,-10*--F)+2)+E}function h(F,E,H,G){return-H*(Math.sqrt(1-(F/=G)*F)-1)+E}function p(F,E,H,G){return H*Math.sqrt(1-(F=F/G-1)*F)+E}function x(F,E,H,G){if((F/=G/2)<1){return-H/2*(Math.sqrt(1-F*F)-1)+E}return H/2*(Math.sqrt(1-(F-=2)*F)+1)+E}function s(G,E,K,J){var H=1.70158;var I=0;var F=K;if(G==0){return E}if((G/=J)==1){return E+K}if(!I){I=J*0.3}if(F<Math.abs(K)){F=K;var H=I/4}else{var H=I/(2*Math.PI)*Math.asin(K/F)}return-(F*Math.pow(2,10*(G-=1))*Math.sin((G*J-H)*(2*Math.PI)/I))+E}function z(G,E,K,J){var H=1.70158;var I=0;var F=K;if(G==0){return E}if((G/=J)==1){return E+K}if(!I){I=J*0.3}if(F<Math.abs(K)){F=K;var H=I/4}else{var H=I/(2*Math.PI)*Math.asin(K/F)}return F*Math.pow(2,-10*G)*Math.sin((G*J-H)*(2*Math.PI)/I)+K+E}function a(G,E,K,J){var H=1.70158;var I=0;var F=K;if(G==0){return E}if((G/=J/2)==2){return E+K}if(!I){I=J*(0.3*1.5)}if(F<Math.abs(K)){F=K;var H=I/4}else{var H=I/(2*Math.PI)*Math.asin(K/F)}if(G<1){return-0.5*(F*Math.pow(2,10*(G-=1))*Math.sin((G*J-H)*(2*Math.PI)/I))+E}return F*Math.pow(2,-10*(G-=1))*Math.sin((G*J-H)*(2*Math.PI)/I)*0.5+K+E}function m(F,E,I,H,G){if(G==undefined){G=1.70158}return I*(F/=H)*F*((G+1)*F-G)+E}function w(F,E,I,H,G){if(G==undefined){G=1.70158}return I*((F=F/H-1)*F*((G+1)*F+G)+1)+E}function A(F,E,I,H,G){if(G==undefined){G=1.70158}if((F/=H/2)<1){return I/2*(F*F*(((G*=(1.525))+1)*F-G))+E}return I/2*((F-=2)*F*(((G*=(1.525))+1)*F+G)+2)+E}function e(F,E,H,G){return H-b(G-F,0,H,G)+E}function b(F,E,H,G){if((F/=G)<(1/2.75)){return H*(7.5625*F*F)+E}else{if(F<(2/2.75)){return H*(7.5625*(F-=(1.5/2.75))*F+0.75)+E}else{if(F<(2.5/2.75)){return H*(7.5625*(F-=(2.25/2.75))*F+0.9375)+E}else{return H*(7.5625*(F-=(2.625/2.75))*F+0.984375)+E}}}}function C(F,E,H,G){if(F<G/2){return e(F*2,0,H,G)*0.5+E}return b(F*2-G,0,H,G)*0.5+H*0.5+E}fabric.util.ease={easeInQuad:d,easeOutQuad:l,easeInOutQuad:r,easeInCubic:B,easeOutCubic:q,easeInOutCubic:u,easeInQuart:t,easeOutQuart:g,easeInOutQuart:k,easeInQuint:y,easeOutQuint:j,easeInOutQuint:n,easeInSine:f,easeOutSine:o,easeInOutSine:v,easeInExpo:D,easeOutExpo:c,easeInOutExpo:i,easeInCirc:h,easeOutCirc:p,easeInOutCirc:x,easeInElastic:s,easeOutElastic:z,easeInOutElastic:a,easeInBack:m,easeOutBack:w,easeInOutBack:A,easeInBounce:e,easeOutBounce:b,easeInOutBounce:C}}());(function(){var d=Array.prototype.slice;if(!Array.prototype.indexOf){Array.prototype.indexOf=function(g){if(this===void 0||this===null){throw new TypeError()}var h=Object(this),e=h.length>>>0;if(e===0){return-1}var i=0;if(arguments.length>0){i=Number(arguments[1]);if(i!==i){i=0}else{if(i!==0&&i!==(1/0)&&i!==-(1/0)){i=(i>0||-1)*Math.floor(Math.abs(i))}}}if(i>=e){return-1}var f=i>=0?i:Math.max(e-Math.abs(i),0);for(;f<e;f++){if(f in h&&h[f]===g){return f}}return-1}}if(!Array.prototype.forEach){Array.prototype.forEach=function(h,g){for(var f=0,e=this.length>>>0;f<e;f++){if(f in this){h.call(g,this[f],f,this)}}}}if(!Array.prototype.map){Array.prototype.map=function(j,h){var f=[];for(var g=0,e=this.length>>>0;g<e;g++){if(g in this){f[g]=j.call(h,this[g],g,this)}}return f}}if(!Array.prototype.every){Array.prototype.every=function(h,g){for(var f=0,e=this.length>>>0;f<e;f++){if(f in this&&!h.call(g,this[f],f,this)){return false}}return true}}if(!Array.prototype.some){Array.prototype.some=function(h,g){for(var f=0,e=this.length>>>0;f<e;f++){if(f in this&&h.call(g,this[f],f,this)){return true}}return false}}if(!Array.prototype.filter){Array.prototype.filter=function(j,h){var f=[],k;for(var g=0,e=this.length>>>0;g<e;g++){if(g in this){k=this[g];if(j.call(h,k,g,this)){f.push(k)}}}return f}}if(!Array.prototype.reduce){Array.prototype.reduce=function(g){var e=this.length>>>0,f=0,h;if(arguments.length>1){h=arguments[1]}else{do{if(f in this){h=this[f++];break}if(++f>=e){throw new TypeError()}}while(true)}for(;f<e;f++){if(f in this){h=g.call(null,h,this[f],f,this)}}return h}}function b(k,j){var g=d.call(arguments,2),f=[];for(var h=0,e=k.length;h<e;h++){f[h]=g.length?k[h][j].apply(k[h],g):k[h][j].call(k[h])}return f}function a(h,g){if(!h||h.length===0){return undefined}var f=h.length-1,e=g?h[f][g]:h[f];if(g){while(f--){if(h[f][g]>=e){e=h[f][g]}}}else{while(f--){if(h[f]>=e){e=h[f]}}}return e}function c(h,g){if(!h||h.length===0){return undefined}var f=h.length-1,e=g?h[f][g]:h[f];if(g){while(f--){if(h[f][g]<e){e=h[f][g]}}}else{while(f--){if(h[f]<e){e=h[f]}}}return e}fabric.util.array={invoke:b,min:c,max:a}})();(function(){function b(c,e){for(var d in e){c[d]=e[d]}return c}function a(c){return b({},c)}fabric.util.object={extend:b,clone:a}})();(function(){if(!String.prototype.trim){String.prototype.trim=function(){return this.replace(/^[\s\xA0]+/,"").replace(/[\s\xA0]+$/,"")}}function b(d){return d.replace(/-+(.)?/g,function(e,f){return f?f.toUpperCase():""})}function c(d){return d.charAt(0).toUpperCase()+d.slice(1).toLowerCase()}function a(d){return d.replace("&","&amp;").replace('"',"&quot;").replace("'","&apos;").replace("<","&lt;").replace(">","&gt;")}fabric.util.string={camelize:b,capitalize:c,escapeXml:a}}());(function(){var c=Array.prototype.slice,a=Function.prototype.apply,b=function(){};if(!Function.prototype.bind){Function.prototype.bind=function(d){var g=this,e=c.call(arguments,1),f;if(e.length){f=function(){return a.call(g,this instanceof b?this:d,e.concat(c.call(arguments)))}}else{f=function(){return a.call(g,this instanceof b?this:d,arguments)}}b.prototype=this.prototype;f.prototype=new b;return f}}})();(function(){var f=Array.prototype.slice,e=function(){};var c=(function(){for(var g in{toString:1}){if(g==="toString"){return false}}return true})();var b;if(c){b=function(g,i){if(i.toString!==Object.prototype.toString){g.prototype.toString=i.toString}if(i.valueOf!==Object.prototype.valueOf){g.prototype.valueOf=i.valueOf}for(var h in i){g.prototype[h]=i[h]}}}else{b=function(g,i){for(var h in i){g.prototype[h]=i[h]}}}function a(){}function d(){var k=null,j=f.call(arguments,0);if(typeof j[0]==="function"){k=j.shift()}function g(){this.initialize.apply(this,arguments)}g.superclass=k;g.subclasses=[];if(k){a.prototype=k.prototype;g.prototype=new a;k.subclasses.push(g)}for(var h=0,l=j.length;h<l;h++){b(g,j[h])}if(!g.prototype.initialize){g.prototype.initialize=e}g.prototype.constructor=g;return g}fabric.util.createClass=d})();(function(d){function h(s){var w=Array.prototype.slice.call(arguments,1),v,u,r=w.length;for(u=0;u<r;u++){v=typeof s[w[u]];if(!(/^(?:function|object|unknown)$/).test(v)){return false}}return true}var e=(function(){if(typeof fabric.document.documentElement.uniqueID!=="undefined"){return function(s){return s.uniqueID}}var r=0;return function(s){return s.__uniqueID||(s.__uniqueID="uniqueID__"+r++)}})();var f,c;(function(){var r={};f=function(s){return r[s]};c=function(t,s){r[t]=s}})();function i(r,s){return{handler:s,wrappedHandler:l(r,s)}}function l(r,s){return function(t){s.call(f(r),t||fabric.window.event)}}function j(s,r){return function(w){if(g[s]&&g[s][r]){var u=g[s][r];for(var v=0,t=u.length;v<t;v++){u[v].call(this,w||fabric.window.event)}}}}var o=(h(fabric.document.documentElement,"addEventListener","removeEventListener")&&h(fabric.window,"addEventListener","removeEventListener")),m=(h(fabric.document.documentElement,"attachEvent","detachEvent")&&h(fabric.window,"attachEvent","detachEvent")),n={},g={},b,k;if(o){b=function(s,r,t){s.addEventListener(r,t,false)};k=function(s,r,t){s.removeEventListener(r,t,false)}}else{if(m){b=function(t,r,u){var s=e(t);c(s,t);if(!n[s]){n[s]={}}if(!n[s][r]){n[s][r]=[]}var v=i(s,u);n[s][r].push(v);t.attachEvent("on"+r,v.wrappedHandler)};k=function(v,s,w){var u=e(v),x;if(n[u]&&n[u][s]){for(var t=0,r=n[u][s].length;t<r;t++){x=n[u][s][t];if(x&&x.handler===w){v.detachEvent("on"+s,x.wrappedHandler);n[u][s][t]=null}}}}}else{b=function(t,r,u){var s=e(t);if(!g[s]){g[s]={}}if(!g[s][r]){g[s][r]=[];var v=t["on"+r];if(v){g[s][r].push(v)}t["on"+r]=j(s,r)}g[s][r].push(u)};k=function(w,t,x){var v=e(w);if(g[v]&&g[v][t]){var s=g[v][t];for(var u=0,r=s.length;u<r;u++){if(s[u]===x){s.splice(u,1)}}}}}}fabric.util.addListener=b;fabric.util.removeListener=k;function q(r){return{x:a(r),y:p(r)}}function a(t){var s=fabric.document.documentElement,r=fabric.document.body||{scrollLeft:0};return t.pageX||((typeof t.clientX!="unknown"?t.clientX:0)+(s.scrollLeft||r.scrollLeft)-(s.clientLeft||0))}function p(t){var s=fabric.document.documentElement,r=fabric.document.body||{scrollTop:0};return t.pageY||((typeof t.clientY!="unknown"?t.clientY:0)+(s.scrollTop||r.scrollTop)-(s.clientTop||0))}if(fabric.isTouchSupported){a=function(r){return r.touches&&r.touches[0]&&r.touches[0].pageX};p=function(r){return r.touches&&r.touches[0]&&r.touches[0].pageY}}fabric.util.getPointer=q;fabric.util.object.extend(fabric.util,fabric.Observable)})(this);(function(){function e(j,l){var n=j.style,i;if(typeof l==="string"){j.style.cssText+=";"+l;return l.indexOf("opacity")>-1?c(j,l.match(/opacity:\s*(\d?\.?\d*)/)[1]):j}for(var m in l){if(m==="opacity"){c(j,l[m])}else{var k=(m==="float"||m==="cssFloat")?(typeof n.styleFloat==="undefined"?"cssFloat":"styleFloat"):m;n[k]=l[m]}}return j}var h=fabric.document.createElement("div"),g=typeof h.style.opacity==="string",b=typeof h.style.filter==="string",a=fabric.document.defaultView,f=a&&typeof a.getComputedStyle!=="undefined",d=/alpha\s*\(\s*opacity\s*=\s*([^\)]+)\)/,c=function(i){return i};if(g){c=function(i,j){i.style.opacity=j;return i}}else{if(b){c=function(i,j){var k=i.style;if(i.currentStyle&&!i.currentStyle.hasLayout){k.zoom=1}if(d.test(k.filter)){j=j>=0.9999?"":("alpha(opacity="+(j*100)+")");k.filter=k.filter.replace(d,j)}else{k.filter+=" alpha(opacity="+(j*100)+")"}return i}}}fabric.util.setStyle=e})();(function(){var h=Array.prototype.slice;function g(j){return typeof j==="string"?fabric.document.getElementById(j):j}function b(j){return h.call(j,0)}try{var i=b(fabric.document.childNodes)instanceof Array}catch(a){}if(!i){b=function(k){var j=new Array(k.length),l=k.length;while(l--){j[l]=k[l]}return j}}function c(k,j){var l=fabric.document.createElement(k);for(var m in j){if(m==="class"){l.className=j[m]}else{if(m==="for"){l.htmlFor=j[m]}else{l.setAttribute(m,j[m])}}}return l}function f(j,k){if((" "+j.className+" ").indexOf(" "+k+" ")===-1){j.className+=(j.className?" ":"")+k}}function e(k,l,j){if(typeof l==="string"){l=c(l,j)}if(k.parentNode){k.parentNode.replaceChild(l,k)}l.appendChild(k);return l}function d(k){var j=0,l=0;do{j+=k.offsetTop||0;l+=k.offsetLeft||0;k=k.offsetParent}while(k);return({left:l,top:j})}(function(){var k=fabric.document.documentElement.style;var l="userSelect"in k?"userSelect":"MozUserSelect"in k?"MozUserSelect":"WebkitUserSelect"in k?"WebkitUserSelect":"KhtmlUserSelect"in k?"KhtmlUserSelect":"";function m(n){if(typeof n.onselectstart!=="undefined"){n.onselectstart=fabric.util.falseFunction}if(l){n.style[l]="none"}else{if(typeof n.unselectable=="string"){n.unselectable="on"}}return n}function j(n){if(typeof n.onselectstart!=="undefined"){n.onselectstart=null}if(l){n.style[l]=""}else{if(typeof n.unselectable=="string"){n.unselectable=""}}return n}fabric.util.makeElementUnselectable=m;fabric.util.makeElementSelectable=j})();(function(){function j(k,o){var m=fabric.document.getElementsByTagName("head")[0],l=fabric.document.createElement("script"),n=true;l.type="text/javascript";l.setAttribute("runat","server");l.onload=l.onreadystatechange=function(p){if(n){if(typeof this.readyState=="string"&&this.readyState!=="loaded"&&this.readyState!=="complete"){return}n=false;o(p||fabric.window.event);l=l.onload=l.onreadystatechange=null}};l.src=k;m.appendChild(l)}fabric.util.getScript=j})();fabric.util.getById=g;fabric.util.toArray=b;fabric.util.makeElement=c;fabric.util.addClass=f;fabric.util.wrapElement=e;fabric.util.getElementOffset=d})();(function(){function d(e,f){return e+(/\?/.test(e)?"&":"?")+f}var c=(function(){var h=[function(){return new ActiveXObject("Microsoft.XMLHTTP")},function(){return new ActiveXObject("Msxml2.XMLHTTP")},function(){return new ActiveXObject("Msxml2.XMLHTTP.3.0")},function(){return new XMLHttpRequest()}];for(var e=h.length;e--;){try{var g=h[e]();if(g){return h[e]}}catch(f){}}})();function a(){}function b(g,f){f||(f={});var j=f.method?f.method.toUpperCase():"GET",i=f.onComplete||function(){},h=c(),e;h.onreadystatechange=function(){if(h.readyState===4){i(h);h.onreadystatechange=a}};if(j==="GET"){e=null;if(typeof f.parameters=="string"){g=d(g,f.parameters)}}h.open(j,g,true);if(j==="POST"||j==="PUT"){h.setRequestHeader("Content-Type","application/x-www-form-urlencoded")}h.send(e);return h}fabric.util.request=b})();(function(){fabric.util.ease={};function d(F,E,H,G){return H*(F/=G)*F+E}function l(F,E,H,G){return-H*(F/=G)*(F-2)+E}function r(F,E,H,G){if((F/=G/2)<1){return H/2*F*F+E}return-H/2*((--F)*(F-2)-1)+E}function B(F,E,H,G){return H*(F/=G)*F*F+E}function q(F,E,H,G){return H*((F=F/G-1)*F*F+1)+E}function u(F,E,H,G){if((F/=G/2)<1){return H/2*F*F*F+E}return H/2*((F-=2)*F*F+2)+E}function t(F,E,H,G){return H*(F/=G)*F*F*F+E}function g(F,E,H,G){return-H*((F=F/G-1)*F*F*F-1)+E}function k(F,E,H,G){if((F/=G/2)<1){return H/2*F*F*F*F+E}return-H/2*((F-=2)*F*F*F-2)+E}function y(F,E,H,G){return H*(F/=G)*F*F*F*F+E}function j(F,E,H,G){return H*((F=F/G-1)*F*F*F*F+1)+E}function n(F,E,H,G){if((F/=G/2)<1){return H/2*F*F*F*F*F+E}return H/2*((F-=2)*F*F*F*F+2)+E}function f(F,E,H,G){return-H*Math.cos(F/G*(Math.PI/2))+H+E}function o(F,E,H,G){return H*Math.sin(F/G*(Math.PI/2))+E}function v(F,E,H,G){return-H/2*(Math.cos(Math.PI*F/G)-1)+E}function D(F,E,H,G){return(F==0)?E:H*Math.pow(2,10*(F/G-1))+E}function c(F,E,H,G){return(F==G)?E+H:H*(-Math.pow(2,-10*F/G)+1)+E}function i(F,E,H,G){if(F==0){return E}if(F==G){return E+H}if((F/=G/2)<1){return H/2*Math.pow(2,10*(F-1))+E}return H/2*(-Math.pow(2,-10*--F)+2)+E}function h(F,E,H,G){return-H*(Math.sqrt(1-(F/=G)*F)-1)+E}function p(F,E,H,G){return H*Math.sqrt(1-(F=F/G-1)*F)+E}function x(F,E,H,G){if((F/=G/2)<1){return-H/2*(Math.sqrt(1-F*F)-1)+E}return H/2*(Math.sqrt(1-(F-=2)*F)+1)+E}function s(G,E,K,J){var H=1.70158;var I=0;var F=K;if(G==0){return E}if((G/=J)==1){return E+K}if(!I){I=J*0.3}if(F<Math.abs(K)){F=K;var H=I/4}else{var H=I/(2*Math.PI)*Math.asin(K/F)}return-(F*Math.pow(2,10*(G-=1))*Math.sin((G*J-H)*(2*Math.PI)/I))+E}function z(G,E,K,J){var H=1.70158;var I=0;var F=K;if(G==0){return E}if((G/=J)==1){return E+K}if(!I){I=J*0.3}if(F<Math.abs(K)){F=K;var H=I/4}else{var H=I/(2*Math.PI)*Math.asin(K/F)}return F*Math.pow(2,-10*G)*Math.sin((G*J-H)*(2*Math.PI)/I)+K+E}function a(G,E,K,J){var H=1.70158;var I=0;var F=K;if(G==0){return E}if((G/=J/2)==2){return E+K}if(!I){I=J*(0.3*1.5)}if(F<Math.abs(K)){F=K;var H=I/4}else{var H=I/(2*Math.PI)*Math.asin(K/F)}if(G<1){return-0.5*(F*Math.pow(2,10*(G-=1))*Math.sin((G*J-H)*(2*Math.PI)/I))+E}return F*Math.pow(2,-10*(G-=1))*Math.sin((G*J-H)*(2*Math.PI)/I)*0.5+K+E}function m(F,E,I,H,G){if(G==undefined){G=1.70158}return I*(F/=H)*F*((G+1)*F-G)+E}function w(F,E,I,H,G){if(G==undefined){G=1.70158}return I*((F=F/H-1)*F*((G+1)*F+G)+1)+E}function A(F,E,I,H,G){if(G==undefined){G=1.70158}if((F/=H/2)<1){return I/2*(F*F*(((G*=(1.525))+1)*F-G))+E}return I/2*((F-=2)*F*(((G*=(1.525))+1)*F+G)+2)+E}function e(F,E,H,G){return H-b(G-F,0,H,G)+E}function b(F,E,H,G){if((F/=G)<(1/2.75)){return H*(7.5625*F*F)+E}else{if(F<(2/2.75)){return H*(7.5625*(F-=(1.5/2.75))*F+0.75)+E}else{if(F<(2.5/2.75)){return H*(7.5625*(F-=(2.25/2.75))*F+0.9375)+E}else{return H*(7.5625*(F-=(2.625/2.75))*F+0.984375)+E}}}}function C(F,E,H,G){if(F<G/2){return e(F*2,0,H,G)*0.5+E}return b(F*2-G,0,H,G)*0.5+H*0.5+E}fabric.util.ease={easeInQuad:d,easeOutQuad:l,easeInOutQuad:r,easeInCubic:B,easeOutCubic:q,easeInOutCubic:u,easeInQuart:t,easeOutQuart:g,easeInOutQuart:k,easeInQuint:y,easeOutQuint:j,easeInOutQuint:n,easeInSine:f,easeOutSine:o,easeInOutSine:v,easeInExpo:D,easeOutExpo:c,easeInOutExpo:i,easeInCirc:h,easeOutCirc:p,easeInOutCirc:x,easeInElastic:s,easeOutElastic:z,easeInOutElastic:a,easeInBack:m,easeOutBack:w,easeInOutBack:A,easeInBounce:e,easeOutBounce:b,easeInOutBounce:C}}());(function(i){var g=i.fabric||(i.fabric={}),o=g.util.object.extend,e=g.util.string.capitalize,p=g.util.object.clone;var k={cx:"left",x:"left",cy:"top",y:"top",r:"radius","fill-opacity":"opacity","fill-rule":"fillRule","stroke-width":"strokeWidth",transform:"transformMatrix"};function d(v,u){if(!v){return}var x,t,s={};if(v.parentNode&&/^g$/i.test(v.parentNode.nodeName)){s=g.parseAttributes(v.parentNode,u)}var w=u.reduce(function(z,y){x=v.getAttribute(y);t=parseFloat(x);if(x){if((y==="fill"||y==="stroke")&&x==="none"){x=""}if(y==="fill-rule"){x=(x==="evenodd")?"destination-over":x}if(y==="transform"){x=g.parseTransformAttribute(x)}if(y in k){y=k[y]}z[y]=isNaN(t)?x:t}return z},{});w=o(w,o(n(v),g.parseStyleAttribute(v)));return o(s,w)}g.parseTransformAttribute=(function(){function s(L,M){var N=M[0];L[0]=Math.cos(N);L[1]=Math.sin(N);L[2]=-Math.sin(N);L[3]=Math.cos(N)}function x(N,O){var M=O[0],L=(O.length===2)?O[1]:O[0];N[0]=M;N[3]=L}function I(L,M){L[2]=M[0]}function u(L,M){L[1]=M[0]}function F(L,M){L[4]=M[0];if(M.length===2){L[5]=M[1]}}var z=[1,0,0,1,0,0],t="(?:[-+]?\\d+(?:\\.\\d+)?(?:e[-+]?\\d+)?)",J="(?:\\s+,?\\s*|,\\s*)",A="(?:(skewX)\\s*\\(\\s*("+t+")\\s*\\))",y="(?:(skewY)\\s*\\(\\s*("+t+")\\s*\\))",H="(?:(rotate)\\s*\\(\\s*("+t+")(?:"+J+"("+t+")"+J+"("+t+"))?\\s*\\))",K="(?:(scale)\\s*\\(\\s*("+t+")(?:"+J+"("+t+"))?\\s*\\))",D="(?:(translate)\\s*\\(\\s*("+t+")(?:"+J+"("+t+"))?\\s*\\))",G="(?:(matrix)\\s*\\(\\s*("+t+")"+J+"("+t+")"+J+"("+t+")"+J+"("+t+")"+J+"("+t+")"+J+"("+t+")\\s*\\))",E="(?:"+G+"|"+D+"|"+K+"|"+H+"|"+A+"|"+y+")",B="(?:"+E+"(?:"+J+E+")*)",v="^\\s*(?:"+B+"?)\\s*$",C=new RegExp(v),w=new RegExp(E);return function(M){var L=z.concat();if(!M||(M&&!C.test(M))){return L}M.replace(w,function(Q){var N=new RegExp(E).exec(Q).filter(function(R){return(R!==""&&R!=null)}),O=N[1],P=N.slice(2).map(parseFloat);switch(O){case"translate":F(L,P);break;case"rotate":s(L,P);break;case"scale":x(L,P);break;case"skewX":I(L,P);break;case"skewY":u(L,P);break;case"matrix":L=P;break}});return L}})();function r(v){if(!v){return null}v=v.trim();var x=v.indexOf(",")>-1;v=v.split(/\s+/);var t=[];if(x){for(var u=0,s=v.length;u<s;u++){var w=v[u].split(",");t.push({x:parseFloat(w[0]),y:parseFloat(w[1])})}}else{for(var u=0,s=v.length;u<s;u+=2){t.push({x:parseFloat(v[u]),y:parseFloat(v[u+1])})}}if(t.length%2!==0){}return t}function h(t){var s={},u=t.getAttribute("style");if(u){if(typeof u=="string"){u=u.replace(/;$/,"").split(";").forEach(function(x){var w=x.split(":");s[w[0].trim().toLowerCase()]=w[1].trim()})}else{for(var v in u){if(typeof u[v]!=="undefined"){s[v.toLowerCase()]=u[v]}}}}return s}function q(x){var t=g.Canvas.activeInstance,s=t?t.getContext():null;if(!s){return}for(var u=x.length;u--;){var v=x[u].get("fill");if(/^url\(/.test(v)){var w=v.slice(5,v.length-1);if(g.gradientDefs[w]){x[u].set("fill",g.Gradient.fromElement(g.gradientDefs[w],s,x[u]))}}}}function f(t,B,C){var s=Array(t.length),w=t.length;function u(){if(--w===0){s=s.filter(function(D){return D!=null});q(s);B(s)}}for(var y=0,v,x=t.length;y<x;y++){v=t[y];var A=g[e(v.tagName)];if(A&&A.fromElement){try{if(A.async){A.fromElement(v,(function(D){return function(E){s.splice(D,0,E);u()}})(y),C)}else{s.splice(y,0,A.fromElement(v,C));u()}}catch(z){g.log(z.message||z)}}else{u()}}}function c(x){var v=x.getElementsByTagName("style"),t={},y;for(var u=0,s=v.length;u<s;u++){var w=v[0].textContent;w=w.replace(/\/\*[\s\S]*?\*\//g,"");y=w.match(/[^{]*\{[\s\S]*?\}/g);y=y.map(function(z){return z.trim()});y.forEach(function(E){var C=E.match(/([\s\S]*?)\s*\{([^}]*)\}/),E=C[1],z=C[2].trim(),G=z.replace(/;$/,"").split(/\s*;\s*/);if(!t[E]){t[E]={}}for(var B=0,D=G.length;B<D;B++){var A=G[B].split(/\s*:\s*/),H=A[0],F=A[1];t[E][H]=F}})}return t}function n(t){var z=t.nodeName,u=t.getAttribute("class"),y=t.getAttribute("id"),v={};for(var x in g.cssRules){var s=(u&&new RegExp("^\\."+u).test(x))||(y&&new RegExp("^#"+y).test(x))||(new RegExp("^"+z).test(x));if(s){for(var w in g.cssRules[x]){v[w]=g.cssRules[x][w]}}}return v}g.parseSVGDocument=(function(){var s=/^(path|circle|polygon|polyline|ellipse|rect|line|image)$/;var t="(?:[-+]?\\d+(?:\\.\\d+)?(?:e[-+]?\\d+)?)";var u=new RegExp("^\\s*("+t+"+)\\s*,?\\s*("+t+"+)\\s*,?\\s*("+t+"+)\\s*,?\\s*("+t+"+)\\s*$");function v(w,x){while(w&&(w=w.parentNode)){if(x.test(w.nodeName)){return true}}return false}return function(I,K){if(!I){return}var A=new Date(),E=g.util.toArray(I.getElementsByTagName("*"));if(E.length===0){E=I.selectNodes("//*[name(.)!='svg']");var G=[];for(var F=0,H=E.length;F<H;F++){G[F]=E[F]}E=G}var w=E.filter(function(M){return s.test(M.tagName)&&!v(M,/^(?:pattern|defs)$/)});if(!w||(w&&!w.length)){return}var x=I.getAttribute("viewBox"),C=I.getAttribute("width"),z=I.getAttribute("height"),y=null,J=null,D,B;if(x&&(x=x.match(u))){D=parseInt(x[1],10);B=parseInt(x[2],10);y=parseInt(x[3],10);J=parseInt(x[4],10)}y=C?parseFloat(C):y;J=z?parseFloat(z):J;var L={width:y,height:J};g.gradientDefs=g.getGradientDefs(I);g.cssRules=c(I);g.parseElements(w,function(M){g.documentParsingTime=new Date()-A;if(K){K(M,L)}},p(L))}})();var j={has:function(s,t){t(false)},get:function(s,t){},set:function(t,s){}};function b(s,u){s=s.replace(/^\n\s*/,"").trim();j.has(s,function(v){if(v){j.get(s,function(x){var w=a(x);u(w.objects,w.options)})}else{new g.util.request(s,{method:"get",onComplete:t})}});function t(w){var v=w.responseXML;if(!v.documentElement&&g.window.ActiveXObject&&w.responseText){v=new ActiveXObject("Microsoft.XMLDOM");v.async="false";v.loadXML(w.responseText.replace(/<!DOCTYPE[\s\S]*?(\[[\s\S]*\])*?>/i,""))}if(!v.documentElement){return}g.parseSVGDocument(v.documentElement,function(y,x){j.set(s,{objects:g.util.array.invoke(y,"toObject"),options:x});u(y,x)})}}function a(u){var t=u.objects,s=u.options;t=t.map(function(v){return g[e(v.type)].fromObject(v)});return({objects:t,options:s})}function m(s,v){s=s.trim();var t;if(typeof DOMParser!=="undefined"){var u=new DOMParser();if(u&&u.parseFromString){t=u.parseFromString(s,"text/xml")}}else{if(g.window.ActiveXObject){var t=new ActiveXObject("Microsoft.XMLDOM");t.async="false";t.loadXML(s.replace(/<!DOCTYPE[\s\S]*?(\[[\s\S]*\])*?>/i,""))}}g.parseSVGDocument(t.documentElement,function(x,w){v(x,w)})}function l(v){var t="";for(var u=0,s=v.length;u<s;u++){if(v[u].type!=="text"||!v[u].path){continue}t+=["@font-face {","font-family: ",v[u].fontFamily,"; ","src: url('",v[u].path,"')","}"].join("")}if(t){t=["<defs>",'<style type="text/css">',"<![CDATA[",t,"]]>","</style>","</defs>"].join("")}return t}o(g,{parseAttributes:d,parseElements:f,parseStyleAttribute:h,parsePointsAttribute:r,getCSSRules:c,loadSVGFromURL:b,loadSVGFromString:m,createSVGFontFacesMarkup:l})})(typeof exports!="undefined"?exports:this);(function(){function c(h){var g=h.getAttribute("style");if(g){var k=g.split(/\s*;\s*/);for(var f=k.length;f--;){var e=k[f].split(/\s*:\s*/),d=e[0].trim(),j=e[1].trim();if(d==="stop-color"){return j}}}}fabric.Gradient={create:function(l,m){m||(m={});var f=m.x1||0,k=m.y1||0,e=m.x2||l.canvas.width,i=m.y2||0,g=m.colorStops;var j=l.createLinearGradient(f,k,e,i);for(var h in g){var d=g[h];j.addColorStop(parseFloat(h),d)}return j},fromElement:function(d,m,l){var j=d.getElementsByTagName("stop"),d,f,e={},g,k={x1:d.getAttribute("x1")||0,y1:d.getAttribute("y1")||0,x2:d.getAttribute("x2")||"100%",y2:d.getAttribute("y2")||0};for(var h=j.length;h--;){d=j[h];f=d.getAttribute("offset");f=parseFloat(f)/(/%$/.test(f)?100:1);e[f]=c(d)||d.getAttribute("stop-color")}a(l,k);return fabric.Gradient.create(m,{x1:k.x1,y1:k.y1,x2:k.x2,y2:k.y2,colorStops:e})},forObject:function(g,d,e){e||(e={});a(g,e);var f=fabric.Gradient.create(d,{x1:e.x1,y1:e.y1,x2:e.x2,y2:e.y2,colorStops:e.colorStops});return f}};function a(f,e){for(var g in e){if(typeof e[g]==="string"&&/^\d+%$/.test(e[g])){var d=parseFloat(e[g],10);if(g==="x1"||g==="x2"){e[g]=f.width*d/100}else{if(g==="y1"||g==="y2"){e[g]=f.height*d/100}}}if(g==="x1"||g==="x2"){e[g]-=f.width/2}else{if(g==="y1"||g==="y2"){e[g]-=f.height/2}}}}function b(j){var f=j.getElementsByTagName("linearGradient"),d=j.getElementsByTagName("radialGradient"),g,h={};for(var e=f.length;e--;){g=f[e];h[g.id]=g}for(var e=d.length;e--;){g=d[e];h[g.id]=g}return h}fabric.getGradientDefs=b})();(function(b){var c=b.fabric||(b.fabric={});if(c.Point){c.warn("fabric.Point is already defined");return}c.Point=a;function a(d,e){if(arguments.length>0){this.init(d,e)}}a.prototype={constructor:a,init:function(d,e){this.x=d;this.y=e},add:function(d){return new a(this.x+d.x,this.y+d.y)},addEquals:function(d){this.x+=d.x;this.y+=d.y;return this},scalarAdd:function(d){return new a(this.x+d,this.y+d)},scalarAddEquals:function(d){this.x+=d;this.y+=d;return this},subtract:function(d){return new a(this.x-d.x,this.y-d.y)},subtractEquals:function(d){this.x-=d.x;this.y-=d.y;return this},scalarSubtract:function(d){return new a(this.x-d,this.y-d)},scalarSubtractEquals:function(d){this.x-=d;this.y-=d;return this},multiply:function(d){return new a(this.x*d,this.y*d)},multiplyEquals:function(d){this.x*=d;this.y*=d;return this},divide:function(d){return new a(this.x/d,this.y/d)},divideEquals:function(d){this.x/=d;this.y/=d;return this},eq:function(d){return(this.x==d.x&&this.y==d.y)},lt:function(d){return(this.x<d.x&&this.y<d.y)},lte:function(d){return(this.x<=d.x&&this.y<=d.y)},gt:function(d){return(this.x>d.x&&this.y>d.y)},gte:function(d){return(this.x>=d.x&&this.y>=d.y)},lerp:function(e,d){return new a(this.x+(e.x-this.x)*d,this.y+(e.y-this.y)*d)},distanceFrom:function(f){var e=this.x-f.x,d=this.y-f.y;return Math.sqrt(e*e+d*d)},min:function(d){return new a(Math.min(this.x,d.x),Math.min(this.y,d.y))},max:function(d){return new a(Math.max(this.x,d.x),Math.max(this.y,d.y))},toString:function(){return this.x+","+this.y},setXY:function(d,e){this.x=d;this.y=e},setFromPoint:function(d){this.x=d.x;this.y=d.y},swap:function(e){var d=this.x,f=this.y;this.x=e.x;this.y=e.y;e.x=d;e.y=f}}})(typeof exports!="undefined"?exports:this);(function(a){var b=a.fabric||(a.fabric={});if(b.Intersection){b.warn("fabric.Intersection is already defined");return}function c(d){if(arguments.length>0){this.init(d)}}b.Intersection=c;b.Intersection.prototype={init:function(d){this.status=d;this.points=[]},appendPoint:function(d){this.points.push(d)},appendPoints:function(d){this.points=this.points.concat(d)}};b.Intersection.intersectLineLine=function(h,f,l,k){var m,i=(k.x-l.x)*(h.y-l.y)-(k.y-l.y)*(h.x-l.x),j=(f.x-h.x)*(h.y-l.y)-(f.y-h.y)*(h.x-l.x),g=(k.y-l.y)*(f.x-h.x)-(k.x-l.x)*(f.y-h.y);if(g!=0){var e=i/g,d=j/g;if(0<=e&&e<=1&&0<=d&&d<=1){m=new c("Intersection");m.points.push(new b.Point(h.x+e*(f.x-h.x),h.y+e*(f.y-h.y)))}else{m=new c("No Intersection")}}else{if(i==0||j==0){m=new c("Coincident")}else{m=new c("Parallel")}}return m};b.Intersection.intersectLinePolygon=function(e,d,l){var m=new c("No Intersection"),f=l.length;for(var h=0;h<f;h++){var k=l[h],j=l[(h+1)%f],g=c.intersectLineLine(e,d,k,j);m.appendPoints(g.points)}if(m.points.length>0){m.status="Intersection"}return m};b.Intersection.intersectPolygonPolygon=function(j,h){var f=new c("No Intersection"),l=j.length;for(var k=0;k<l;k++){var g=j[k],e=j[(k+1)%l],d=c.intersectLinePolygon(g,e,h);f.appendPoints(d.points)}if(f.points.length>0){f.status="Intersection"}return f};b.Intersection.intersectPolygonRectangle=function(n,e,d){var g=e.min(d),m=e.max(d),f=new b.Point(m.x,g.y),l=new b.Point(g.x,m.y),k=c.intersectLinePolygon(g,f,n),j=c.intersectLinePolygon(f,m,n),i=c.intersectLinePolygon(m,l,n),h=c.intersectLinePolygon(l,g,n),o=new c("No Intersection");o.appendPoints(k.points);o.appendPoints(j.points);o.appendPoints(i.points);o.appendPoints(h.points);if(o.points.length>0){o.status="Intersection"}return o}})(typeof exports!="undefined"?exports:this);(function(a){var b=a.fabric||(a.fabric={});if(b.Color){b.warn("fabric.Color is already defined.");return}function c(d){if(!d){this.setSource([0,0,0,1])}else{this._tryParsingColor(d)}}b.Color=c;b.Color.prototype={_tryParsingColor:function(d){var e=c.sourceFromHex(d);if(!e){e=c.sourceFromRgb(d)}if(e){this.setSource(e)}},getSource:function(){return this._source},setSource:function(d){this._source=d},toRgb:function(){var d=this.getSource();return"rgb("+d[0]+","+d[1]+","+d[2]+")"},toRgba:function(){var d=this.getSource();return"rgba("+d[0]+","+d[1]+","+d[2]+","+d[3]+")"},toHex:function(){var h=this.getSource();var f=h[0].toString(16);f=(f.length==1)?("0"+f):f;var e=h[1].toString(16);e=(e.length==1)?("0"+e):e;var d=h[2].toString(16);d=(d.length==1)?("0"+d):d;return f.toUpperCase()+e.toUpperCase()+d.toUpperCase()},getAlpha:function(){return this.getSource()[3]},setAlpha:function(e){var d=this.getSource();d[3]=e;this.setSource(d);return this},toGrayscale:function(){var f=this.getSource(),e=parseInt((f[0]*0.3+f[1]*0.59+f[2]*0.11).toFixed(0),10),d=f[3];this.setSource([e,e,e,d]);return this},toBlackWhite:function(d){var g=this.getSource(),f=(g[0]*0.3+g[1]*0.59+g[2]*0.11).toFixed(0),e=g[3],d=d||127;f=(Number(f)<Number(d))?0:255;this.setSource([f,f,f,e]);return this},overlayWith:function(k){if(!(k instanceof c)){k=new c(k)}var d=[],j=this.getAlpha(),g=0.5,h=this.getSource(),e=k.getSource();for(var f=0;f<3;f++){d.push(Math.round((h[f]*(1-g))+(e[f]*g)))}d[3]=j;this.setSource(d);return this}};b.Color.reRGBa=/^rgba?\((\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(\d+(?:\.\d+)?))?\)$/;b.Color.reHex=/^#?([0-9a-f]{6}|[0-9a-f]{3})$/i;b.Color.fromRgb=function(d){return c.fromSource(c.sourceFromRgb(d))};b.Color.sourceFromRgb=function(d){var e=d.match(c.reRGBa);if(e){return[parseInt(e[1],10),parseInt(e[2],10),parseInt(e[3],10),e[4]?parseFloat(e[4]):1]}};b.Color.fromRgba=c.fromRgb;b.Color.fromHex=function(d){return c.fromSource(c.sourceFromHex(d))};b.Color.sourceFromHex=function(f){if(f.match(c.reHex)){var j=f.slice(f.indexOf("#")+1),e=(j.length===3),i=e?(j.charAt(0)+j.charAt(0)):j.substring(0,2),h=e?(j.charAt(1)+j.charAt(1)):j.substring(2,4),d=e?(j.charAt(2)+j.charAt(2)):j.substring(4,6);return[parseInt(i,16),parseInt(h,16),parseInt(d,16),1]}};b.Color.fromSource=function(d){var e=new c();e.setSource(d);return e}})(typeof exports!="undefined"?exports:this);(function(c){if(fabric.StaticCanvas){fabric.warn("fabric.StaticCanvas is already defined.");return}var f=fabric.util.object.extend,d=fabric.util.getElementOffset,e=fabric.util.removeFromArray,b=fabric.util.removeListener,a=new Error("Could not initialize `canvas` element");fabric.StaticCanvas=function(h,g){g||(g={});this._initStatic(h,g);fabric.StaticCanvas.activeInstance=this};f(fabric.StaticCanvas.prototype,fabric.Observable);f(fabric.StaticCanvas.prototype,{backgroundColor:"rgba(0, 0, 0, 0)",backgroundImage:"",backgroundImageOpacity:1,backgroundImageStretch:true,includeDefaultValues:true,stateful:true,renderOnAddition:true,clipTo:null,CANVAS_WIDTH:600,CANVAS_HEIGHT:600,onBeforeScaleRotate:function(g){},onFpsUpdate:null,_initStatic:function(h,g){this._objects=[];this._createLowerCanvas(h);this._initOptions(g);if(g.overlayImage){this.setOverlayImage(g.overlayImage,this.renderAll.bind(this))}if(g.backgroundImage){this.setBackgroundImage(g.backgroundImage,this.renderAll.bind(this))}this.calcOffset()},calcOffset:function(){this._offset=d(this.lowerCanvasEl);return this},setOverlayImage:function(g,h){return fabric.util.loadImage(g,function(i){this.overlayImage=i;h&&h()},this)},setBackgroundImage:function(h,i,g){return fabric.util.loadImage(h,function(j){this.backgroundImage=j;if(g&&g.backgroundOpacity){this.backgroundOpacity=g.backgroundOpacity}if(g&&g.backgroundStretch){this.backgroundStretch=g.backgroundStretch}i&&i()},this)},_createCanvasElement:function(){var g=fabric.document.createElement("canvas");if(!g.style){g.style={}}if(!g){throw a}this._initCanvasElement(g);return g},_initCanvasElement:function(g){if(typeof g.getContext==="undefined"&&typeof G_vmlCanvasManager!=="undefined"&&G_vmlCanvasManager.initElement){G_vmlCanvasManager.initElement(g)}if(typeof g.getContext==="undefined"){throw a}},_initOptions:function(g){for(var h in g){this[h]=g[h]}this.width=parseInt(this.lowerCanvasEl.width,10)||0;this.height=parseInt(this.lowerCanvasEl.height,10)||0;this.lowerCanvasEl.style.width=this.width+"px";this.lowerCanvasEl.style.height=this.height+"px"},_createLowerCanvas:function(g){this.lowerCanvasEl=fabric.util.getById(g)||this._createCanvasElement();this._initCanvasElement(this.lowerCanvasEl);fabric.util.addClass(this.lowerCanvasEl,"lower-canvas");if(this.interactive){this._applyCanvasStyle(this.lowerCanvasEl)}this.contextContainer=this.lowerCanvasEl.getContext("2d")},getWidth:function(){return this.width},getHeight:function(){return this.height},setWidth:function(g){return this._setDimension("width",g)},setHeight:function(g){return this._setDimension("height",g)},setDimensions:function(g){for(var h in g){this._setDimension(h,g[h])}return this},_setDimension:function(h,g){this.lowerCanvasEl[h]=g;this.lowerCanvasEl.style[h]=g+"px";if(this.upperCanvasEl){this.upperCanvasEl[h]=g;this.upperCanvasEl.style[h]=g+"px"}if(this.wrapperEl){this.wrapperEl.style[h]=g+"px"}this[h]=g;this.calcOffset();this.renderAll();return this},getElement:function(){return this.lowerCanvasEl},getActiveObject:function(){return null},getActiveGroup:function(){return null},_draw:function(g,h){h&&h.render(g)},add:function(){this._objects.push.apply(this._objects,arguments);for(var g=arguments.length;g--;){this.stateful&&arguments[g].setupState();arguments[g].setCoords()}this.renderOnAddition&&this.renderAll();return this},insertAt:function(h,g,i){if(i){this._objects[g]=h}else{this._objects.splice(g,0,h)}this.stateful&&h.setupState();h.setCoords();this.renderAll();return this},getObjects:function(){return this._objects},clearContext:function(g){g.clearRect(0,0,this.width,this.height);return this},getContext:function(){return this.contextContainer},clear:function(){this._objects.length=0;this.clearContext(this.contextContainer);if(this.contextTop){this.clearContext(this.contextTop)}this.renderAll();return this},renderAll:function(h){var j=this[(h===true&&this.interactive)?"contextTop":"contextContainer"];if(this.contextTop){this.clearContext(this.contextTop)}if(h===false||(typeof h==="undefined")){this.clearContext(j)}var n=this._objects.length,m=this.getActiveGroup(),l=new Date();if(this.clipTo){j.save();j.beginPath();this.clipTo(j);j.clip()}j.fillStyle=this.backgroundColor;j.fillRect(0,0,this.width,this.height);if(typeof this.backgroundImage=="object"){j.save();j.globalAlpha=this.backgroundImageOpacity;if(this.backgroundImageStretch){j.drawImage(this.backgroundImage,0,0,this.width,this.height)}else{j.drawImage(this.backgroundImage,0,0)}j.restore()}if(n){for(var k=0;k<n;++k){if(!m||(m&&this._objects[k]&&!m.contains(this._objects[k]))){this._draw(j,this._objects[k])}}}if(this.clipTo){j.restore()}if(m){this._draw(this.contextTop,m)}if(this.overlayImage){(this.contextTop||this.contextContainer).drawImage(this.overlayImage,0,0)}if(this.onFpsUpdate){var g=new Date()-l;this.onFpsUpdate(~~(1000/g))}this.fire("after:render");return this},renderTop:function(){this.clearContext(this.contextTop||this.contextContainer);if(this.overlayImage){(this.contextTop||this.contextContainer).drawImage(this.overlayImage,0,0)}if(this.selection&&this._groupSelector){this._drawSelection()}var g=this.getActiveGroup();if(g){g.render(this.contextTop)}this.fire("after:render");return this},toDataURL:function(h){this.renderAll(true);var g=(this.upperCanvasEl||this.lowerCanvasEl).toDataURL("image/"+h);this.renderAll();return g},toDataURLWithMultiplier:function(j,n){var m=this.getWidth(),l=this.getHeight(),h=m*n,i=l*n,g=this.getActiveObject();this.setWidth(h).setHeight(i);this.contextTop.scale(n,n);if(g){this.deactivateAll()}this.width=m;this.height=l;this.renderAll(true);var k=this.toDataURL(j);this.contextTop.scale(1/n,1/n);this.setWidth(m).setHeight(l);if(g){this.setActiveObject(g)}this.renderAll();return k},getCenter:function(){return{top:this.getHeight()/2,left:this.getWidth()/2}},centerObjectH:function(g){g.set("left",this.getCenter().left);this.renderAll();return this},centerObjectV:function(g){g.set("top",this.getCenter().top);this.renderAll();return this},centerObject:function(g){return this.centerObjectH(g).centerObjectV(g)},toDatalessJSON:function(){return this.toDatalessObject()},toObject:function(){return this._toObjectMethod("toObject")},toDatalessObject:function(){return this._toObjectMethod("toDatalessObject")},_toObjectMethod:function(g){var h={objects:this._objects.map(function(i){if(!this.includeDefaultValues){var j=i.includeDefaultValues;i.includeDefaultValues=false}var k=i[g]();if(!this.includeDefaultValues){i.includeDefaultValues=j}return k},this),background:this.backgroundColor};if(this.backgroundImage){h.backgroundImage=this.backgroundImage.src;h.backgroundImageOpacity=this.backgroundImageOpacity;h.backgroundImageStretch=this.backgroundImageStretch}return h},toSVG:function(){var h=['<?xml version="1.0" standalone="no" ?>','<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" ','"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">',"<svg ",'xmlns="http://www.w3.org/2000/svg" ','xmlns:xlink="http://www.w3.org/1999/xlink" ','version="1.1" ','width="',this.width,'" ','height="',this.height,'" ','xml:space="preserve">',"<desc>Created with Fabric.js ",fabric.version,"</desc>",fabric.createSVGFontFacesMarkup(this.getObjects())];if(this.backgroundImage){h.push('<image x="0" y="0" ','width="',this.width,'" height="',this.height,'" preserveAspectRatio="',(this.backgroundImageStretch?"none":"defer"),'" xlink:href="',this.backgroundImage.src,'" style="opacity:',this.backgroundImageOpacity,'"></image>')}for(var j=0,k=this.getObjects(),g=k.length;j<g;j++){h.push(k[j].toSVG())}h.push("</svg>");return h.join("")},isEmpty:function(){return this._objects.length===0},remove:function(g){e(this._objects,g);if(this.getActiveObject()===g){this.discardActiveObject()}this.renderAll();return g},sendToBack:function(g){e(this._objects,g);this._objects.unshift(g);return this.renderAll()},bringToFront:function(g){e(this._objects,g);this._objects.push(g);return this.renderAll()},sendBackwards:function(j){var h=this._objects.indexOf(j),g=h;if(h!==0){for(var k=h-1;k>=0;--k){if(j.intersectsWithObject(this._objects[k])||j.isContainedWithinObject(this._objects[k])){g=k;break}}e(this._objects,j);this._objects.splice(g,0,j)}return this.renderAll()},bringForward:function(k){var n=this.getObjects(),h=n.indexOf(k),g=h;if(h!==n.length-1){for(var m=h+1,j=this._objects.length;m<j;++m){if(k.intersectsWithObject(n[m])||k.isContainedWithinObject(this._objects[m])){g=m;break}}e(n,k);n.splice(g,0,k)}this.renderAll()},item:function(g){return this.getObjects()[g]},complexity:function(){return this.getObjects().reduce(function(g,h){g+=h.complexity?h.complexity():0;return g},0)},forEachObject:function(k,h){var j=this.getObjects(),g=j.length;while(g--){k.call(h,j[g],g,j)}return this},dispose:function(){this.clear();if(this.interactive){b(this.upperCanvasEl,"mousedown",this._onMouseDown);b(this.upperCanvasEl,"mousemove",this._onMouseMove);b(fabric.window,"resize",this._onResize)}return this},_resizeImageToFit:function(i){var h=i.width||i.offsetWidth,g=this.getWidth()/h;if(h){i.width=h*g}}});fabric.StaticCanvas.prototype.toString=function(){return"#<fabric.Canvas ("+this.complexity()+"): { objects: "+this.getObjects().length+" }>"};f(fabric.StaticCanvas,{EMPTY_JSON:'{"objects": [], "background": "white"}',toGrayscale:function(l){var k=l.getContext("2d"),g=k.getImageData(0,0,l.width,l.height),p=g.data,m=g.width,r=g.height,q,h,o,n;for(o=0;o<m;o++){for(n=0;n<r;n++){q=(o*4)*r+(n*4);h=(p[q]+p[q+1]+p[q+2])/3;p[q]=h;p[q+1]=h;p[q+2]=h}}k.putImageData(g,0,0)},supports:function(h){var i=fabric.document.createElement("canvas");if(typeof G_vmlCanvasManager!=="undefined"){G_vmlCanvasManager.initElement(i)}if(!i||!i.getContext){return null}var g=i.getContext("2d");if(!g){return null}switch(h){case"getImageData":return typeof g.getImageData!=="undefined";case"toDataURL":return typeof i.toDataURL!=="undefined";default:return null}}});fabric.StaticCanvas.prototype.toJSON=fabric.StaticCanvas.prototype.toObject})(typeof exports!="undefined"?exports:this);(function(){var j=fabric.util.object.extend,q=fabric.util.getPointer,b=fabric.util.addListener,g=fabric.util.removeListener,m={tr:"ne-resize",br:"se-resize",bl:"sw-resize",tl:"nw-resize",ml:"w-resize",mt:"n-resize",mr:"e-resize",mb:"s-resize",mtr:"crosshair"},d=fabric.util.array.min,h=fabric.util.array.max,n=Math.sqrt,i=Math.pow,o=Math.atan2,p=Math.abs,f=Math.min,l=Math.max,a=0.5;fabric.Canvas=function(s,r){r||(r={});this._initStatic(s,r);this._initInteractive();fabric.Canvas.activeInstance=this};function k(){}k.prototype=fabric.StaticCanvas.prototype;fabric.Canvas.prototype=new k;var e={interactive:true,selection:true,selectionColor:"rgba(100, 100, 255, 0.3)",selectionBorderColor:"rgba(255, 255, 255, 0.3)",selectionLineWidth:1,freeDrawingColor:"rgb(0, 0, 0)",freeDrawingLineWidth:1,HOVER_CURSOR:"move",CURSOR:"default",CONTAINER_CLASS:"canvas-container",_initInteractive:function(){this._currentTransform=null;this._groupSelector=null;this._freeDrawingXPoints=[];this._freeDrawingYPoints=[];this._initWrapperElement();this._createUpperCanvas();this._initEvents();this.calcOffset()},_initEvents:function(){var r=this;this._onMouseDown=function(s){r.__onMouseDown(s);b(fabric.document,"mouseup",r._onMouseUp);fabric.isTouchSupported&&b(fabric.document,"touchend",r._onMouseUp);b(fabric.document,"mousemove",r._onMouseMove);fabric.isTouchSupported&&b(fabric.document,"touchmove",r._onMouseMove);g(r.upperCanvasEl,"mousemove",r._onMouseMove);fabric.isTouchSupported&&g(r.upperCanvasEl,"touchmove",r._onMouseMove)};this._onMouseUp=function(s){r.__onMouseUp(s);g(fabric.document,"mouseup",r._onMouseUp);fabric.isTouchSupported&&g(fabric.document,"touchend",r._onMouseUp);g(fabric.document,"mousemove",r._onMouseMove);fabric.isTouchSupported&&g(fabric.document,"touchmove",r._onMouseMove);b(r.upperCanvasEl,"mousemove",r._onMouseMove);fabric.isTouchSupported&&b(r.upperCanvasEl,"touchmove",r._onMouseMove)};this._onMouseMove=function(s){s.preventDefault&&s.preventDefault();r.__onMouseMove(s)};this._onResize=function(s){r.calcOffset()};b(fabric.window,"resize",this._onResize);if(fabric.isTouchSupported){b(this.upperCanvasEl,"touchstart",this._onMouseDown);b(this.upperCanvasEl,"touchmove",this._onMouseMove)}else{b(this.upperCanvasEl,"mousedown",this._onMouseDown);b(this.upperCanvasEl,"mousemove",this._onMouseMove)}},__onMouseUp:function(v){if(this.isDrawingMode&&this._isCurrentlyDrawing){this._finalizeDrawingPath();return}if(this._currentTransform){var r=this._currentTransform,u=r.target;if(u._scaling){u._scaling=false}var s=this._objects.length;while(s--){this._objects[s].setCoords()}if(this.stateful&&u.hasStateChanged()){u.isMoving=false;this.fire("object:modified",{target:u})}}this._currentTransform=null;if(this._groupSelector){this._findSelectedObjects(v)}var t=this.getActiveGroup();if(t){t.setObjectsCoords();t.set("isMoving",false);this._setCursor(this.CURSOR)}this._groupSelector=null;this.renderAll();this._setCursorFromEvent(v,u);this._setCursor("");var w=this;setTimeout(function(){w._setCursorFromEvent(v,u)},50);this.fire("mouse:up",{target:u,e:v})},__onMouseDown:function(w){var r="which"in w?w.which==1:w.button==1;if(!r&&!fabric.isTouchSupported){return}if(this.isDrawingMode){this._prepareForDrawing(w);this._captureDrawingPath(w);return}if(this._currentTransform){return}var v=this.findTarget(w),x=this.getPointer(w),t=this.getActiveGroup(),u;if(this._shouldClearSelection(w)){this._groupSelector={ex:x.x,ey:x.y,top:0,left:0};this.deactivateAllWithDispatch()}else{this.stateful&&v.saveState();if(u=v._findTargetCorner(w,this._offset)){this.onBeforeScaleRotate(v)}this._setupCurrentTransform(w,v);var s=w.shiftKey&&(t||this.getActiveObject())&&this.selection;if(s){this._handleGroupLogic(w,v)}else{if(v!==this.getActiveGroup()){this.deactivateAll()}this.setActiveObject(v,w)}}this.renderAll();this.fire("mouse:down",{target:v,e:w})},__onMouseMove:function(w){if(this.isDrawingMode){if(this._isCurrentlyDrawing){this._captureDrawingPath(w)}return}var s=this._groupSelector;if(s!==null){var z=q(w);s.left=z.x-this._offset.left-s.ex;s.top=z.y-this._offset.top-s.ey;this.renderTop()}else{if(!this._currentTransform){var u=this.upperCanvasEl.style;var v=this.findTarget(w);if(!v){for(var t=this._objects.length;t--;){if(this._objects[t]&&!this._objects[t].active){this._objects[t].setActive(false)}}u.cursor=this.CURSOR}else{this._setCursorFromEvent(w,v);if(v.isActive()){v.setCornersVisibility&&v.setCornersVisibility(true)}}}else{var z=q(w),r=z.x,A=z.y;this._currentTransform.target.isMoving=true;if(this._currentTransform.action==="rotate"){if(!w.shiftKey){this._rotateObject(r,A);this.fire("object:rotating",{target:this._currentTransform.target})}if(!this._currentTransform.target.hasRotatingPoint){this._scaleObject(r,A);this.fire("object:scaling",{target:this._currentTransform.target})}}else{if(this._currentTransform.action==="scale"){this._scaleObject(r,A);this.fire("object:scaling",{target:this._currentTransform.target})}else{if(this._currentTransform.action==="scaleX"){this._scaleObject(r,A,"x");this.fire("object:scaling",{target:this._currentTransform.target})}else{if(this._currentTransform.action==="scaleY"){this._scaleObject(r,A,"y");this.fire("object:scaling",{target:this._currentTransform.target})}else{this._translateObject(r,A);this.fire("object:moving",{target:this._currentTransform.target})}}}}this.renderAll()}}this.fire("mouse:move",{target:v,e:w})},containsPoint:function(w,v){var z=this.getPointer(w),u=this._normalizePointer(v,z),r=u.x,A=u.y;var s=v._getImageLines(v.oCoords),t=v._findCrossPoints(r,A,s);if((t&&t%2===1)||v._findTargetCorner(w,this._offset)){return true}return false},_normalizePointer:function(s,v){var u=this.getActiveGroup(),r=v.x,w=v.y;var t=(u&&s.type!=="group"&&u.contains(s));if(t){r-=u.left;w-=u.top}return{x:r,y:w}},_shouldClearSelection:function(t){var s=this.findTarget(t),r=this.getActiveGroup();return(!s||(s&&r&&!r.contains(s)&&r!==s&&!t.shiftKey))},_setupCurrentTransform:function(u,t){var s="drag",r,v=q(u);if(r=t._findTargetCorner(u,this._offset)){s=(r==="ml"||r==="mr")?"scaleX":(r==="mt"||r==="mb")?"scaleY":(r==="mtr")?"rotate":(t.hasRotatingPoint)?"scale":"rotate"}this._currentTransform={target:t,action:s,scaleX:t.scaleX,scaleY:t.scaleY,offsetX:v.x-t.left,offsetY:v.y-t.top,ex:v.x,ey:v.y,left:t.left,top:t.top,theta:t.theta,width:t.width*t.scaleX};this._currentTransform.original={left:t.left,top:t.top}},_handleGroupLogic:function(u,t){if(t.isType("group")){t=this.findTarget(u,true);if(!t||t.isType("group")){return}}var r=this.getActiveGroup();if(r){if(r.contains(t)){r.remove(t);t.setActive(false);if(r.size()===1){this.discardActiveGroup()}}else{r.add(t)}this.fire("selection:created",{target:r,e:u});r.setActive(true)}else{if(this._activeObject){if(t!==this._activeObject){var s=new fabric.Group([this._activeObject,t]);this.setActiveGroup(s);r=this.getActiveGroup()}}t.setActive(true)}if(r){r.saveCoords()}},_prepareForDrawing:function(r){this._isCurrentlyDrawing=true;this.discardActiveObject().renderAll();var s=this.getPointer(r);this._freeDrawingXPoints.length=this._freeDrawingYPoints.length=0;this._freeDrawingXPoints.push(s.x);this._freeDrawingYPoints.push(s.y);this.contextTop.beginPath();this.contextTop.moveTo(s.x,s.y);this.contextTop.strokeStyle=this.freeDrawingColor;this.contextTop.lineWidth=this.freeDrawingLineWidth;this.contextTop.lineCap=this.contextTop.lineJoin="round"},_captureDrawingPath:function(r){var s=this.getPointer(r);this._freeDrawingXPoints.push(s.x);this._freeDrawingYPoints.push(s.y);this.contextTop.lineTo(s.x,s.y);this.contextTop.stroke()},_finalizeDrawingPath:function(){this.contextTop.closePath();this._isCurrentlyDrawing=false;var w=d(this._freeDrawingXPoints),v=d(this._freeDrawingYPoints),t=h(this._freeDrawingXPoints),r=h(this._freeDrawingYPoints),B=this.contextTop,C=[],x,z,s=this._freeDrawingXPoints,A=this._freeDrawingYPoints;C.push("M ",s[0]-w," ",A[0]-v," ");for(var y=1;x=s[y],z=A[y];y++){C.push("L ",x-w," ",z-v," ")}C=C.join("");if(C==="M 0 0 L 0 0 "){return}var u=new fabric.Path(C);u.fill=null;u.stroke=this.freeDrawingColor;u.strokeWidth=this.freeDrawingLineWidth;this.add(u);u.set("left",w+(t-w)/2).set("top",v+(r-v)/2).setCoords();this.renderAll();this.fire("path:created",{path:u})},_translateObject:function(r,t){var s=this._currentTransform.target;s.lockMovementX||s.set("left",r-this._currentTransform.offsetX);s.lockMovementY||s.set("top",t-this._currentTransform.offsetY)},_scaleObject:function(r,B,z){var s=this._currentTransform,A=this._offset,w=s.target;if(w.lockScalingX&&w.lockScalingY){return}var v=n(i(s.ey-s.top-A.top,2)+i(s.ex-s.left-A.left,2)),u=n(i(B-s.top-A.top,2)+i(r-s.left-A.left,2));w._scaling=true;if(!z){w.lockScalingX||w.set("scaleX",s.scaleX*u/v);w.lockScalingY||w.set("scaleY",s.scaleY*u/v)}else{if(z==="x"&&!w.lockUniScaling){w.lockScalingX||w.set("scaleX",s.scaleX*u/v)}else{if(z==="y"&&!w.lockUniScaling){w.lockScalingY||w.set("scaleY",s.scaleY*u/v)}}}},_rotateObject:function(r,z){var s=this._currentTransform,v=this._offset;if(s.target.lockRotation){return}var u=o(s.ey-s.top-v.top,s.ex-s.left-v.left),w=o(z-s.top-v.top,r-s.left-v.left);s.target.set("theta",(w-u)+s.theta)},_setCursor:function(r){this.upperCanvasEl.style.cursor=r},_setCursorFromEvent:function(w,v){var t=this.upperCanvasEl.style;if(!v){t.cursor=this.CURSOR;return false}else{var r=this.getActiveGroup();var u=!!v._findTargetCorner&&(!r||!r.contains(v))&&v._findTargetCorner(w,this._offset);if(!u){t.cursor=this.HOVER_CURSOR}else{if(u in m){t.cursor=m[u]}else{t.cursor=this.CURSOR;return false}}}return true},_drawSelection:function(){var r=this._groupSelector,v=r.left,u=r.top,t=p(v),s=p(u);this.contextTop.fillStyle=this.selectionColor;this.contextTop.fillRect(r.ex-((v>0)?0:-v),r.ey-((u>0)?0:-u),t,s);this.contextTop.lineWidth=this.selectionLineWidth;this.contextTop.strokeStyle=this.selectionBorderColor;this.contextTop.strokeRect(r.ex+a-((v>0)?0:t),r.ey+a-((u>0)?0:s),t,s)},_findSelectedObjects:function(x){var y,t,D=[],s=this._groupSelector.ex,C=this._groupSelector.ey,r=s+this._groupSelector.left,A=C+this._groupSelector.top,z,w=new fabric.Point(f(s,r),f(C,A)),B=new fabric.Point(l(s,r),l(C,A));for(var u=0,v=this._objects.length;u<v;++u){z=this._objects[u];if(!z){continue}if(z.intersectsWithRect(w,B)||z.isContainedWithinRect(w,B)){if(this.selection&&z.selectable){z.setActive(true);D.push(z)}}}if(D.length===1){this.setActiveObject(D[0],x)}else{if(D.length>1){var D=new fabric.Group(D);this.setActiveGroup(D);D.saveCoords();this.fire("selection:created",{target:D})}}this.renderAll()},findTarget:function(v,s){var u,w=this.getPointer(v);var t=this.getActiveGroup();if(t&&!s&&this.containsPoint(v,t)){u=t;return u}for(var r=this._objects.length;r--;){if(this._objects[r]&&this.containsPoint(v,this._objects[r])){u=this._objects[r];this.relatedTarget=u;break}}if(u&&u.selectable){return u}},getPointer:function(r){var s=q(r);return{x:s.x-this._offset.left,y:s.y-this._offset.top}},_createUpperCanvas:function(){this.upperCanvasEl=this._createCanvasElement();this.upperCanvasEl.className="upper-canvas";this.wrapperEl.appendChild(this.upperCanvasEl);this._applyCanvasStyle(this.upperCanvasEl);this.contextTop=this.upperCanvasEl.getContext("2d")},_initWrapperElement:function(){this.wrapperEl=fabric.util.wrapElement(this.lowerCanvasEl,"div",{"class":this.CONTAINER_CLASS});fabric.util.setStyle(this.wrapperEl,{width:this.getWidth()+"px",height:this.getHeight()+"px",position:"relative"});fabric.util.makeElementUnselectable(this.wrapperEl)},_applyCanvasStyle:function(s){var t=this.getWidth()||s.width,r=this.getHeight()||s.height;fabric.util.setStyle(s,{position:"absolute",width:t+"px",height:r+"px",left:0,top:0});s.width=t;s.height=r;fabric.util.makeElementUnselectable(s)},getSelectionContext:function(){return this.contextTop},getSelectionElement:function(){return this.upperCanvasEl},setActiveObject:function(r,s){if(this._activeObject){this._activeObject.setActive(false)}this._activeObject=r;r.setActive(true);this.renderAll();this.fire("object:selected",{target:r,e:s});return this},getActiveObject:function(){return this._activeObject},discardActiveObject:function(){if(this._activeObject){this._activeObject.setActive(false)}this._activeObject=null;return this},setActiveGroup:function(r){this._activeGroup=r;return this},getActiveGroup:function(){return this._activeGroup},discardActiveGroup:function(){var r=this.getActiveGroup();if(r){r.destroy()}return this.setActiveGroup(null)},deactivateAll:function(){var s=this.getObjects(),t=0,r=s.length;for(;t<r;t++){s[t].setActive(false)}this.discardActiveGroup();this.discardActiveObject();return this},deactivateAllWithDispatch:function(){var r=this.getActiveGroup()||this.getActiveObject();if(r){this.fire("before:selection:cleared",{target:r})}this.deactivateAll();if(r){this.fire("selection:cleared")}return this}};fabric.Canvas.prototype.toString=fabric.StaticCanvas.prototype.toString;j(fabric.Canvas.prototype,e);for(var c in fabric.StaticCanvas){if(c!=="prototype"){fabric.Canvas[c]=fabric.StaticCanvas[c]}}if(fabric.isTouchSupported){fabric.Canvas.prototype._setCursorFromEvent=function(){}}fabric.Element=fabric.Canvas})();fabric.util.object.extend(fabric.StaticCanvas.prototype,{FX_DURATION:500,fxCenterObjectH:function(b,c){c=c||{};var d=function(){},e=c.onComplete||d,a=c.onChange||d,f=this;fabric.util.animate({startValue:b.get("left"),endValue:this.getCenter().left,duration:this.FX_DURATION,onChange:function(g){b.set("left",g);f.renderAll();a()},onComplete:function(){b.setCoords();e()}});return this},fxCenterObjectV:function(b,c){c=c||{};var d=function(){},e=c.onComplete||d,a=c.onChange||d,f=this;fabric.util.animate({startValue:b.get("top"),endValue:this.getCenter().top,duration:this.FX_DURATION,onChange:function(g){b.set("top",g);f.renderAll();a()},onComplete:function(){b.setCoords();e()}});return this},fxRemove:function(b,c){c=c||{};var d=function(){},e=c.onComplete||d,a=c.onChange||d,f=this;fabric.util.animate({startValue:b.get("opacity"),endValue:0,duration:this.FX_DURATION,onStart:function(){b.setActive(false)},onChange:function(g){b.set("opacity",g);f.renderAll();a()},onComplete:function(){f.remove(b);e()}});return this}});fabric.util.object.extend(fabric.StaticCanvas.prototype,{loadFromDatalessJSON:function(a,c){if(!a){return}var b=(typeof a==="string")?JSON.parse(a):a;if(!b||(b&&!b.objects)){return}this.clear();this.backgroundColor=b.background;this._enlivenDatalessObjects(b.objects,c)},_enlivenDatalessObjects:function(b,h){function g(i,e){f.insertAt(i,e,true);i.setCoords();if(++d===a){h&&h()}}var f=this,d=0,a=b.length;if(a===0&&h){h()}try{b.forEach(function(n,l){var i=n.paths?"paths":"path";var m=n[i];delete n[i];if(typeof m!=="string"){switch(n.type){case"image":fabric[fabric.util.string.capitalize(n.type)].fromObject(n,function(p){g(p,l)});break;default:var e=fabric[fabric.util.string.camelize(fabric.util.string.capitalize(n.type))];if(e&&e.fromObject){if(m){n[i]=m}g(e.fromObject(n),l)}break}}else{if(n.type==="image"){fabric.util.loadImage(m,function(p){var o=new fabric.Image(p);o.setSourcePath(m);fabric.util.object.extend(o,n);o.setAngle(n.angle);g(o,l)})}else{if(n.type==="text"){n.path=m;var k=fabric.Text.fromObject(n);var j=function(){if(Object.prototype.toString.call(fabric.window.opera)==="[object Opera]"){setTimeout(function(){g(k,l)},500)}else{g(k,l)}};fabric.util.getScript(m,j)}else{fabric.loadSVGFromURL(m,function(q,p){if(q.length>1){var o=new fabric.PathGroup(q,n)}else{var o=q[0]}o.setSourcePath(m);if(!(o instanceof fabric.PathGroup)){fabric.util.object.extend(o,n);if(typeof n.angle!=="undefined"){o.setAngle(n.angle)}}g(o,l)})}}}},this)}catch(c){fabric.log(c.message)}},loadFromJSON:function(a,d){if(!a){return}var b=JSON.parse(a);if(!b||(b&&!b.objects)){return}this.clear();var c=this;this._enlivenObjects(b.objects,function(){c.backgroundColor=b.background;if(b.backgroundImage){c.setBackgroundImage(b.backgroundImage);c.backgroundImageOpacity=b.backgroundImageOpacity;c.backgroundImageStretch=b.backgroundImageStretch}if(d){d()}});return this},_enlivenObjects:function(b,e){var c=0,a=b.filter(function(f){return f.type==="image"}).length;var d=this;b.forEach(function(h,g){if(!h.type){return}switch(h.type){case"image":case"font":fabric[fabric.util.string.capitalize(h.type)].fromObject(h,function(i){d.insertAt(i,g,true);if(++c===a){if(e){e()}}});break;default:var f=fabric[fabric.util.string.camelize(fabric.util.string.capitalize(h.type))];if(f&&f.fromObject){d.insertAt(f.fromObject(h),g,true)}break}});if(a===0&&e){e()}},_toDataURL:function(a,b){this.clone(function(c){b(c.toDataURL(a))})},_toDataURLWithMultiplier:function(a,c,b){this.clone(function(d){b(d.toDataURLWithMultiplier(a,c))})},clone:function(b){var a=JSON.stringify(this);this.cloneWithoutData(function(c){c.loadFromJSON(a,function(){if(b){b(c)}})})},cloneWithoutData:function(c){var a=fabric.document.createElement("canvas");a.width=this.getWidth();a.height=this.getHeight();var b=this.__clone||(this.__clone=new fabric.Canvas(a));b.clipTo=this.clipTo;if(c){c(b)}}});(function(a){var d=a.fabric||(a.fabric={}),l=d.util.object.extend,m=d.util.object.clone,c=d.util.toFixed,k=d.util.string.capitalize,p=d.util.getPointer,b=d.util.degreesToRadians,o=Array.prototype.slice;if(d.Object){return}d.Object=d.util.createClass({type:"object",includeDefaultValues:true,NUM_FRACTION_DIGITS:2,MIN_SCALE_LIMIT:0.1,stateProperties:("top left width height scaleX scaleY flipX flipY theta angle opacity cornersize fill overlayFill stroke strokeWidth fillRule borderScaleFactor transformMatrix selectable").split(" "),top:0,left:0,width:0,height:0,scaleX:1,scaleY:1,flipX:false,flipY:false,theta:0,opacity:1,angle:0,cornersize:12,padding:0,borderColor:"rgba(102,153,255,0.75)",cornerColor:"rgba(102,153,255,0.5)",fill:"rgb(0,0,0)",fillRule:"source-over",overlayFill:null,stroke:null,strokeWidth:1,borderOpacityWhenMoving:0.4,borderScaleFactor:1,transformMatrix:null,selectable:true,hasControls:true,hasBorders:true,hasRotatingPoint:false,callSuper:function(i){var q=this.constructor.superclass.prototype[i];return(arguments.length>1)?q.apply(this,o.call(arguments,1)):q.call(this)},initialize:function(i){i&&this.setOptions(i)},setOptions:function(q){var r=this.stateProperties.length,s;while(r--){s=this.stateProperties[r];if(s in q){this.set(s,q[s])}}},transform:function(i){i.globalAlpha=this.opacity;i.translate(this.left,this.top);i.rotate(this.theta);i.scale(this.scaleX*(this.flipX?-1:1),this.scaleY*(this.flipY?-1:1))},toObject:function(){var i={type:this.type,left:c(this.left,this.NUM_FRACTION_DIGITS),top:c(this.top,this.NUM_FRACTION_DIGITS),width:c(this.width,this.NUM_FRACTION_DIGITS),height:c(this.height,this.NUM_FRACTION_DIGITS),fill:this.fill,overlayFill:this.overlayFill,stroke:this.stroke,strokeWidth:this.strokeWidth,scaleX:c(this.scaleX,this.NUM_FRACTION_DIGITS),scaleY:c(this.scaleY,this.NUM_FRACTION_DIGITS),angle:c(this.getAngle(),this.NUM_FRACTION_DIGITS),flipX:this.flipX,flipY:this.flipY,opacity:c(this.opacity,this.NUM_FRACTION_DIGITS),selectable:this.selectable};if(!this.includeDefaultValues){i=this._removeDefaultValues(i)}return i},toDatalessObject:function(){return this.toObject()},getSvgStyles:function(){return["stroke: ",(this.stroke?this.stroke:"none"),"; ","stroke-width: ",(this.strokeWidth?this.strokeWidth:"0"),"; ","fill: ",(this.fill?this.fill:"none"),"; ","opacity: ",(this.opacity?this.opacity:"1"),";"].join("")},getSvgTransform:function(){var i=this.getAngle();return["translate(",c(this.left,2)," ",c(this.top,2),")",i!==0?(" rotate("+c(i,2)+")"):"",(this.scaleX===1&&this.scaleY===1)?"":(" scale("+c(this.scaleX,2)+" "+c(this.scaleY,2)+")")].join("")},_removeDefaultValues:function(q){var i=d.Object.prototype.options;if(i){this.stateProperties.forEach(function(r){if(q[r]===i[r]){delete q[r]}})}return q},isActive:function(){return!!this.active},setActive:function(i){this.active=!!i;return this},toString:function(){return"#<fabric."+k(this.type)+">"},set:function(q,i){var s=(q==="scaleX"||q==="scaleY")&&i<this.MIN_SCALE_LIMIT;if(s){i=this.MIN_SCALE_LIMIT}if(typeof q=="object"){for(var r in q){this.set(r,q[r])}}else{if(q==="angle"){this.setAngle(i)}else{this[q]=i}}return this},toggle:function(q){var i=this.get(q);if(typeof i==="boolean"){this.set(q,!i)}return this},setSourcePath:function(i){this.sourcePath=i;return this},get:function(i){return(i==="angle")?this.getAngle():this[i]},render:function(q,r){if(this.width===0||this.height===0){return}q.save();var i=this.transformMatrix;if(i){q.setTransform(i[0],i[1],i[2],i[3],i[4],i[5])}if(!r){this.transform(q)}if(this.stroke){q.lineWidth=this.strokeWidth;q.strokeStyle=this.stroke}if(this.overlayFill){q.fillStyle=this.overlayFill}else{if(this.fill){q.fillStyle=this.fill}}this._render(q,r);if(this.active&&!r){this.drawBorders(q);this.hideCorners||this.drawCorners(q)}q.restore()},getWidth:function(){return this.width*this.scaleX},getHeight:function(){return this.height*this.scaleY},scale:function(i){this.scaleX=i;this.scaleY=i;return this},scaleToWidth:function(i){return this.scale(i/this.width)},scaleToHeight:function(i){return this.scale(i/this.height)},setOpacity:function(i){this.set("opacity",i);return this},getAngle:function(){return this.theta*180/Math.PI},setAngle:function(i){this.theta=i/180*Math.PI;this.angle=i;return this},setCoords:function(){this.currentWidth=this.width*this.scaleX;this.currentHeight=this.height*this.scaleY;this._hypotenuse=Math.sqrt(Math.pow(this.currentWidth/2,2)+Math.pow(this.currentHeight/2,2));this._angle=Math.atan(this.currentHeight/this.currentWidth);var w=Math.cos(this._angle+this.theta)*this._hypotenuse,v=Math.sin(this._angle+this.theta)*this._hypotenuse,r=this.theta,z=Math.sin(r),x=Math.cos(r);var C={x:this.left-w,y:this.top-v};var y={x:C.x+(this.currentWidth*x),y:C.y+(this.currentWidth*z)};var B={x:y.x-(this.currentHeight*z),y:y.y+(this.currentHeight*x)};var s={x:C.x-(this.currentHeight*z),y:C.y+(this.currentHeight*x)};var u={x:C.x-(this.currentHeight/2*z),y:C.y+(this.currentHeight/2*x)};var i={x:C.x+(this.currentWidth/2*x),y:C.y+(this.currentWidth/2*z)};var q={x:y.x-(this.currentHeight/2*z),y:y.y+(this.currentHeight/2*x)};var A={x:s.x+(this.currentWidth/2*x),y:s.y+(this.currentWidth/2*z)};var t={x:C.x+(this.currentWidth/2*x),y:C.y+(this.currentWidth/2*z)};this.oCoords={tl:C,tr:y,br:B,bl:s,ml:u,mt:i,mr:q,mb:A,mtr:t};this._setCornerCoords();return this},drawBorders:function(y){if(!this.hasBorders){return}var t=this.padding,i=t*2;y.save();y.globalAlpha=this.isMoving?this.borderOpacityWhenMoving:1;y.strokeStyle=this.borderColor;var x=1/(this.scaleX<this.MIN_SCALE_LIMIT?this.MIN_SCALE_LIMIT:this.scaleX),u=1/(this.scaleY<this.MIN_SCALE_LIMIT?this.MIN_SCALE_LIMIT:this.scaleY);y.lineWidth=1/this.borderScaleFactor;y.scale(x,u);var v=this.getWidth(),s=this.getHeight();y.strokeRect(~~(-(v/2)-t)+0.5,~~(-(s/2)-t)+0.5,~~(v+i),~~(s+i));if(this.hasRotatingPoint&&!this.hideCorners&&!this.lockRotation){var r=(-s/2);var q=(-v/2);y.beginPath();y.moveTo(0,r);y.lineTo(0,r-40);y.closePath();y.stroke()}y.restore();return this},drawCorners:function(B){if(!this.hasControls){return}var D=this.cornersize,y=D/2,x=this.padding,r=-(this.width/2),w=-(this.height/2),C,A,q=D/this.scaleX,i=D/this.scaleY,s=(x+y)/this.scaleY,t=(x+y)/this.scaleX,v=(x+y-D)/this.scaleX,u=(x+y-D)/this.scaleY,z=this.height;B.save();B.globalAlpha=this.isMoving?this.borderOpacityWhenMoving:1;B.fillStyle=this.cornerColor;C=r-t;A=w-s;B.fillRect(C,A,q,i);C=r+this.width-t;A=w-s;B.fillRect(C,A,q,i);C=r-t;A=w+z+u;B.fillRect(C,A,q,i);C=r+this.width+v;A=w+z+u;B.fillRect(C,A,q,i);C=r+this.width/2-t;A=w-s;B.fillRect(C,A,q,i);C=r+this.width/2-t;A=w+z+u;B.fillRect(C,A,q,i);C=r+this.width+v;A=w+z/2-s;B.fillRect(C,A,q,i);C=r-t;A=w+z/2-s;B.fillRect(C,A,q,i);if(this.hasRotatingPoint){C=r+this.width/2-t;A=w-(45/this.scaleY);B.fillRect(C,A,q,i)}B.restore();return this},clone:function(i){if(this.constructor.fromObject){return this.constructor.fromObject(this.toObject(),i)}return new d.Object(this.toObject())},cloneAsImage:function(s){if(d.Image){var q=new Image();q.onload=function(){if(s){s(new d.Image(q),r)}q=q.onload=null};var r={angle:this.get("angle"),flipX:this.get("flipX"),flipY:this.get("flipY")};this.set("angle",0).set("flipX",false).set("flipY",false);this.toDataURL(function(i){q.src=i})}return this},toDataURL:function(s){var q=d.document.createElement("canvas");if(!q.getContext&&typeof G_vmlCanvasManager!="undefined"){G_vmlCanvasManager.initElement(q)}q.width=this.getWidth();q.height=this.getHeight();d.util.wrapElement(q,"div");var i=new d.Canvas(q);i.backgroundColor="transparent";i.renderAll();if(this.constructor.async){this.clone(r)}else{r(this.clone())}function r(u){u.left=q.width/2;u.top=q.height/2;u.setActive(false);i.add(u);var t=i.toDataURL("png");i.dispose();i=u=null;s&&s(t)}},hasStateChanged:function(){return this.stateProperties.some(function(i){return this[i]!==this.originalState[i]},this)},saveState:function(){this.stateProperties.forEach(function(i){this.originalState[i]=this.get(i)},this);return this},setupState:function(){this.originalState={};this.saveState()},intersectsWithRect:function(r,t){var w=this.oCoords,i=new d.Point(w.tl.x,w.tl.y),s=new d.Point(w.tr.x,w.tr.y),v=new d.Point(w.bl.x,w.bl.y),q=new d.Point(w.br.x,w.br.y);var u=d.Intersection.intersectPolygonRectangle([i,s,q,v],r,t);return(u.status==="Intersection")},intersectsWithObject:function(i){function q(u){return{tl:new d.Point(u.tl.x,u.tl.y),tr:new d.Point(u.tr.x,u.tr.y),bl:new d.Point(u.bl.x,u.bl.y),br:new d.Point(u.br.x,u.br.y)}}var r=q(this.oCoords),t=q(i.oCoords);var s=d.Intersection.intersectPolygonPolygon([r.tl,r.tr,r.br,r.bl],[t.tl,t.tr,t.br,t.bl]);return(s.status==="Intersection")},isContainedWithinObject:function(i){return this.isContainedWithinRect(i.oCoords.tl,i.oCoords.br)},isContainedWithinRect:function(r,t){var v=this.oCoords,i=new d.Point(v.tl.x,v.tl.y),s=new d.Point(v.tr.x,v.tr.y),u=new d.Point(v.bl.x,v.bl.y),q=new d.Point(v.br.x,v.br.y);return i.x>r.x&&s.x<t.x&&i.y>r.y&&u.y<t.y},isType:function(i){return this.type===i},_findTargetCorner:function(v,x){if(!this.hasControls){return false}var w=p(v),u=w.x-x.left,r=w.y-x.top,t,q;for(var s in this.oCoords){q=this._getImageLines(this.oCoords[s].corner,s);t=this._findCrossPoints(u,r,q);if(t%2==1&&t!=0){this.__corner=s;return s}}return false},_findCrossPoints:function(w,v,i){var z,y,r,q,x,u,t=0,s;for(var A in i){s=i[A];if((s.o.y<v)&&(s.d.y<v)){continue}if((s.o.y>=v)&&(s.d.y>=v)){continue}if((s.o.x==s.d.x)&&(s.o.x>=w)){x=s.o.x;u=v}else{z=0;y=(s.d.y-s.o.y)/(s.d.x-s.o.x);r=v-z*w;q=s.o.y-y*s.o.x;x=-(r-q)/(z-y);u=r+z*x}if(x>=w){t+=1}if(t==2){break}}return t},_getImageLines:function(r,q){return{topline:{o:r.tl,d:r.tr},rightline:{o:r.tr,d:r.br},bottomline:{o:r.br,d:r.bl},leftline:{o:r.bl,d:r.tl}}},_setCornerCoords:function(){var u=this.oCoords,q=b(45-this.getAngle()),s=Math.sqrt(2*Math.pow(this.cornersize,2))/2,i=s*Math.cos(q),r=s*Math.sin(q),v=Math.sin(this.theta),t=Math.cos(this.theta);u.tl.corner={tl:{x:u.tl.x-r,y:u.tl.y-i},tr:{x:u.tl.x+i,y:u.tl.y-r},bl:{x:u.tl.x-i,y:u.tl.y+r},br:{x:u.tl.x+r,y:u.tl.y+i}};u.tr.corner={tl:{x:u.tr.x-r,y:u.tr.y-i},tr:{x:u.tr.x+i,y:u.tr.y-r},br:{x:u.tr.x+r,y:u.tr.y+i},bl:{x:u.tr.x-i,y:u.tr.y+r}};u.bl.corner={tl:{x:u.bl.x-r,y:u.bl.y-i},bl:{x:u.bl.x-i,y:u.bl.y+r},br:{x:u.bl.x+r,y:u.bl.y+i},tr:{x:u.bl.x+i,y:u.bl.y-r}};u.br.corner={tr:{x:u.br.x+i,y:u.br.y-r},bl:{x:u.br.x-i,y:u.br.y+r},br:{x:u.br.x+r,y:u.br.y+i},tl:{x:u.br.x-r,y:u.br.y-i}};u.ml.corner={tl:{x:u.ml.x-r,y:u.ml.y-i},tr:{x:u.ml.x+i,y:u.ml.y-r},bl:{x:u.ml.x-i,y:u.ml.y+r},br:{x:u.ml.x+r,y:u.ml.y+i}};u.mt.corner={tl:{x:u.mt.x-r,y:u.mt.y-i},tr:{x:u.mt.x+i,y:u.mt.y-r},bl:{x:u.mt.x-i,y:u.mt.y+r},br:{x:u.mt.x+r,y:u.mt.y+i}};u.mr.corner={tl:{x:u.mr.x-r,y:u.mr.y-i},tr:{x:u.mr.x+i,y:u.mr.y-r},bl:{x:u.mr.x-i,y:u.mr.y+r},br:{x:u.mr.x+r,y:u.mr.y+i}};u.mb.corner={tl:{x:u.mb.x-r,y:u.mb.y-i},tr:{x:u.mb.x+i,y:u.mb.y-r},bl:{x:u.mb.x-i,y:u.mb.y+r},br:{x:u.mb.x+r,y:u.mb.y+i}};u.mtr.corner={tl:{x:u.mtr.x-r+(v*40),y:u.mtr.y-i-(t*40)},tr:{x:u.mtr.x+i+(v*40),y:u.mtr.y-r-(t*40)},bl:{x:u.mtr.x-i+(v*40),y:u.mtr.y+r-(t*40)},br:{x:u.mtr.x+r+(v*40),y:u.mtr.y+i-(t*40)}}},toGrayscale:function(){var i=this.get("fill");if(i){this.set("overlayFill",new d.Color(i).toGrayscale().toRgb())}return this},complexity:function(){return 0},toJSON:function(){return this.toObject()},setGradientFill:function(i,q){this.set("fill",d.Gradient.forObject(this,i,q))},animate:function(q,s,i){var r=this;if(!("from"in i)){i.from=this.get(q)}if(/[+-]/.test(s.charAt(0))){s=this.get(q)+parseFloat(s)}d.util.animate({startValue:i.from,endValue:s,byValue:i.by,easing:i.easing,duration:i.duration,onChange:function(t){r.set(q,t);i.onChange&&i.onChange()},onComplete:function(){r.setCoords();i.onComplete&&i.onComplete()}})}});d.Object.prototype.rotate=d.Object.prototype.setAngle;var j=d.Object.prototype;for(var g=j.stateProperties.length;g--;){var h=j.stateProperties[g],e=h.charAt(0).toUpperCase()+h.slice(1),f="set"+e,n="get"+e;if(!j[n]){j[n]=(function(i){return new Function('return this.get("'+i+'")')})(h)}if(!j[f]){j[f]=(function(i){return new Function("value",'return this.set("'+i+'", value)')})(h)}}})(typeof exports!="undefined"?exports:this);(function(b){var c=b.fabric||(b.fabric={}),e=c.util.object.extend,d=c.Object.prototype.set,a={x1:1,x2:1,y1:1,y2:1};if(c.Line){c.warn("fabric.Line is already defined");return}c.Line=c.util.createClass(c.Object,{type:"line",initialize:function(g,f){if(!g){g=[0,0,0,0]}this.callSuper("initialize",f);this.set("x1",g[0]);this.set("y1",g[1]);this.set("x2",g[2]);this.set("y2",g[3]);this._setWidthHeight()},_setWidthHeight:function(){this.set("width",(this.x2-this.x1)||1);this.set("height",(this.y2-this.y1)||1);this.set("left",this.x1+this.width/2);this.set("top",this.y1+this.height/2)},set:function(f,g){d.call(this,f,g);if(f in a){this._setWidthHeight()}return this},_render:function(f){f.beginPath();f.moveTo(this.width===1?0:(-this.width/2),this.height===1?0:(-this.height/2));f.lineTo(this.width===1?0:(this.width/2),this.height===1?0:(this.height/2));f.lineWidth=this.strokeWidth;var g=f.strokeStyle;f.strokeStyle=f.fillStyle;f.stroke();f.strokeStyle=g},complexity:function(){return 1},toObject:function(){return e(this.callSuper("toObject"),{x1:this.get("x1"),y1:this.get("y1"),x2:this.get("x2"),y2:this.get("y2")})},toSVG:function(){return["<line ",'x1="',this.get("x1"),'" ','y1="',this.get("y1"),'" ','x2="',this.get("x2"),'" ','y2="',this.get("y2"),'" ','style="',this.getSvgStyles(),'" ',"/>"].join("")}});c.Line.ATTRIBUTE_NAMES="x1 y1 x2 y2 stroke stroke-width transform".split(" ");c.Line.fromElement=function(g,f){var i=c.parseAttributes(g,c.Line.ATTRIBUTE_NAMES);var h=[i.x1||0,i.y1||0,i.x2||0,i.y2||0];return new c.Line(h,e(i,f))};c.Line.fromObject=function(f){var g=[f.x1,f.y1,f.x2,f.y2];return new c.Line(g,f)}})(typeof exports!="undefined"?exports:this);(function(a){var b=a.fabric||(a.fabric={}),d=Math.PI*2,e=b.util.object.extend;if(b.Circle){b.warn("fabric.Circle is already defined.");return}b.Circle=b.util.createClass(b.Object,{type:"circle",initialize:function(f){f=f||{};this.set("radius",f.radius||0);this.callSuper("initialize",f);var g=this.get("radius")*2*this.get("scaleX");this.set("width",g).set("height",g)},toObject:function(){return e(this.callSuper("toObject"),{radius:this.get("radius")})},toSVG:function(){return('<circle cx="0" cy="0" r="'+this.radius+'" style="'+this.getSvgStyles()+'" transform="'+this.getSvgTransform()+'" />')},_render:function(f,g){f.beginPath();f.globalAlpha*=this.opacity;f.arc(g?this.left:0,g?this.top:0,this.radius,0,d,false);f.closePath();if(this.fill){f.fill()}if(this.stroke){f.stroke()}},getRadiusX:function(){return this.get("radius")*this.get("scaleX")},getRadiusY:function(){return this.get("radius")*this.get("scaleY")},complexity:function(){return 1}});b.Circle.ATTRIBUTE_NAMES="cx cy r fill fill-opacity opacity stroke stroke-width transform".split(" ");b.Circle.fromElement=function(g,f){f||(f={});var h=b.parseAttributes(g,b.Circle.ATTRIBUTE_NAMES);if(!c(h)){throw Error("value of `r` attribute is required and can not be negative")}if("left"in h){h.left-=(f.width/2)||0}if("top"in h){h.top-=(f.height/2)||0}return new b.Circle(e(h,f))};function c(f){return(("radius"in f)&&(f.radius>0))}b.Circle.fromObject=function(f){return new b.Circle(f)}})(typeof exports!="undefined"?exports:this);(function(a){var b=a.fabric||(a.fabric={});if(b.Triangle){b.warn("fabric.Triangle is already defined");return}b.Triangle=b.util.createClass(b.Object,{type:"triangle",initialize:function(c){c=c||{};this.callSuper("initialize",c);this.set("width",c.width||100).set("height",c.height||100)},_render:function(c){var d=this.width/2,e=this.height/2;c.beginPath();c.moveTo(-d,e);c.lineTo(0,-e);c.lineTo(d,e);c.closePath();if(this.fill){c.fill()}if(this.stroke){c.stroke()}},complexity:function(){return 1},toSVG:function(){var c=this.width/2,d=this.height/2;var e=[-c+" "+d,"0 "+ -d,c+" "+d].join(",");return'<polygon points="'+e+'" style="'+this.getSvgStyles()+'" transform="'+this.getSvgTransform()+'" />'}});b.Triangle.fromObject=function(c){return new b.Triangle(c)}})(typeof exports!="undefined"?exports:this);(function(a){var b=a.fabric||(a.fabric={}),c=Math.PI*2,d=b.util.object.extend;if(b.Ellipse){b.warn("fabric.Ellipse is already defined.");return}b.Ellipse=b.util.createClass(b.Object,{type:"ellipse",initialize:function(e){e=e||{};this.callSuper("initialize",e);this.set("rx",e.rx||0);this.set("ry",e.ry||0);this.set("width",this.get("rx")*2);this.set("height",this.get("ry")*2)},toObject:function(){return d(this.callSuper("toObject"),{rx:this.get("rx"),ry:this.get("ry")})},toSVG:function(){return["<ellipse ",'rx="',this.get("rx"),'" ','ry="',this.get("ry"),'" ','style="',this.getSvgStyles(),'" ','transform="',this.getSvgTransform(),'" ',"/>"].join("")},render:function(e,f){if(this.rx===0||this.ry===0){return}return this.callSuper("render",e,f)},_render:function(e,f){e.beginPath();e.save();e.globalAlpha*=this.opacity;e.transform(1,0,0,this.ry/this.rx,0,0);e.arc(f?this.left:0,f?this.top:0,this.rx,0,c,false);if(this.stroke){e.stroke()}if(this.fill){e.fill()}e.restore()},complexity:function(){return 1}});b.Ellipse.ATTRIBUTE_NAMES="cx cy rx ry fill fill-opacity opacity stroke stroke-width transform".split(" ");b.Ellipse.fromElement=function(f,e){e||(e={});var g=b.parseAttributes(f,b.Ellipse.ATTRIBUTE_NAMES);if("left"in g){g.left-=(e.width/2)||0}if("top"in g){g.top-=(e.height/2)||0}return new b.Ellipse(d(g,e))};b.Ellipse.fromObject=function(e){return new b.Ellipse(e)}})(typeof exports!="undefined"?exports:this);(function(b){var c=b.fabric||(b.fabric={});if(c.Rect){console.warn("fabric.Rect is already defined");return}c.Rect=c.util.createClass(c.Object,{type:"rect",options:{rx:0,ry:0},initialize:function(d){this._initStateProperties();this.callSuper("initialize",d);this._initRxRy()},_initStateProperties:function(){this.stateProperties=this.stateProperties.concat(["rx","ry"])},_initRxRy:function(){if(this.rx&&!this.ry){this.ry=this.rx}else{if(this.ry&&!this.rx){this.rx=this.ry}}},_render:function(f){var j=this.rx||0,i=this.ry||0,d=-this.width/2,k=-this.height/2,e=this.width,g=this.height;f.beginPath();f.globalAlpha*=this.opacity;if(this.group){f.translate(this.x||0,this.y||0)}f.moveTo(d+j,k);f.lineTo(d+e-j,k);f.bezierCurveTo(d+e,k,d+e,k+i,d+e,k+i);f.lineTo(d+e,k+g-i);f.bezierCurveTo(d+e,k+g,d+e-j,k+g,d+e-j,k+g);f.lineTo(d+j,k+g);f.bezierCurveTo(d,k+g,d,k+g-i,d,k+g-i);f.lineTo(d,k+i);f.bezierCurveTo(d,k,d+j,k,d+j,k);f.closePath();if(this.fill){f.fill()}if(this.stroke){f.stroke()}},_normalizeLeftTopProperties:function(d){if(d.left){this.set("left",d.left+this.getWidth()/2)}this.set("x",d.left||0);if(d.top){this.set("top",d.top+this.getHeight()/2)}this.set("y",d.top||0);return this},complexity:function(){return 1},toObject:function(){return c.util.object.extend(this.callSuper("toObject"),{rx:this.get("rx")||0,ry:this.get("ry")||0})},toSVG:function(){return'<rect x="'+(-1*this.width/2)+'" y="'+(-1*this.height/ 2) + '" rx="' + this.get("rx") + '" ry="' + this.get("ry") + '" width="' + this.width + '" height="' + this.height + '" style="' + this.getSvgStyles() + '" transform="' + this.getSvgTransform() + '" />'}});c.Rect.ATTRIBUTE_NAMES="x y width height rx ry fill fill-opacity opacity stroke stroke-width transform".split(" ");function a(d){d.left=d.left||0;d.top=d.top||0;return d}c.Rect.fromElement=function(e,d){if(!e){return null}var g=c.parseAttributes(e,c.Rect.ATTRIBUTE_NAMES);g=a(g);var f=new c.Rect(c.util.object.extend((d?c.util.object.clone(d):{}),g));f._normalizeLeftTopProperties(g);return f};c.Rect.fromObject=function(d){return new c.Rect(d)}})(typeof exports!="undefined"?exports:this);(function(b){var c=b.fabric||(b.fabric={}),a=c.util.toFixed;if(c.Polyline){c.warn("fabric.Polyline is already defined");return}c.Polyline=c.util.createClass(c.Object,{type:"polyline",initialize:function(e,d){d=d||{};this.set("points",e);this.callSuper("initialize",d);this._calcDimensions()},_calcDimensions:function(){return c.Polygon.prototype._calcDimensions.call(this)},toObject:function(){return c.Polygon.prototype.toObject.call(this)},toSVG:function(){var f=[];for(var e=0,d=this.points.length;e<d;e++){f.push(a(this.points[e].x,2),",",a(this.points[e].y,2)," ")}return["<polyline ",'points="',f.join(""),'" ','style="',this.getSvgStyles(),'" ','transform="',this.getSvgTransform(),'" ',"/>"].join("")},_render:function(f){var e;f.beginPath();for(var g=0,d=this.points.length;g<d;g++){e=this.points[g];f.lineTo(e.x,e.y)}if(this.fill){f.fill()}if(this.stroke){f.stroke()}},complexity:function(){return this.get("points").length}});c.Polyline.ATTRIBUTE_NAMES="fill fill-opacity opacity stroke stroke-width transform".split(" ");c.Polyline.fromElement=function(g,e){if(!g){return null}e||(e={});var h=c.parsePointsAttribute(g.getAttribute("points")),j=c.parseAttributes(g,c.Polyline.ATTRIBUTE_NAMES);for(var f=0,d=h.length;f<d;f++){h[f].x-=(e.width/2)||0;h[f].y-=(e.height/2)||0}return new c.Polyline(h,c.util.object.extend(j,e))};c.Polyline.fromObject=function(d){var e=d.points;return new c.Polyline(e,d)}})(typeof exports!="undefined"?exports:this);(function(f){var g=f.fabric||(f.fabric={}),h=g.util.object.extend,e=g.util.array.min,b=g.util.array.max,a=g.util.toFixed;if(g.Polygon){g.warn("fabric.Polygon is already defined");return}function d(i){return i.x}function c(i){return i.y}g.Polygon=g.util.createClass(g.Object,{type:"polygon",initialize:function(j,i){i=i||{};this.points=j;this.callSuper("initialize",i);this._calcDimensions()},_calcDimensions:function(){var j=this.points,i=e(j,"x"),m=e(j,"y"),l=b(j,"x"),k=b(j,"y");this.width=l-i;this.height=k-m;this.minX=i;this.minY=m},toObject:function(){return h(this.callSuper("toObject"),{points:this.points.concat()})},toSVG:function(){var l=[];for(var k=0,j=this.points.length;k<j;k++){l.push(a(this.points[k].x,2),",",a(this.points[k].y,2)," ")}return["<polygon ",'points="',l.join(""),'" ','style="',this.getSvgStyles(),'" ','transform="',this.getSvgTransform(),'" ',"/>"].join("")},_render:function(l){var k;l.beginPath();for(var m=0,j=this.points.length;m<j;m++){k=this.points[m];l.lineTo(k.x,k.y)}if(this.fill){l.fill()}if(this.stroke){l.closePath();l.stroke()}},complexity:function(){return this.points.length}});g.Polygon.ATTRIBUTE_NAMES="fill fill-opacity opacity stroke stroke-width transform".split(" ");g.Polygon.fromElement=function(m,k){if(!m){return null}k||(k={});var n=g.parsePointsAttribute(m.getAttribute("points")),o=g.parseAttributes(m,g.Polygon.ATTRIBUTE_NAMES);for(var l=0,j=n.length;l<j;l++){n[l].x-=(k.width/2)||0;n[l].y-=(k.height/2)||0}return new g.Polygon(n,h(o,k))};g.Polygon.fromObject=function(i){return new g.Polygon(i.points,i)}})(typeof exports!="undefined"?exports:this);(function(a){var l={m:2,l:2,h:1,v:1,c:6,s:4,q:4,t:2,a:7};function k(F,B,z,A){var s=A[0];var q=A[1];var t=A[2];var D=A[3];var E=A[4];var w=A[5];var v=A[6];var r=i(w,v,s,q,D,E,t,B,z);for(var u=0;u<r.length;u++){var C=f.apply(this,r[u]);F.bezierCurveTo.apply(F,C)}}var b={},p={},o=Array.prototype.join,j;function i(T,S,O,N,J,P,G,M,L){j=o.call(arguments);if(b[j]){return b[j]}var r=G*(Math.PI/180);var W=Math.sin(r);var aa=Math.cos(r);O=Math.abs(O);N=Math.abs(N);var A=aa*(M-T)*0.5+W*(L-S)*0.5;var z=aa*(L-S)*0.5-W*(M-T)*0.5;var E=(A*A)/(O*O)+(z*z)/(N*N);if(E>1){E=Math.sqrt(E);O*=E;N*=E}var R=aa/O;var Q=W/O;var D=(-W)/N;var C=(aa)/N;var H=R*M+Q*L;var q=D*M+C*L;var F=R*T+Q*S;var ab=D*T+C*S;var Z=(F-H)*(F-H)+(ab-q)*(ab-q);var U=1/Z-0.25;if(U<0){U=0}var w=Math.sqrt(U);if(P==J){w=-w}var V=0.5*(H+F)-w*(ab-q);var K=0.5*(q+ab)+w*(F-H);var v=Math.atan2(q-K,H-V);var u=Math.atan2(ab-K,F-V);var Y=u-v;if(Y<0&&P==1){Y+=2*Math.PI}else{if(Y>0&&P==0){Y-=2*Math.PI}}var B=Math.ceil(Math.abs(Y/(Math.PI*0.5+0.001)));var I=[];for(var X=0;X<B;X++){var t=v+X*Y/B;var s=v+(X+1)*Y/B;I[X]=[V,K,t,s,O,N,W,aa]}return(b[j]=I)}function f(w,s,E,C,y,x,u,D){j=o.call(arguments);if(p[j]){return p[j]}var K=D*y;var J=-u*x;var A=u*y;var z=D*x;var F=0.5*(C-E);var B=(8/3)*Math.sin(F*0.5)*Math.sin(F*0.5)/Math.sin(F);var I=w+Math.cos(E)-B*Math.sin(E);var v=s+Math.sin(E)+B*Math.cos(E);var G=w+Math.cos(C);var q=s+Math.sin(C);var H=G+B*Math.sin(C);var r=q-B*Math.cos(C);return(p[j]=[K*I+J*v,A*I+z*v,K*H+J*r,A*H+z*r,K*G+J*q,A*G+z*q])}"use strict";var d=a.fabric||(a.fabric={}),e=d.util.array.min,h=d.util.array.max,g=d.util.object.extend,c=Object.prototype.toString;if(d.Path){d.warn("fabric.Path is already defined");return}if(!d.Object){d.warn("fabric.Path requires fabric.Object");return}function n(q){if(q[0]==="H"){return q[1]}return q[q.length-2]}function m(q){if(q[0]==="V"){return q[1]}return q[q.length-1]}d.Path=d.util.createClass(d.Object,{type:"path",initialize:function(s,r){r=r||{};this.setOptions(r);if(!s){throw Error("`path` argument is required")}var q=c.call(s)==="[object Array]";this.path=q?s:s.match&&s.match(/[a-zA-Z][^a-zA-Z]*/g);if(!this.path){return}if(!q){this._initializeFromArray(r)}if(r.sourcePath){this.setSourcePath(r.sourcePath)}},_initializeFromArray:function(r){var q="width"in r,s="height"in r;this.path=this._parsePath();if(!q||!s){g(this,this._parseDimensions());if(q){this.width=r.width}if(s){this.height=r.height}}},_render:function(D){var z,B=0,A=0,q=0,E=0,v,u,r=-(this.width/2),C=-(this.height/2);for(var s=0,w=this.path.length;s<w;++s){z=this.path[s];switch(z[0]){case"l":B+=z[1];A+=z[2];D.lineTo(B+r,A+C);break;case"L":B=z[1];A=z[2];D.lineTo(B+r,A+C);break;case"h":B+=z[1];D.lineTo(B+r,A+C);break;case"H":B=z[1];D.lineTo(B+r,A+C);break;case"v":A+=z[1];D.lineTo(B+r,A+C);break;case"V":A=z[1];D.lineTo(B+r,A+C);break;case"m":B+=z[1];A+=z[2];D.moveTo(B+r,A+C);break;case"M":B=z[1];A=z[2];D.moveTo(B+r,A+C);break;case"c":v=B+z[5];u=A+z[6];q=B+z[3];E=A+z[4];D.bezierCurveTo(B+z[1]+r,A+z[2]+C,q+r,E+C,v+r,u+C);B=v;A=u;break;case"C":B=z[5];A=z[6];q=z[3];E=z[4];D.bezierCurveTo(z[1]+r,z[2]+C,q+r,E+C,B+r,A+C);break;case"s":v=B+z[3];u=A+z[4];q=2*B-q;E=2*A-E;D.bezierCurveTo(q+r,E+C,B+z[1]+r,A+z[2]+C,v+r,u+C);B=v;A=u;break;case"S":v=z[3];u=z[4];q=2*B-q;E=2*A-E;D.bezierCurveTo(q+r,E+C,z[1]+r,z[2]+C,v+r,u+C);B=v;A=u;break;case"q":B+=z[3];A+=z[4];D.quadraticCurveTo(z[1]+r,z[2]+C,B+r,A+C);break;case"Q":B=z[3];A=z[4];q=z[1];E=z[2];D.quadraticCurveTo(q+r,E+C,B+r,A+C);break;case"T":v=B;u=A;B=z[1];A=z[2];q=-q+2*v;E=-E+2*u;D.quadraticCurveTo(q+r,E+C,B+r,A+C);break;case"a":k(D,B+r,A+C,[z[1],z[2],z[3],z[4],z[5],z[6]+B+r,z[7]+A+C]);B+=z[6];A+=z[7];break;case"A":k(D,B+r,A+C,[z[1],z[2],z[3],z[4],z[5],z[6]+r,z[7]+C]);B=z[6];A=z[7];break;case"z":case"Z":D.closePath();break}}},render:function(r,s){r.save();var q=this.transformMatrix;if(q){r.transform(q[0],q[1],q[2],q[3],q[4],q[5])}if(!s){this.transform(r)}if(this.overlayFill){r.fillStyle=this.overlayFill}else{if(this.fill){r.fillStyle=this.fill}}if(this.stroke){r.strokeStyle=this.stroke}r.beginPath();this._render(r);if(this.fill){r.fill()}if(this.stroke){r.strokeStyle=this.stroke;r.lineWidth=this.strokeWidth;r.lineCap=r.lineJoin="round";r.stroke()}if(!s&&this.active){this.drawBorders(r);this.hideCorners||this.drawCorners(r)}r.restore()},toString:function(){return"#<fabric.Path ("+this.complexity()+'): { "top": '+this.top+', "left": '+this.left+" }>"},toObject:function(){var q=g(this.callSuper("toObject"),{path:this.path});if(this.sourcePath){q.sourcePath=this.sourcePath}if(this.transformMatrix){q.transformMatrix=this.transformMatrix}return q},toDatalessObject:function(){var q=this.toObject();if(this.sourcePath){q.path=this.sourcePath}delete q.sourcePath;return q},toSVG:function(){var t=[];for(var r=0,q=this.path.length;r<q;r++){t.push(this.path[r].join(" "))}var s=t.join(" ");return['<g transform="',this.getSvgTransform(),'">',"<path ",'width="',this.width,'" height="',this.height,'" ','d="',s,'" ','style="',this.getSvgStyles(),'" ','transform="translate(',(-this.width/2)," ",(-this.height/ 2), ')" />',"</g>"].join("")},complexity:function(){return this.path.length},_parsePath:function(){var C=[],z,v,y;for(var u=0,t,q,w=this.path.length;u<w;u++){z=this.path[u];v=z.slice(1).trim().replace(/(\d)-/g,"$1###-").split(/\s|,|###/);q=[z.charAt(0)];for(var t=0,A=v.length;t<A;t++){y=parseFloat(v[t]);if(!isNaN(y)){q.push(y)}}var s=q[0].toLowerCase(),B=l[s];if(q.length-1>B){for(var r=1,x=q.length;r<x;r+=B){C.push([q[0]].concat(q.slice(r,r+B)))}}else{C.push(q)}}return C},_parseDimensions:function(){var z=[],v=[],A,w,B=false,D,C;this.path.forEach(function(y,x){if(y[0]!=="H"){A=(x===0)?n(y):n(this.path[x-1])}if(y[0]!=="V"){w=(x===0)?m(y):m(this.path[x-1])}if(y[0]===y[0].toLowerCase()){B=true}D=B?A+n(y):y[0]==="V"?A:n(y);C=B?w+m(y):y[0]==="H"?w:m(y);var E=parseInt(D,10);if(!isNaN(E)){z.push(E)}E=parseInt(C,10);if(!isNaN(E)){v.push(E)}},this);var s=e(z),r=e(v),u=0,t=0;var q={top:r-t,left:s-u,bottom:h(v)-t,right:h(z)-u};q.width=q.right-q.left;q.height=q.bottom-q.top;return q}});d.Path.fromObject=function(q){return new d.Path(q.path,q)};d.Path.ATTRIBUTE_NAMES="d fill fill-opacity opacity fill-rule stroke stroke-width transform".split(" ");d.Path.fromElement=function(r,q){var s=d.parseAttributes(r,d.Path.ATTRIBUTE_NAMES);return new d.Path(s.d,g(s,q))}})(typeof exports!="undefined"?exports:this);(function(a){var d=a.fabric||(a.fabric={}),h=d.util.object.extend,f=d.util.array.invoke,i=d.Object.prototype.set,e=d.Object.prototype.toObject,b=d.util.string.camelize,g=d.util.string.capitalize;if(d.PathGroup){d.warn("fabric.PathGroup is already defined");return}d.PathGroup=d.util.createClass(d.Path,{type:"path-group",forceFillOverwrite:false,initialize:function(l,j){j=j||{};this.paths=l||[];for(var k=this.paths.length;k--;){this.paths[k].group=this}this.setOptions(j);this.setCoords();if(j.sourcePath){this.setSourcePath(j.sourcePath)}},render:function(n){if(this.stub){n.save();this.transform(n);this.stub.render(n,false);if(this.active){this.drawBorders(n);this.drawCorners(n)}n.restore()}else{n.save();var j=this.transformMatrix;if(j){n.transform(j[0],j[1],j[2],j[3],j[4],j[5])}this.transform(n);for(var o=0,k=this.paths.length;o<k;++o){this.paths[o].render(n,true)}if(this.active){this.drawBorders(n);this.hideCorners||this.drawCorners(n)}n.restore()}},set:function(l,k){if((l==="fill"||l==="overlayFill")&&this.isSameColor()){this[l]=k;var j=this.paths.length;while(j--){this.paths[j].set(l,k)}}else{i.call(this,l,k)}return this},toObject:function(){return h(e.call(this),{paths:f(this.getObjects(),"clone"),sourcePath:this.sourcePath})},toDatalessObject:function(){var j=this.toObject();if(this.sourcePath){j.paths=this.sourcePath}return j},toSVG:function(){var m=this.getObjects();var k=["<g ",'width="',this.width,'" ','height="',this.height,'" ','style="',this.getSvgStyles(),'" ','transform="',this.getSvgTransform(),'" ',">"];for(var l=0,j=m.length;l<j;l++){k.push(m[l].toSVG())}k.push("</g>");return k.join("")},toString:function(){return"#<fabric.PathGroup ("+this.complexity()+"): { top: "+this.top+", left: "+this.left+" }>"},isSameColor:function(){var j=this.getObjects()[0].get("fill");return this.getObjects().every(function(k){return k.get("fill")===j})},complexity:function(){return this.paths.reduce(function(j,k){return j+((k&&k.complexity)?k.complexity():0)},0)},toGrayscale:function(){var j=this.paths.length;while(j--){this.paths[j].toGrayscale()}return this},getObjects:function(){return this.paths}});function c(m){for(var l=0,j=m.length;l<j;l++){if(!(m[l]instanceof d.Object)){var k=b(g(m[l].type));m[l]=d[k].fromObject(m[l])}}return m}d.PathGroup.fromObject=function(j){var k=c(j.paths);return new d.PathGroup(k,j)}})(typeof exports!="undefined"?exports:this);(function(d){var e=d.fabric||(d.fabric={}),g=e.util.object.extend,c=e.util.array.min,a=e.util.array.max,b=e.util.array.invoke,f=e.util.removeFromArray;if(e.Group){return}e.Group=e.util.createClass(e.Object,{type:"group",initialize:function(i,h){this.objects=i||[];this.originalState={};this.callSuper("initialize");this._calcBounds();this._updateObjectsCoords();if(h){g(this,h)}this._setOpacityIfSame();this.setCoords(true);this.saveCoords();this.activateAllObjects()},_updateObjectsCoords:function(){var i=this.left,h=this.top;this.forEachObject(function(j){var k=j.get("left"),l=j.get("top");j.set("originalLeft",k);j.set("originalTop",l);j.set("left",k-i);j.set("top",l-h);j.setCoords();j.hideCorners=true},this)},toString:function(){return"#<fabric.Group: ("+this.complexity()+")>"},getObjects:function(){return this.objects},add:function(h){this._restoreObjectsState();this.objects.push(h);h.setActive(true);this._calcBounds();this._updateObjectsCoords();return this},remove:function(h){this._restoreObjectsState();f(this.objects,h);h.setActive(false);this._calcBounds();this._updateObjectsCoords();return this},size:function(){return this.getObjects().length},set:function(h,k){if(typeof k=="function"){this.set(h,k(this[h]))}else{if(h==="fill"||h==="opacity"){var j=this.objects.length;this[h]=k;while(j--){this.objects[j].set(h,k)}}else{this[h]=k}}return this},contains:function(h){return this.objects.indexOf(h)>-1},toObject:function(){return g(this.callSuper("toObject"),{objects:b(this.objects,"clone")})},render:function(j){j.save();this.transform(j);var n=Math.max(this.scaleX,this.scaleY);for(var l=0,h=this.objects.length,k;k=this.objects[l];l++){var m=k.borderScaleFactor;k.borderScaleFactor=n;k.render(j);k.borderScaleFactor=m}this.hideBorders||this.drawBorders(j);this.hideCorners||this.drawCorners(j);j.restore();this.setCoords()},item:function(h){return this.getObjects()[h]},complexity:function(){return this.getObjects().reduce(function(i,h){i+=(typeof h.complexity=="function")?h.complexity():0;return i},0)},_restoreObjectsState:function(){this.objects.forEach(this._restoreObjectState,this);return this},_restoreObjectState:function(j){var l=this.get("left"),m=this.get("top"),h=this.getAngle()*(Math.PI/180),k=j.get("originalLeft"),n=j.get("originalTop"),i=Math.cos(h)*j.get("top")+Math.sin(h)*j.get("left"),o=-Math.sin(h)*j.get("top")+Math.cos(h)*j.get("left");j.setAngle(j.getAngle()+this.getAngle());j.set("left",l+o*this.get("scaleX"));j.set("top",m+i*this.get("scaleY"));j.set("scaleX",j.get("scaleX")*this.get("scaleX"));j.set("scaleY",j.get("scaleY")*this.get("scaleY"));j.setCoords();j.hideCorners=false;j.setActive(false);j.setCoords();return this},destroy:function(){return this._restoreObjectsState()},saveCoords:function(){this._originalLeft=this.get("left");this._originalTop=this.get("top");return this},hasMoved:function(){return this._originalLeft!==this.get("left")||this._originalTop!==this.get("top")},setObjectsCoords:function(){this.forEachObject(function(h){h.setCoords()});return this},activateAllObjects:function(){return this.setActive(true)},setActive:function(h){this.forEachObject(function(i){i.setActive(h)});return this},forEachObject:e.StaticCanvas.prototype.forEachObject,_setOpacityIfSame:function(){var j=this.getObjects(),i=j[0]?j[0].get("opacity"):1;var h=j.every(function(k){return k.get("opacity")===i});if(h){this.opacity=i}},_calcBounds:function(){var s=[],q=[],p,n,k,h,m,l,u,r=0,t=this.objects.length;for(;r<t;++r){m=this.objects[r];m.setCoords();for(var j in m.oCoords){s.push(m.oCoords[j].x);q.push(m.oCoords[j].y)}}p=c(s);k=a(s);n=c(q);h=a(q);l=(k-p)||0;u=(h-n)||0;this.width=l;this.height=u;this.left=(p+l/2)||0;this.top=(n+u/2)||0},containsPoint:function(i){var l=this.get("width")/2,h=this.get("height")/2,k=this.get("left"),j=this.get("top");return k-l<i.x&&k+l>i.x&&j-h<i.y&&j+h>i.y},toGrayscale:function(){var h=this.objects.length;while(h--){this.objects[h].toGrayscale()}}});e.Group.fromObject=function(h){return new e.Group(h.objects,h)}})(typeof exports!="undefined"?exports:this);(function(a){var b=fabric.util.object.extend;if(!a.fabric){a.fabric={}}if(a.fabric.Image){fabric.warn("fabric.Image is already defined.");return}if(!fabric.Object){fabric.warn("fabric.Object is required for fabric.Image initialization");return}fabric.Image=fabric.util.createClass(fabric.Object,{active:false,bordervisibility:false,cornervisibility:false,type:"image",filters:[],initialize:function(d,c){c||(c={});this.callSuper("initialize",c);this._initElement(d);this._originalImage=this.getElement();this._initConfig(c);if(c.filters){this.filters=c.filters;this.applyFilters()}},getElement:function(){return this._element},setElement:function(c){this._element=c;this._initConfig();return this},getOriginalSize:function(){var c=this.getElement();return{width:c.width,height:c.height}},setBorderVisibility:function(c){this._resetWidthHeight();this._adjustWidthHeightToBorders(showBorder);this.setCoords()},setCornersVisibility:function(c){this.cornervisibility=!!c},render:function(c,d){c.save();if(!d){this.transform(c)}this._render(c);if(this.active&&!d){this.drawBorders(c);this.hideCorners||this.drawCorners(c)}c.restore()},toObject:function(){return b(this.callSuper("toObject"),{src:this._originalImage.src||this._originalImage._src,filters:this.filters.concat()})},toSVG:function(){return'<g transform="'+this.getSvgTransform()+'"><image xlink:href="'+this.getSvgSrc()+'" style="'+this.getSvgStyles()+'" transform="translate('+(-this.width/2)+" "+(-this.height/ 2) + ')" width="' + this.width + '" height="' + this.height + '"/></g>'},getSrc:function(){return this.getElement().src||this.getElement()._src},toString:function(){return'#<fabric.Image: { src: "'+this.getSrc()+'" }>'},clone:function(c){this.constructor.fromObject(this.toObject(),c)},applyFilters:function(i){if(this.filters.length===0){this.setElement(this._originalImage);i&&i();return}var c=typeof Buffer!=="undefined"&&typeof window==="undefined",g=this._originalImage,e=fabric.document.createElement("canvas"),f=c?new(require("canvas").Image):fabric.document.createElement("img"),h=this;if(!e.getContext&&typeof G_vmlCanvasManager!="undefined"){G_vmlCanvasManager.initElement(e)}e.width=g.width;e.height=g.height;e.getContext("2d").drawImage(g,0,0);this.filters.forEach(function(j){j&&j.applyTo(e)});f.onload=function(){h.setElement(f);i&&i();f.onload=e=g=null};f.width=g.width;f.height=g.height;if(c){var d=e.toDataURL("image/png").replace(/data:image\/png;base64,/,"");f.src=new Buffer(d,"base64");h.setElement(f);i&&i()}else{f.src=e.toDataURL("image/png")}return this},_render:function(d){var c=this.getOriginalSize();d.drawImage(this.getElement(),-c.width/2,-c.height/2,c.width,c.height)},_adjustWidthHeightToBorders:function(c){if(c){this.currentBorder=this.borderwidth;this.width+=(2*this.currentBorder);this.height+=(2*this.currentBorder)}else{this.currentBorder=0}},_resetWidthHeight:function(){var c=this.getElement();this.set("width",c.width);this.set("height",c.height)},_initElement:function(c){this.setElement(fabric.util.getById(c));fabric.util.addClass(this.getElement(),fabric.Image.CSS_CANVAS)},_initConfig:function(c){this.setOptions(c||{});this._setBorder();this._setWidthHeight()},_initFilters:function(c){if(c.filters&&c.filters.length){this.filters=c.filters.map(function(d){return fabric.Image.filters[d.type].fromObject(d)})}},_setBorder:function(){if(this.bordervisibility){this.currentBorder=this.borderwidth}else{this.currentBorder=0}},_setWidthHeight:function(){var c=2*this.currentBorder;this.width=(this.getElement().width||0)+c;this.height=(this.getElement().height||0)+c},complexity:function(){return 1}});fabric.Image.CSS_CANVAS="canvas-img";fabric.Image.prototype.getSvgSrc=fabric.Image.prototype.getSrc;fabric.Image.fromObject=function(d,f){var c=fabric.document.createElement("img"),e=d.src;if(d.width){c.width=d.width}if(d.height){c.height=d.height}c.onload=function(){fabric.Image.prototype._initFilters.call(d,d);var g=new fabric.Image(c,d);f&&f(g);c=c.onload=null};c.src=e};fabric.Image.fromURL=function(d,f,e){var c=fabric.document.createElement("img");c.onload=function(){if(f){f(new fabric.Image(c,e))}c=c.onload=null};c.src=d};fabric.Image.ATTRIBUTE_NAMES="x y width height fill fill-opacity opacity stroke stroke-width transform xlink:href".split(" ");fabric.Image.fromElement=function(d,f,c){c||(c={});var e=fabric.parseAttributes(d,fabric.Image.ATTRIBUTE_NAMES);fabric.Image.fromURL(e["xlink:href"],f,b(e,c))};fabric.Image.async=true})(typeof exports!="undefined"?exports:this);fabric.util.object.extend(fabric.Object.prototype,{_getAngleValueForStraighten:function(){var a=this.get("angle");if(a>-225&&a<=-135){return-180}else{if(a>-135&&a<=-45){return-90}else{if(a>-45&&a<=45){return 0}else{if(a>45&&a<=135){return 90}else{if(a>135&&a<=225){return 180}else{if(a>225&&a<=315){return 270}else{if(a>315){return 360}}}}}}}return 0},straighten:function(){var a=this._getAngleValueForStraighten();this.setAngle(a);return this},fxStraighten:function(b){b=b||{};var c=function(){},d=b.onComplete||c,a=b.onChange||c,e=this;fabric.util.animate({startValue:this.get("angle"),endValue:this._getAngleValueForStraighten(),duration:this.FX_DURATION,onChange:function(f){e.setAngle(f);a()},onComplete:function(){e.setCoords();d()},onStart:function(){e.setActive(false)}});return this}});fabric.util.object.extend(fabric.StaticCanvas.prototype,{straightenObject:function(a){a.straighten();this.renderAll();return this},fxStraightenObject:function(a){a.fxStraighten({onChange:this.renderAll.bind(this)});return this}});fabric.Image.filters={};fabric.Image.filters.Grayscale=fabric.util.createClass({type:"Grayscale",applyTo:function(d){var c=d.getContext("2d"),a=c.getImageData(0,0,d.width,d.height),h=a.data,e=a.width,l=a.height,k,b,g,f;for(g=0;g<e;g++){for(f=0;f<l;f++){k=(g*4)*l+(f*4);b=(h[k]+h[k+1]+h[k+2])/3;h[k]=b;h[k+1]=b;h[k+2]=b}}c.putImageData(a,0,0)},toJSON:function(){return{type:this.type}}});fabric.Image.filters.Grayscale.fromObject=function(){return new fabric.Image.filters.Grayscale()};fabric.Image.filters.RemoveWhite=fabric.util.createClass({type:"RemoveWhite",initialize:function(a){a||(a={});this.threshold=a.threshold||30;this.distance=a.distance||20},applyTo:function(f){var e=f.getContext("2d"),c=e.getImageData(0,0,f.width,f.height),k=c.data,l=this.threshold,d=this.distance,h=255-l,p=Math.abs,a,m,o;for(var j=0,n=k.length;j<n;j+=4){a=k[j];m=k[j+1];o=k[j+2];if(a>h&&m>h&&o>h&&p(a-m)<d&&p(a-o)<d&&p(m-o)<d){k[j+3]=1}}e.putImageData(c,0,0)},toJSON:function(){return{type:this.type,threshold:this.threshold,distance:this.distance}}});fabric.Image.filters.RemoveWhite.fromObject=function(a){return new fabric.Image.filters.RemoveWhite(a)};fabric.Image.filters.Invert=fabric.util.createClass({type:"Invert",applyTo:function(d){var c=d.getContext("2d"),f=c.getImageData(0,0,d.width,d.height),e=f.data,a=e.length,b;for(b=0;b<a;b+=4){e[b]=255-e[b];e[b+1]=255-e[b+1];e[b+2]=255-e[b+2]}c.putImageData(f,0,0)},toJSON:function(){return{type:this.type}}});fabric.Image.filters.Invert.fromObject=function(){return new fabric.Image.filters.Invert()};(function(b){var c=b.fabric||(b.fabric={}),e=c.util.object.extend,d=c.util.object.clone,a=c.util.toFixed;if(c.Text){c.warn("fabric.Text is already defined");return}if(!c.Object){c.warn("fabric.Text requires fabric.Object");return}c.Text=c.util.createClass(c.Object,{fontSize:40,fontWeight:100,fontFamily:"Times_New_Roman",textDecoration:"",textShadow:null,textAlign:"left",fontStyle:"",lineHeight:1.6,strokeStyle:"",strokeWidth:1,backgroundColor:"",path:null,type:"text",initialize:function(g,f){this._initStateProperties();this.text=g;this.setOptions(f);this.theta=this.angle*Math.PI/180;this.width=this.getWidth();this.setCoords()},_initStateProperties:function(){this.stateProperties=this.stateProperties.concat();this.stateProperties.push("fontFamily","fontWeight","fontSize","path","text","textDecoration","textShadow","textAlign","fontStyle","lineHeight","strokeStyle","strokeWidth","backgroundColor");c.util.removeFromArray(this.stateProperties,"width")},toString:function(){return"#<fabric.Text ("+this.complexity()+'): { "text": "'+this.text+'", "fontFamily": "'+this.fontFamily+'" }>'},_render:function(f){var h=Cufon.textOptions||(Cufon.textOptions={});h.left=this.left;h.top=this.top;h.context=f;h.color=this.fill;var g=this._initDummyElement();this.transform(f);Cufon.replaceElement(g,{engine:"canvas",separate:"none",fontFamily:this.fontFamily,fontWeight:this.fontWeight,textDecoration:this.textDecoration,textShadow:this.textShadow,textAlign:this.textAlign,fontStyle:this.fontStyle,lineHeight:this.lineHeight,strokeStyle:this.strokeStyle,strokeWidth:this.strokeWidth,backgroundColor:this.backgroundColor});this.width=h.width;this.height=h.height;this._totalLineHeight=h.totalLineHeight;this._fontAscent=h.fontAscent;this._boundaries=h.boundaries;this._shadowOffsets=h.shadowOffsets;this._shadows=h.shadows||[];this.setCoords()},_initDummyElement:function(){var g=c.document.createElement("pre"),f=c.document.createElement("div");f.appendChild(g);if(typeof G_vmlCanvasManager=="undefined"){g.innerHTML=this.text}else{g.innerText=this.text.replace(/\r?\n/gi,"\r")}g.style.fontSize=this.fontSize+"px";g.style.letterSpacing="normal";return g},render:function(f,g){f.save();this._render(f);if(!g&&this.active){this.drawBorders(f);this.hideCorners||this.drawCorners(f)}f.restore()},toObject:function(){return e(this.callSuper("toObject"),{text:this.text,fontSize:this.fontSize,fontWeight:this.fontWeight,fontFamily:this.fontFamily,fontStyle:this.fontStyle,lineHeight:this.lineHeight,textDecoration:this.textDecoration,textShadow:this.textShadow,textAlign:this.textAlign,path:this.path,strokeStyle:this.strokeStyle,strokeWidth:this.strokeWidth,backgroundColor:this.backgroundColor})},toSVG:function(){var i=this.text.split(/\r?\n/),j=-this._fontAscent-((this._fontAscent/5)*this.lineHeight),g=-(this.width/2),f=(this.height/2)-(i.length*this.fontSize)-this._totalLineHeight,h=this._getSVGTextAndBg(j,g,i),k=this._getSVGShadows(j,i);f+=((this._fontAscent/5)*this.lineHeight);return['<g transform="',this.getSvgTransform(),'">',h.textBgRects.join(""),"<text ",(this.fontFamily?"font-family=\"'"+this.fontFamily+"'\" ":""),(this.fontSize?'font-size="'+this.fontSize+'" ':""),(this.fontStyle?'font-style="'+this.fontStyle+'" ':""),(this.fontWeight?'font-weight="'+this.fontWeight+'" ':""),(this.textDecoration?'text-decoration="'+this.textDecoration+'" ':""),'style="',this.getSvgStyles(),'" ','transform="translate(',a(g,2)," ",a(f,2),')">',k.join(""),h.textSpans.join(""),"</text>","</g>"].join("")},_getSVGShadows:function(h,n){var o=[],k,l,p,g,f=1;for(k=0,p=this._shadows.length;k<p;k++){for(l=0,g=n.length;l<g;l++){if(n[l]!==""){var m=(this._boundaries&&this._boundaries[l])?this._boundaries[l].left:0;o.push('<tspan x="',a((m+f)+this._shadowOffsets[k][0],2),(l===0?'" y':'" dy'),'="',a(h+(l===0?this._shadowOffsets[k][1]:0),2),'" ',this._getFillAttributes(this._shadows[k].color),">",c.util.string.escapeXml(n[l]),"</tspan>");f=1}else{f++}}}return o},_getSVGTextAndBg:function(j,h,n){var g=[],k=[],l,m,o,f=1;for(l=0,o=n.length;l<o;l++){if(n[l]!==""){m=(this._boundaries&&this._boundaries[l])?a(this._boundaries[l].left,2):0;g.push('<tspan x="',m,'" ',(l===0?"y":"dy"),'="',a(j*f,2),'" ',this._getFillAttributes(this.fill),">",c.util.string.escapeXml(n[l]),"</tspan>");f=1}else{f++}if(!this.backgroundColor){continue}k.push("<rect ",this._getFillAttributes(this.backgroundColor),' x="',a(h+this._boundaries[l].left,2),'" y="',a((j*l)-this.height/2,2),'" width="',a(this._boundaries[l].width,2),'" height="',a(this._boundaries[l].height,2),'"></rect>')}return{textSpans:g,textBgRects:k}},_getFillAttributes:function(f){var g=f?new c.Color(f):"";if(!g||!g.getSource()||g.getAlpha()===1){return'fill="'+f+'"'}return'opacity="'+g.getAlpha()+'" fill="'+g.setAlpha(1).toRgb()+'"'},setColor:function(f){this.set("fill",f);return this},setFontsize:function(f){this.set("fontSize",f);this.setCoords();return this},getText:function(){return this.text},setText:function(f){this.set("text",f);this.setCoords();return this},set:function(f,g){if(typeof f=="object"){for(var h in f){this.set(h,f[h])}}else{this[f]=g;if(f==="fontFamily"&&this.path){this.path=this.path.replace(/(.*?)([^\/]*)(\.font\.js)/,"$1"+g+"$3")}}return this}});c.Text.fromObject=function(f){return new c.Text(f.text,d(f))};c.Text.fromElement=function(f){}})(typeof exports!="undefined"?exports:this);(function(){if(typeof document!="undefined"&&typeof window!="undefined"){return}var XML=require("o3-xml"),URL=require("url"),HTTP=require("http"),Canvas=require("canvas"),Image=require("canvas").Image;function request(url,encoding,callback){var oURL=URL.parse(url),client=HTTP.createClient(80,oURL.hostname),request=client.request("GET",oURL.pathname,{host:oURL.hostname});client.addListener("error",function(err){if(err.errno===process.ECONNREFUSED){fabric.log("ECONNREFUSED: connection refused to "+client.host+":"+client.port)}else{fabric.log(err.message)}});request.end();request.on("response",function(response){var body="";if(encoding){response.setEncoding(encoding)}response.on("end",function(){callback(body)});response.on("data",function(chunk){if(response.statusCode==200){body+=chunk}})})}fabric.util.loadImage=function(url,callback){request(url,"binary",function(body){var img=new Image();img.src=new Buffer(body,"binary");img._src=url;callback(img)})};fabric.loadSVGFromURL=function(url,callback){url=url.replace(/^\n\s*/,"").replace(/\?.*$/,"").trim();request(url,"",function(body){var doc=XML.parseFromString(body);fabric.parseSVGDocument(doc.documentElement,function(results,options){callback(results,options)})})};fabric.util.getScript=function(url,callback){request(url,"",function(body){eval(body);callback&&callback()})};fabric.Image.fromObject=function(object,callback){fabric.util.loadImage(object.src,function(img){var oImg=new fabric.Image(img);oImg._initConfig(object);oImg._initFilters(object);callback(oImg)})};fabric.createCanvasForNode=function(width,height){var canvasEl=fabric.document.createElement("canvas"),nodeCanvas=new Canvas(width||600,height||600);canvasEl.style={};canvasEl.width=nodeCanvas.width;canvasEl.height=nodeCanvas.height;var canvas=fabric.Canvas||fabric.StaticCanvas;var fabricCanvas=new canvas(canvasEl);fabricCanvas.contextContainer=nodeCanvas.getContext("2d");fabricCanvas.nodeCanvas=nodeCanvas;return fabricCanvas};fabric.StaticCanvas.prototype.createPNGStream=function(){return this.nodeCanvas.createPNGStream()};if(fabric.Canvas){fabric.Canvas.prototype.createPNGStream}var origSetWidth=fabric.StaticCanvas.prototype.setWidth;fabric.StaticCanvas.prototype.setWidth=function(width){origSetWidth.call(this);this.nodeCanvas.width=width;return this};if(fabric.Canvas){fabric.Canvas.prototype.setWidth=fabric.StaticCanvas.prototype.setWidth}var origSetHeight=fabric.StaticCanvas.prototype.setHeight;fabric.StaticCanvas.prototype.setHeight=function(height){origSetHeight.call(this);this.nodeCanvas.height=height;return this};if(fabric.Canvas){fabric.Canvas.prototype.setHeight=fabric.StaticCanvas.prototype.setHeight}})();
+var fabric = fabric || {
+	version: "0.8.8"
+};
+typeof exports != "undefined" && (exports.fabric = fabric), typeof document != "undefined" && typeof window != "undefined" ? (fabric.document = document, fabric.window = window) : (fabric.document = require("jsdom").jsdom("<!DOCTYPE html><html><head></head><body></body></html>"), fabric.window = fabric.document.createWindow()), fabric.isTouchSupported = "ontouchstart" in fabric.document.documentElement, this.JSON || (this.JSON = {}), function () {
+	function f(a) {
+		return a < 10 ? "0" + a : a
+	}
+	function quote(a) {
+		return escapable.lastIndex = 0, escapable.test(a) ? '"' + a.replace(escapable, function (a) {
+			var b = meta[a];
+			return typeof b == "string" ? b : "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4)
+		}) + '"' : '"' + a + '"'
+	}
+	function str(a, b) {
+		var c, d, e, f, g = gap,
+			h, i = b[a];
+		i && typeof i == "object" && typeof i.toJSON == "function" && (i = i.toJSON(a)), typeof rep == "function" && (i = rep.call(b, a, i));
+		switch (typeof i) {
+		case "string":
+			return quote(i);
+		case "number":
+			return isFinite(i) ? String(i) : "null";
+		case "boolean":
+		case "null":
+			return String(i);
+		case "object":
+			if (!i) return "null";
+			gap += indent, h = [];
+			if (Object.prototype.toString.apply(i) === "[object Array]") {
+				f = i.length;
+				for (c = 0; c < f; c += 1) h[c] = str(c, i) || "null";
+				return e = h.length === 0 ? "[]" : gap ? "[\n" + gap + h.join(",\n" + gap) + "\n" + g + "]" : "[" + h.join(",") + "]", gap = g, e
+			}
+			if (rep && typeof rep == "object") {
+				f = rep.length;
+				for (c = 0; c < f; c += 1) d = rep[c], typeof d == "string" && (e = str(d, i), e && h.push(quote(d) + (gap ? ": " : ":") + e))
+			} else for (d in i) Object.hasOwnProperty.call(i, d) && (e = str(d, i), e && h.push(quote(d) + (gap ? ": " : ":") + e));
+			return e = h.length === 0 ? "{}" : gap ? "{\n" + gap + h.join(",\n" + gap) + "\n" + g + "}" : "{" + h.join(",") + "}", gap = g, e
+		}
+	}
+	typeof Date.prototype.toJSON != "function" && (Date.prototype.toJSON = function (a) {
+		return isFinite(this.valueOf()) ? this.getUTCFullYear() + "-" + f(this.getUTCMonth() + 1) + "-" + f(this.getUTCDate()) + "T" + f(this.getUTCHours()) + ":" + f(this.getUTCMinutes()) + ":" + f(this.getUTCSeconds()) + "Z" : null
+	}, String.prototype.toJSON = Number.prototype.toJSON = Boolean.prototype.toJSON = function (a) {
+		return this.valueOf()
+	});
+	var cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+		escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
+		gap, indent, meta = {
+			"\b": "\\b",
+			"	": "\\t",
+			"\n": "\\n",
+			"\f": "\\f",
+			"\r": "\\r",
+			'"': '\\"',
+			"\\": "\\\\"
+		},
+		rep;
+	typeof JSON.stringify != "function" && (JSON.stringify = function (a, b, c) {
+		var d;
+		gap = "", indent = "";
+		if (typeof c == "number") for (d = 0; d < c; d += 1) indent += " ";
+		else typeof c == "string" && (indent = c);
+		rep = b;
+		if (!b || typeof b == "function" || typeof b == "object" && typeof b.length == "number") return str("", {
+			"": a
+		});
+		throw new Error("JSON.stringify")
+	}), typeof JSON.parse != "function" && (JSON.parse = function (text, reviver) {
+		function walk(a, b) {
+			var c, d, e = a[b];
+			if (e && typeof e == "object") for (c in e) Object.hasOwnProperty.call(e, c) && (d = walk(e, c), d !== undefined ? e[c] = d : delete e[c]);
+			return reviver.call(a, b, e)
+		}
+		var j;
+		text = String(text), cx.lastIndex = 0, cx.test(text) && (text = text.replace(cx, function (a) {
+			return "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4)
+		}));
+		if (/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, "@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]").replace(/(?:^|:|,)(?:\s*\[)+/g, ""))) return j = eval("(" + text + ")"), typeof reviver == "function" ? walk({
+			"": j
+		}, "") : j;
+		throw new SyntaxError("JSON.parse")
+	})
+}(), fabric.log = function () {}, fabric.warn = function () {}, typeof console != "undefined" && (typeof console.log != "undefined" && console.log.apply && (fabric.log = function () {
+	return console.log.apply(console, arguments)
+}), typeof console.warn != "undefined" && console.warn.apply && (fabric.warn = function () {
+	return console.warn.apply(console, arguments)
+})), fabric.Observable = {
+	observe: function (a, b) {
+		this.__eventListeners || (this.__eventListeners = {});
+		if (arguments.length === 1) for (var c in a) this.observe(c, a[c]);
+		else this.__eventListeners[a] || (this.__eventListeners[a] = []), this.__eventListeners[a].push(b)
+	},
+	stopObserving: function (a, b) {
+		this.__eventListeners || (this.__eventListeners = {}), this.__eventListeners[a] && fabric.util.removeFromArray(this.__eventListeners[a], b)
+	},
+	fire: function (a, b) {
+		this.__eventListeners || (this.__eventListeners = {});
+		var c = this.__eventListeners[a];
+		if (!c) return;
+		for (var d = 0, e = c.length; d < e; d++) c[d](b || {})
+	}
+}, function () {
+	function a(a, b) {
+		var c = a.indexOf(b);
+		return c !== -1 && a.splice(c, 1), a
+	}
+	function b(a, b) {
+		return Math.floor(Math.random() * (b - a + 1)) + a
+	}
+	function c(a) {
+		return a * h
+	}
+	function d(a, b) {
+		return parseFloat(Number(a).toFixed(b))
+	}
+	function e() {
+		return !1
+	}
+	function f(a) {
+		a || (a = {});
+		var b = +(new Date),
+			c = a.duration || 500,
+			d = b + c,
+			e, f, g = a.onChange ||
+		function () {}, h = a.abort ||
+		function () {
+			return !1
+		}, j = a.easing ||
+		function (a, b, c, d) {
+			return -c * Math.cos(a / d * (Math.PI / 2)) + c + b
+		}, k = "startValue" in a ? a.startValue : 0, l = "endValue" in a ? a.endValue : 100;
+		byValue = a.byValue || l - k, a.onStart && a.onStart(), function m() {
+			e = +(new Date), currentTime = e > d ? c : e - b, g(j(currentTime, k, byValue, c));
+			if (e > d || h()) {
+				a.onComplete && a.onComplete();
+				return
+			}
+			i(m)
+		}()
+	}
+	function g(a, b, c) {
+		if (a) {
+			var d = new Image;
+			d.onload = function () {
+				b && b.call(c, d), d = d.onload = null
+			}, d.src = a
+		} else b && b.call(c, a)
+	}
+	fabric.util = {};
+	var h = Math.PI / 180,
+		i = function () {
+			return fabric.window.requestAnimationFrame || fabric.window.webkitRequestAnimationFrame || fabric.window.mozRequestAnimationFrame || fabric.window.oRequestAnimationFrame || fabric.window.msRequestAnimationFrame ||
+			function (a, b) {
+				fabric.window.setTimeout(a, 1e3 / 60)
+			}
+		}();
+	fabric.util.removeFromArray = a, fabric.util.degreesToRadians = c, fabric.util.toFixed = d, fabric.util.getRandomInt = b, fabric.util.falseFunction = e, fabric.util.animate = f, fabric.util.requestAnimFrame = i, fabric.util.loadImage = g
+}(), function () {
+	function a(a, b, c, d) {
+		return c * (a /= d) * a + b
+	}
+	function b(a, b, c, d) {
+		return -c * (a /= d) * (a - 2) + b
+	}
+	function c(a, b, c, d) {
+		return (a /= d / 2) < 1 ? c / 2 * a * a + b : -c / 2 * (--a * (a - 2) - 1) + b
+	}
+	function d(a, b, c, d) {
+		return c * (a /= d) * a * a + b
+	}
+	function e(a, b, c, d) {
+		return c * ((a = a / d - 1) * a * a + 1) + b
+	}
+	function f(a, b, c, d) {
+		return (a /= d / 2) < 1 ? c / 2 * a * a * a + b : c / 2 * ((a -= 2) * a * a + 2) + b
+	}
+	function g(a, b, c, d) {
+		return c * (a /= d) * a * a * a + b
+	}
+	function h(a, b, c, d) {
+		return -c * ((a = a / d - 1) * a * a * a - 1) + b
+	}
+	function i(a, b, c, d) {
+		return (a /= d / 2) < 1 ? c / 2 * a * a * a * a + b : -c / 2 * ((a -= 2) * a * a * a - 2) + b
+	}
+	function j(a, b, c, d) {
+		return c * (a /= d) * a * a * a * a + b
+	}
+	function k(a, b, c, d) {
+		return c * ((a = a / d - 1) * a * a * a * a + 1) + b
+	}
+	function l(a, b, c, d) {
+		return (a /= d / 2) < 1 ? c / 2 * a * a * a * a * a + b : c / 2 * ((a -= 2) * a * a * a * a + 2) + b
+	}
+	function m(a, b, c, d) {
+		return -c * Math.cos(a / d * (Math.PI / 2)) + c + b
+	}
+	function n(a, b, c, d) {
+		return c * Math.sin(a / d * (Math.PI / 2)) + b
+	}
+	function o(a, b, c, d) {
+		return -c / 2 * (Math.cos(Math.PI * a / d) - 1) + b
+	}
+	function p(a, b, c, d) {
+		return a == 0 ? b : c * Math.pow(2, 10 * (a / d - 1)) + b
+	}
+	function q(a, b, c, d) {
+		return a == d ? b + c : c * (-Math.pow(2, -10 * a / d) + 1) + b
+	}
+	function r(a, b, c, d) {
+		return a == 0 ? b : a == d ? b + c : (a /= d / 2) < 1 ? c / 2 * Math.pow(2, 10 * (a - 1)) + b : c / 2 * (-Math.pow(2, -10 * --a) + 2) + b
+	}
+	function s(a, b, c, d) {
+		return -c * (Math.sqrt(1 - (a /= d) * a) - 1) + b
+	}
+	function t(a, b, c, d) {
+		return c * Math.sqrt(1 - (a = a / d - 1) * a) + b
+	}
+	function u(a, b, c, d) {
+		return (a /= d / 2) < 1 ? -c / 2 * (Math.sqrt(1 - a * a) - 1) + b : c / 2 * (Math.sqrt(1 - (a -= 2) * a) + 1) + b
+	}
+	function v(a, b, c, d) {
+		var e = 1.70158,
+			f = 0,
+			g = c;
+		if (a == 0) return b;
+		if ((a /= d) == 1) return b + c;
+		f || (f = d * .3);
+		if (g < Math.abs(c)) {
+			g = c;
+			var e = f / 4
+		} else var e = f / (2 * Math.PI) * Math.asin(c / g);
+		return -(g * Math.pow(2, 10 * (a -= 1)) * Math.sin((a * d - e) * 2 * Math.PI / f)) + b
+	}
+	function w(a, b, c, d) {
+		var e = 1.70158,
+			f = 0,
+			g = c;
+		if (a == 0) return b;
+		if ((a /= d) == 1) return b + c;
+		f || (f = d * .3);
+		if (g < Math.abs(c)) {
+			g = c;
+			var e = f / 4
+		} else var e = f / (2 * Math.PI) * Math.asin(c / g);
+		return g * Math.pow(2, -10 * a) * Math.sin((a * d - e) * 2 * Math.PI / f) + c + b
+	}
+	function x(a, b, c, d) {
+		var e = 1.70158,
+			f = 0,
+			g = c;
+		if (a == 0) return b;
+		if ((a /= d / 2) == 2) return b + c;
+		f || (f = d * .3 * 1.5);
+		if (g < Math.abs(c)) {
+			g = c;
+			var e = f / 4
+		} else var e = f / (2 * Math.PI) * Math.asin(c / g);
+		return a < 1 ? -0.5 * g * Math.pow(2, 10 * (a -= 1)) * Math.sin((a * d - e) * 2 * Math.PI / f) + b : g * Math.pow(2, -10 * (a -= 1)) * Math.sin((a * d - e) * 2 * Math.PI / f) * .5 + c + b
+	}
+	function y(a, b, c, d, e) {
+		return e == undefined && (e = 1.70158), c * (a /= d) * a * ((e + 1) * a - e) + b
+	}
+	function z(a, b, c, d, e) {
+		return e == undefined && (e = 1.70158), c * ((a = a / d - 1) * a * ((e + 1) * a + e) + 1) + b
+	}
+	function A(a, b, c, d, e) {
+		return e == undefined && (e = 1.70158), (a /= d / 2) < 1 ? c / 2 * a * a * (((e *= 1.525) + 1) * a - e) + b : c / 2 * ((a -= 2) * a * (((e *= 1.525) + 1) * a + e) + 2) + b
+	}
+	function B(a, b, c, d) {
+		return c - C(d - a, 0, c, d) + b
+	}
+	function C(a, b, c, d) {
+		return (a /= d) < 1 / 2.75 ? c * 7.5625 * a * a + b : a < 2 / 2.75 ? c * (7.5625 * (a -= 1.5 / 2.75) * a + .75) + b : a < 2.5 / 2.75 ? c * (7.5625 * (a -= 2.25 / 2.75) * a + .9375) + b : c * (7.5625 * (a -= 2.625 / 2.75) * a + .984375) + b
+	}
+	function D(a, b, c, d) {
+		return a < d / 2 ? B(a * 2, 0, c, d) * .5 + b : C(a * 2 - d, 0, c, d) * .5 + c * .5 + b
+	}
+	fabric.util.ease = {}, fabric.util.ease = {
+		easeInQuad: a,
+		easeOutQuad: b,
+		easeInOutQuad: c,
+		easeInCubic: d,
+		easeOutCubic: e,
+		easeInOutCubic: f,
+		easeInQuart: g,
+		easeOutQuart: h,
+		easeInOutQuart: i,
+		easeInQuint: j,
+		easeOutQuint: k,
+		easeInOutQuint: l,
+		easeInSine: m,
+		easeOutSine: n,
+		easeInOutSine: o,
+		easeInExpo: p,
+		easeOutExpo: q,
+		easeInOutExpo: r,
+		easeInCirc: s,
+		easeOutCirc: t,
+		easeInOutCirc: u,
+		easeInElastic: v,
+		easeOutElastic: w,
+		easeInOutElastic: x,
+		easeInBack: y,
+		easeOutBack: z,
+		easeInOutBack: A,
+		easeInBounce: B,
+		easeOutBounce: C,
+		easeInOutBounce: D
+	}
+}(), function () {
+	function a(a, b) {
+		var c = d.call(arguments, 2),
+			e = [];
+		for (var f = 0, g = a.length; f < g; f++) e[f] = c.length ? a[f][b].apply(a[f], c) : a[f][b].call(a[f]);
+		return e
+	}
+	function b(a, b) {
+		if (!a || a.length === 0) return undefined;
+		var c = a.length - 1,
+			d = b ? a[c][b] : a[c];
+		if (b) while (c--) a[c][b] >= d && (d = a[c][b]);
+		else while (c--) a[c] >= d && (d = a[c]);
+		return d
+	}
+	function c(a, b) {
+		if (!a || a.length === 0) return undefined;
+		var c = a.length - 1,
+			d = b ? a[c][b] : a[c];
+		if (b) while (c--) a[c][b] < d && (d = a[c][b]);
+		else while (c--) a[c] < d && (d = a[c]);
+		return d
+	}
+	var d = Array.prototype.slice;
+	Array.prototype.indexOf || (Array.prototype.indexOf = function (a) {
+		if (this === void 0 || this === null) throw new TypeError;
+		var b = Object(this),
+			c = b.length >>> 0;
+		if (c === 0) return -1;
+		var d = 0;
+		arguments.length > 0 && (d = Number(arguments[1]), d !== d ? d = 0 : d !== 0 && d !== 1 / 0 && d !== -Infinity && (d = (d > 0 || -1) * Math.floor(Math.abs(d))));
+		if (d >= c) return -1;
+		var e = d >= 0 ? d : Math.max(c - Math.abs(d), 0);
+		for (; e < c; e++) if (e in b && b[e] === a) return e;
+		return -1
+	}), Array.prototype.forEach || (Array.prototype.forEach = function (a, b) {
+		for (var c = 0, d = this.length >>> 0; c < d; c++) c in this && a.call(b, this[c], c, this)
+	}), Array.prototype.map || (Array.prototype.map = function (a, b) {
+		var c = [];
+		for (var d = 0, e = this.length >>> 0; d < e; d++) d in this && (c[d] = a.call(b, this[d], d, this));
+		return c
+	}), Array.prototype.every || (Array.prototype.every = function (a, b) {
+		for (var c = 0, d = this.length >>> 0; c < d; c++) if (c in this && !a.call(b, this[c], c, this)) return !1;
+		return !0
+	}), Array.prototype.some || (Array.prototype.some = function (a, b) {
+		for (var c = 0, d = this.length >>> 0; c < d; c++) if (c in this && a.call(b, this[c], c, this)) return !0;
+		return !1
+	}), Array.prototype.filter || (Array.prototype.filter = function (a, b) {
+		var c = [],
+			d;
+		for (var e = 0, f = this.length >>> 0; e < f; e++) e in this && (d = this[e], a.call(b, d, e, this) && c.push(d));
+		return c
+	}), Array.prototype.reduce || (Array.prototype.reduce = function (a) {
+		var b = this.length >>> 0,
+			c = 0,
+			d;
+		if (arguments.length > 1) d = arguments[1];
+		else do {
+			if (c in this) {
+				d = this[c++];
+				break
+			}
+			if (++c >= b) throw new TypeError
+		} while (!0);
+		for (; c < b; c++) c in this && (d = a.call(null, d, this[c], c, this));
+		return d
+	}), fabric.util.array = {
+		invoke: a,
+		min: c,
+		max: b
+	}
+}(), function () {
+	function a(a, b) {
+		for (var c in b) a[c] = b[c];
+		return a
+	}
+	function b(b) {
+		return a({}, b)
+	}
+	fabric.util.object = {
+		extend: a,
+		clone: b
+	}
+}(), function () {
+	function a(a) {
+		return a.replace(/-+(.)?/g, function (a, b) {
+			return b ? b.toUpperCase() : ""
+		})
+	}
+	function b(a) {
+		return a.charAt(0).toUpperCase() + a.slice(1).toLowerCase()
+	}
+	function c(a) {
+		return a.replace("&", "&amp;").replace('"', "&quot;").replace("'", "&apos;").replace("<", "&lt;").replace(">", "&gt;")
+	}
+	String.prototype.trim || (String.prototype.trim = function () {
+		return this.replace(/^[\s\xA0]+/, "").replace(/[\s\xA0]+$/, "")
+	}), fabric.util.string = {
+		camelize: a,
+		capitalize: b,
+		escapeXml: c
+	}
+}(), function () {
+	var a = Array.prototype.slice,
+		b = Function.prototype.apply,
+		c = function () {};
+	Function.prototype.bind || (Function.prototype.bind = function (d) {
+		var e = this,
+			f = a.call(arguments, 1),
+			g;
+		return f.length ? g = function () {
+			return b.call(e, this instanceof c ? this : d, f.concat(a.call(arguments)))
+		} : g = function () {
+			return b.call(e, this instanceof c ? this : d, arguments)
+		}, c.prototype = this.prototype, g.prototype = new c, g
+	})
+}(), function () {
+	function a() {}
+	function b() {
+		function b() {
+			this.initialize.apply(this, arguments)
+		}
+		var e = null,
+			g = c.call(arguments, 0);
+		typeof g[0] == "function" && (e = g.shift()), b.superclass = e, b.subclasses = [], e && (a.prototype = e.prototype, b.prototype = new a, e.subclasses.push(b));
+		for (var h = 0, i = g.length; h < i; h++) f(b, g[h]);
+		return b.prototype.initialize || (b.prototype.initialize = d), b.prototype.constructor = b, b
+	}
+	var c = Array.prototype.slice,
+		d = function () {},
+		e = function () {
+			for (var a in {
+				toString: 1
+			}) if (a === "toString") return !1;
+			return !0
+		}(),
+		f;
+	e ? f = function (a, b) {
+		b.toString !== Object.prototype.toString && (a.prototype.toString = b.toString), b.valueOf !== Object.prototype.valueOf && (a.prototype.valueOf = b.valueOf);
+		for (var c in b) a.prototype[c] = b[c]
+	} : f = function (a, b) {
+		for (var c in b) a.prototype[c] = b[c]
+	}, fabric.util.createClass = b
+}(), function (a) {
+	function b(a) {
+		var b = Array.prototype.slice.call(arguments, 1),
+			c, d, e = b.length;
+		for (d = 0; d < e; d++) {
+			c = typeof a[b[d]];
+			if (!/^(?:function|object|unknown)$/.test(c)) return !1
+		}
+		return !0
+	}
+	function c(a, b) {
+		return {
+			handler: b,
+			wrappedHandler: d(a, b)
+		}
+	}
+	function d(a, b) {
+		return function (c) {
+			b.call(j(a), c || fabric.window.event)
+		}
+	}
+	function e(a, b) {
+		return function (c) {
+			if (o[a] && o[a][b]) {
+				var d = o[a][b];
+				for (var e = 0, f = d.length; e < f; e++) d[e].call(this, c || fabric.window.event)
+			}
+		}
+	}
+	function f(a) {
+		return {
+			x: g(a),
+			y: h(a)
+		}
+	}
+	function g(a) {
+		var b = fabric.document.documentElement,
+			c = fabric.document.body || {
+				scrollLeft: 0
+			};
+		return a.pageX || (typeof a.clientX != "unknown" ? a.clientX : 0) + (b.scrollLeft || c.scrollLeft) - (b.clientLeft || 0)
+	}
+	function h(a) {
+		var b = fabric.document.documentElement,
+			c = fabric.document.body || {
+				scrollTop: 0
+			};
+		return a.pageY || (typeof a.clientY != "unknown" ? a.clientY : 0) + (b.scrollTop || c.scrollTop) - (b.clientTop || 0)
+	}
+	var i = function () {
+			if (typeof fabric.document.documentElement.uniqueID != "undefined") return function (a) {
+				return a.uniqueID
+			};
+			var a = 0;
+			return function (b) {
+				return b.__uniqueID || (b.__uniqueID = "uniqueID__" + a++)
+			}
+		}(),
+		j, k;
+	(function () {
+		var a = {};
+		j = function (b) {
+			return a[b]
+		}, k = function (b, c) {
+			a[b] = c
+		}
+	})();
+	var l = b(fabric.document.documentElement, "addEventListener", "removeEventListener") && b(fabric.window, "addEventListener", "removeEventListener"),
+		m = b(fabric.document.documentElement, "attachEvent", "detachEvent") && b(fabric.window, "attachEvent", "detachEvent"),
+		n = {},
+		o = {},
+		p, q;
+	l ? (p = function (a, b, c) {
+		a.addEventListener(b, c, !1)
+	}, q = function (a, b, c) {
+		a.removeEventListener(b, c, !1)
+	}) : m ? (p = function (a, b, d) {
+		var e = i(a);
+		k(e, a), n[e] || (n[e] = {}), n[e][b] || (n[e][b] = []);
+		var f = c(e, d);
+		n[e][b].push(f), a.attachEvent("on" + b, f.wrappedHandler)
+	}, q = function (a, b, c) {
+		var d = i(a),
+			e;
+		if (n[d] && n[d][b]) for (var f = 0, g = n[d][b].length; f < g; f++) e = n[d][b][f], e && e.handler === c && (a.detachEvent("on" + b, e.wrappedHandler), n[d][b][f] = null)
+	}) : (p = function (a, b, c) {
+		var d = i(a);
+		o[d] || (o[d] = {});
+		if (!o[d][b]) {
+			o[d][b] = [];
+			var f = a["on" + b];
+			f && o[d][b].push(f), a["on" + b] = e(d, b)
+		}
+		o[d][b].push(c)
+	}, q = function (a, b, c) {
+		var d = i(a);
+		if (o[d] && o[d][b]) {
+			var e = o[d][b];
+			for (var f = 0, g = e.length; f < g; f++) e[f] === c && e.splice(f, 1)
+		}
+	}), fabric.util.addListener = p, fabric.util.removeListener = q, fabric.isTouchSupported && (g = function (a) {
+		return a.touches && a.touches[0] && a.touches[0].pageX
+	}, h = function (a) {
+		return a.touches && a.touches[0] && a.touches[0].pageY
+	}), fabric.util.getPointer = f, fabric.util.object.extend(fabric.util, fabric.Observable)
+}(this), function () {
+	function a(a, b) {
+		var c = a.style,
+			d;
+		if (typeof b == "string") return a.style.cssText += ";" + b, b.indexOf("opacity") > -1 ? h(a, b.match(/opacity:\s*(\d?\.?\d*)/)[1]) : a;
+		for (var e in b) if (e === "opacity") h(a, b[e]);
+		else {
+			var f = e === "float" || e === "cssFloat" ? typeof c.styleFloat == "undefined" ? "cssFloat" : "styleFloat" : e;
+			c[f] = b[e]
+		}
+		return a
+	}
+	var b = fabric.document.createElement("div"),
+		c = typeof b.style.opacity == "string",
+		d = typeof b.style.filter == "string",
+		e = fabric.document.defaultView,
+		f = e && typeof e.getComputedStyle != "undefined",
+		g = /alpha\s*\(\s*opacity\s*=\s*([^\)]+)\)/,
+		h = function (a) {
+			return a
+		};
+	c ? h = function (a, b) {
+		return a.style.opacity = b, a
+	} : d && (h = function (a, b) {
+		var c = a.style;
+		return a.currentStyle && !a.currentStyle.hasLayout && (c.zoom = 1), g.test(c.filter) ? (b = b >= .9999 ? "" : "alpha(opacity=" + b * 100 + ")", c.filter = c.filter.replace(g, b)) : c.filter += " alpha(opacity=" + b * 100 + ")", a
+	}), fabric.util.setStyle = a
+}(), function () {
+	function a(a) {
+		return typeof a == "string" ? fabric.document.getElementById(a) : a
+	}
+	function b(a) {
+		return g.call(a, 0)
+	}
+	function c(a, b) {
+		var c = fabric.document.createElement(a);
+		for (var d in b) d === "class" ? c.className = b[d] : d === "for" ? c.htmlFor = b[d] : c.setAttribute(d, b[d]);
+		return c
+	}
+	function d(a, b) {
+		(" " + a.className + " ").indexOf(" " + b + " ") === -1 && (a.className += (a.className ? " " : "") + b)
+	}
+	function e(a, b, d) {
+		return typeof b == "string" && (b = c(b, d)), a.parentNode && a.parentNode.replaceChild(b, a), b.appendChild(a), b
+	}
+	function f(a) {
+		var b = 0,
+			c = 0;
+		do b += a.offsetTop || 0, c += a.offsetLeft || 0, a = a.offsetParent;
+		while (a);
+		return {
+			left: c,
+			top: b
+		}
+	}
+	var g = Array.prototype.slice;
+	try {
+		var h = b(fabric.document.childNodes) instanceof Array
+	} catch (i) {}
+	h || (b = function (a) {
+		var b = new Array(a.length),
+			c = a.length;
+		while (c--) b[c] = a[c];
+		return b
+	}), function () {
+		function a(a) {
+			return typeof a.onselectstart != "undefined" && (a.onselectstart = fabric.util.falseFunction), d ? a.style[d] = "none" : typeof a.unselectable == "string" && (a.unselectable = "on"), a
+		}
+		function b(a) {
+			return typeof a.onselectstart != "undefined" && (a.onselectstart = null), d ? a.style[d] = "" : typeof a.unselectable == "string" && (a.unselectable = ""), a
+		}
+		var c = fabric.document.documentElement.style,
+			d = "userSelect" in c ? "userSelect" : "MozUserSelect" in c ? "MozUserSelect" : "WebkitUserSelect" in c ? "WebkitUserSelect" : "KhtmlUserSelect" in c ? "KhtmlUserSelect" : "";
+		fabric.util.makeElementUnselectable = a, fabric.util.makeElementSelectable = b
+	}(), function () {
+		function a(a, b) {
+			var c = fabric.document.getElementsByTagName("head")[0],
+				d = fabric.document.createElement("script"),
+				e = !0;
+			d.type = "text/javascript", d.setAttribute("runat", "server"), d.onload = d.onreadystatechange = function (a) {
+				if (e) {
+					if (typeof this.readyState == "string" && this.readyState !== "loaded" && this.readyState !== "complete") return;
+					e = !1, b(a || fabric.window.event), d = d.onload = d.onreadystatechange = null
+				}
+			}, d.src = a, c.appendChild(d)
+		}
+		fabric.util.getScript = a
+	}(), fabric.util.getById = a, fabric.util.toArray = b, fabric.util.makeElement = c, fabric.util.addClass = d, fabric.util.wrapElement = e, fabric.util.getElementOffset = f
+}(), function () {
+	function a(a, b) {
+		return a + (/\?/.test(a) ? "&" : "?") + b
+	}
+	function b() {}
+	function c(c, e) {
+		e || (e = {});
+		var f = e.method ? e.method.toUpperCase() : "GET",
+			g = e.onComplete ||
+		function () {}, h = d(), i;
+		return h.onreadystatechange = function () {
+			h.readyState === 4 && (g(h), h.onreadystatechange = b)
+		}, f === "GET" && (i = null, typeof e.parameters == "string" && (c = a(c, e.parameters))), h.open(f, c, !0), (f === "POST" || f === "PUT") && h.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"), h.send(i), h
+	}
+	var d = function () {
+			var a = [function () {
+				return new ActiveXObject("Microsoft.XMLHTTP")
+			}, function () {
+				return new ActiveXObject("Msxml2.XMLHTTP")
+			}, function () {
+				return new ActiveXObject("Msxml2.XMLHTTP.3.0")
+			}, function () {
+				return new XMLHttpRequest
+			}];
+			for (var b = a.length; b--;) try {
+				var c = a[b]();
+				if (c) return a[b]
+			} catch (d) {}
+		}();
+	fabric.util.request = c
+}(), function () {
+	function a(a, b, c, d) {
+		return c * (a /= d) * a + b
+	}
+	function b(a, b, c, d) {
+		return -c * (a /= d) * (a - 2) + b
+	}
+	function c(a, b, c, d) {
+		return (a /= d / 2) < 1 ? c / 2 * a * a + b : -c / 2 * (--a * (a - 2) - 1) + b
+	}
+	function d(a, b, c, d) {
+		return c * (a /= d) * a * a + b
+	}
+	function e(a, b, c, d) {
+		return c * ((a = a / d - 1) * a * a + 1) + b
+	}
+	function f(a, b, c, d) {
+		return (a /= d / 2) < 1 ? c / 2 * a * a * a + b : c / 2 * ((a -= 2) * a * a + 2) + b
+	}
+	function g(a, b, c, d) {
+		return c * (a /= d) * a * a * a + b
+	}
+	function h(a, b, c, d) {
+		return -c * ((a = a / d - 1) * a * a * a - 1) + b
+	}
+	function i(a, b, c, d) {
+		return (a /= d / 2) < 1 ? c / 2 * a * a * a * a + b : -c / 2 * ((a -= 2) * a * a * a - 2) + b
+	}
+	function j(a, b, c, d) {
+		return c * (a /= d) * a * a * a * a + b
+	}
+	function k(a, b, c, d) {
+		return c * ((a = a / d - 1) * a * a * a * a + 1) + b
+	}
+	function l(a, b, c, d) {
+		return (a /= d / 2) < 1 ? c / 2 * a * a * a * a * a + b : c / 2 * ((a -= 2) * a * a * a * a + 2) + b
+	}
+	function m(a, b, c, d) {
+		return -c * Math.cos(a / d * (Math.PI / 2)) + c + b
+	}
+	function n(a, b, c, d) {
+		return c * Math.sin(a / d * (Math.PI / 2)) + b
+	}
+	function o(a, b, c, d) {
+		return -c / 2 * (Math.cos(Math.PI * a / d) - 1) + b
+	}
+	function p(a, b, c, d) {
+		return a == 0 ? b : c * Math.pow(2, 10 * (a / d - 1)) + b
+	}
+	function q(a, b, c, d) {
+		return a == d ? b + c : c * (-Math.pow(2, -10 * a / d) + 1) + b
+	}
+	function r(a, b, c, d) {
+		return a == 0 ? b : a == d ? b + c : (a /= d / 2) < 1 ? c / 2 * Math.pow(2, 10 * (a - 1)) + b : c / 2 * (-Math.pow(2, -10 * --a) + 2) + b
+	}
+	function s(a, b, c, d) {
+		return -c * (Math.sqrt(1 - (a /= d) * a) - 1) + b
+	}
+	function t(a, b, c, d) {
+		return c * Math.sqrt(1 - (a = a / d - 1) * a) + b
+	}
+	function u(a, b, c, d) {
+		return (a /= d / 2) < 1 ? -c / 2 * (Math.sqrt(1 - a * a) - 1) + b : c / 2 * (Math.sqrt(1 - (a -= 2) * a) + 1) + b
+	}
+	function v(a, b, c, d) {
+		var e = 1.70158,
+			f = 0,
+			g = c;
+		if (a == 0) return b;
+		if ((a /= d) == 1) return b + c;
+		f || (f = d * .3);
+		if (g < Math.abs(c)) {
+			g = c;
+			var e = f / 4
+		} else var e = f / (2 * Math.PI) * Math.asin(c / g);
+		return -(g * Math.pow(2, 10 * (a -= 1)) * Math.sin((a * d - e) * 2 * Math.PI / f)) + b
+	}
+	function w(a, b, c, d) {
+		var e = 1.70158,
+			f = 0,
+			g = c;
+		if (a == 0) return b;
+		if ((a /= d) == 1) return b + c;
+		f || (f = d * .3);
+		if (g < Math.abs(c)) {
+			g = c;
+			var e = f / 4
+		} else var e = f / (2 * Math.PI) * Math.asin(c / g);
+		return g * Math.pow(2, -10 * a) * Math.sin((a * d - e) * 2 * Math.PI / f) + c + b
+	}
+	function x(a, b, c, d) {
+		var e = 1.70158,
+			f = 0,
+			g = c;
+		if (a == 0) return b;
+		if ((a /= d / 2) == 2) return b + c;
+		f || (f = d * .3 * 1.5);
+		if (g < Math.abs(c)) {
+			g = c;
+			var e = f / 4
+		} else var e = f / (2 * Math.PI) * Math.asin(c / g);
+		return a < 1 ? -0.5 * g * Math.pow(2, 10 * (a -= 1)) * Math.sin((a * d - e) * 2 * Math.PI / f) + b : g * Math.pow(2, -10 * (a -= 1)) * Math.sin((a * d - e) * 2 * Math.PI / f) * .5 + c + b
+	}
+	function y(a, b, c, d, e) {
+		return e == undefined && (e = 1.70158), c * (a /= d) * a * ((e + 1) * a - e) + b
+	}
+	function z(a, b, c, d, e) {
+		return e == undefined && (e = 1.70158), c * ((a = a / d - 1) * a * ((e + 1) * a + e) + 1) + b
+	}
+	function A(a, b, c, d, e) {
+		return e == undefined && (e = 1.70158), (a /= d / 2) < 1 ? c / 2 * a * a * (((e *= 1.525) + 1) * a - e) + b : c / 2 * ((a -= 2) * a * (((e *= 1.525) + 1) * a + e) + 2) + b
+	}
+	function B(a, b, c, d) {
+		return c - C(d - a, 0, c, d) + b
+	}
+	function C(a, b, c, d) {
+		return (a /= d) < 1 / 2.75 ? c * 7.5625 * a * a + b : a < 2 / 2.75 ? c * (7.5625 * (a -= 1.5 / 2.75) * a + .75) + b : a < 2.5 / 2.75 ? c * (7.5625 * (a -= 2.25 / 2.75) * a + .9375) + b : c * (7.5625 * (a -= 2.625 / 2.75) * a + .984375) + b
+	}
+	function D(a, b, c, d) {
+		return a < d / 2 ? B(a * 2, 0, c, d) * .5 + b : C(a * 2 - d, 0, c, d) * .5 + c * .5 + b
+	}
+	fabric.util.ease = {}, fabric.util.ease = {
+		easeInQuad: a,
+		easeOutQuad: b,
+		easeInOutQuad: c,
+		easeInCubic: d,
+		easeOutCubic: e,
+		easeInOutCubic: f,
+		easeInQuart: g,
+		easeOutQuart: h,
+		easeInOutQuart: i,
+		easeInQuint: j,
+		easeOutQuint: k,
+		easeInOutQuint: l,
+		easeInSine: m,
+		easeOutSine: n,
+		easeInOutSine: o,
+		easeInExpo: p,
+		easeOutExpo: q,
+		easeInOutExpo: r,
+		easeInCirc: s,
+		easeOutCirc: t,
+		easeInOutCirc: u,
+		easeInElastic: v,
+		easeOutElastic: w,
+		easeInOutElastic: x,
+		easeInBack: y,
+		easeOutBack: z,
+		easeInOutBack: A,
+		easeInBounce: B,
+		easeOutBounce: C,
+		easeInOutBounce: D
+	}
+}(), function (a) {
+	function b(a, b) {
+		if (!a) return;
+		var c, d, e = {};
+		a.parentNode && /^g$/i.test(a.parentNode.nodeName) && (e = m.parseAttributes(a.parentNode, b));
+		var f = b.reduce(function (b, e) {
+			return c = a.getAttribute(e), d = parseFloat(c), c && ((e === "fill" || e === "stroke") && c === "none" && (c = ""), e === "fill-rule" && (c = c === "evenodd" ? "destination-over" : c), e === "transform" && (c = m.parseTransformAttribute(c)), e in q && (e = q[e]), b[e] = isNaN(d) ? c : d), b
+		}, {});
+		return f = n(f, n(h(a), m.parseStyleAttribute(a))), n(e, f)
+	}
+	function c(a) {
+		if (!a) return null;
+		a = a.trim();
+		var b = a.indexOf(",") > -1;
+		a = a.split(/\s+/);
+		var c = [];
+		if (b) for (var d = 0, e = a.length; d < e; d++) {
+			var f = a[d].split(",");
+			c.push({
+				x: parseFloat(f[0]),
+				y: parseFloat(f[1])
+			})
+		} else for (var d = 0, e = a.length; d < e; d += 2) c.push({
+			x: parseFloat(a[d]),
+			y: parseFloat(a[d + 1])
+		});
+		return c.length % 2 === 0, c
+	}
+	function d(a) {
+		var b = {},
+			c = a.getAttribute("style");
+		if (c) if (typeof c == "string") c = c.replace(/;$/, "").split(";").forEach(function (a) {
+			var c = a.split(":");
+			b[c[0].trim().toLowerCase()] = c[1].trim()
+		});
+		else for (var d in c) typeof c[d] != "undefined" && (b[d.toLowerCase()] = c[d]);
+		return b
+	}
+	function e(a) {
+		var b = m.Canvas.activeInstance,
+			c = b ? b.getContext() : null;
+		if (!c) return;
+		for (var d = a.length; d--;) {
+			var e = a[d].get("fill");
+			if (/^url\(/.test(e)) {
+				var f = e.slice(5, e.length - 1);
+				m.gradientDefs[f] && a[d].set("fill", m.Gradient.fromElement(m.gradientDefs[f], c, a[d]))
+			}
+		}
+	}
+	function f(a, b, c) {
+		function d() {
+			--g === 0 && (f = f.filter(function (a) {
+				return a != null
+			}), e(f), b(f))
+		}
+		var f = Array(a.length),
+			g = a.length;
+		for (var h = 0, i, j = a.length; h < j; h++) {
+			i = a[h];
+			var k = m[o(i.tagName)];
+			if (k && k.fromElement) try {
+				k.async ? k.fromElement(i, function (a) {
+					return function (b) {
+						f.splice(a, 0, b), d()
+					}
+				}(h), c) : (f.splice(h, 0, k.fromElement(i, c)), d())
+			} catch (l) {
+				m.log(l.message || l)
+			} else d()
+		}
+	}
+	function g(a) {
+		var b = a.getElementsByTagName("style"),
+			c = {},
+			d;
+		for (var e = 0, f = b.length; e < f; e++) {
+			var g = b[0].textContent;
+			g = g.replace(/\/\*[\s\S]*?\*\//g, ""), d = g.match(/[^{]*\{[\s\S]*?\}/g), d = d.map(function (a) {
+				return a.trim()
+			}), d.forEach(function (a) {
+				var b = a.match(/([\s\S]*?)\s*\{([^}]*)\}/),
+					a = b[1],
+					d = b[2].trim(),
+					e = d.replace(/;$/, "").split(/\s*;\s*/);
+				c[a] || (c[a] = {});
+				for (var f = 0, g = e.length; f < g; f++) {
+					var h = e[f].split(/\s*:\s*/),
+						i = h[0],
+						j = h[1];
+					c[a][i] = j
+				}
+			})
+		}
+		return c
+	}
+	function h(a) {
+		var b = a.nodeName,
+			c = a.getAttribute("class"),
+			d = a.getAttribute("id"),
+			e = {};
+		for (var f in m.cssRules) {
+			var g = c && (new RegExp("^\\." + c)).test(f) || d && (new RegExp("^#" + d)).test(f) || (new RegExp("^" + b)).test(f);
+			if (g) for (var h in m.cssRules[f]) e[h] = m.cssRules[f][h]
+		}
+		return e
+	}
+	function i(a, b) {
+		function c(c) {
+			var d = c.responseXML;
+			!d.documentElement && m.window.ActiveXObject && c.responseText && (d = new ActiveXObject("Microsoft.XMLDOM"), d.async = "false", d.loadXML(c.responseText.replace(/<!DOCTYPE[\s\S]*?(\[[\s\S]*\])*?>/i, "")));
+			if (!d.documentElement) return;
+			m.parseSVGDocument(d.documentElement, function (c, d) {
+				r.set(a, {
+					objects: m.util.array.invoke(c, "toObject"),
+					options: d
+				}), b(c, d)
+			})
+		}
+		a = a.replace(/^\n\s*/, "").trim(), r.has(a, function (d) {
+			d ? r.get(a, function (a) {
+				var c = j(a);
+				b(c.objects, c.options)
+			}) : new m.util.request(a, {
+				method: "get",
+				onComplete: c
+			})
+		})
+	}
+	function j(a) {
+		var b = a.objects,
+			c = a.options;
+		return b = b.map(function (a) {
+			return m[o(a.type)].fromObject(a)
+		}), {
+			objects: b,
+			options: c
+		}
+	}
+	function k(a, b) {
+		a = a.trim();
+		var c;
+		if (typeof DOMParser != "undefined") {
+			var d = new DOMParser;
+			d && d.parseFromString && (c = d.parseFromString(a, "text/xml"))
+		} else if (m.window.ActiveXObject) {
+			var c = new ActiveXObject("Microsoft.XMLDOM");
+			c.async = "false", c.loadXML(a.replace(/<!DOCTYPE[\s\S]*?(\[[\s\S]*\])*?>/i, ""))
+		}
+		m.parseSVGDocument(c.documentElement, function (a, c) {
+			b(a, c)
+		})
+	}
+	function l(a) {
+		var b = "";
+		for (var c = 0, d = a.length; c < d; c++) {
+			if (a[c].type !== "text" || !a[c].path) continue;
+			b += ["@font-face {", "font-family: ", a[c].fontFamily, "; ", "src: url('", a[c].path, "')", "}"].join("")
+		}
+		return b && (b = ["<defs>", '<style type="text/css">', "<![CDATA[", b, "]]>", "</style>", "</defs>"].join("")), b
+	}
+	var m = a.fabric || (a.fabric = {}),
+		n = m.util.object.extend,
+		o = m.util.string.capitalize,
+		p = m.util.object.clone,
+		q = {
+			cx: "left",
+			x: "left",
+			cy: "top",
+			y: "top",
+			r: "radius",
+			"fill-opacity": "opacity",
+			"fill-rule": "fillRule",
+			"stroke-width": "strokeWidth",
+			transform: "transformMatrix"
+		};
+	m.parseTransformAttribute = function () {
+		function a(a, b) {
+			var c = b[0];
+			a[0] = Math.cos(c), a[1] = Math.sin(c), a[2] = -Math.sin(c), a[3] = Math.cos(c)
+		}
+		function b(a, b) {
+			var c = b[0],
+				d = b.length === 2 ? b[1] : b[0];
+			a[0] = c, a[3] = d
+		}
+		function c(a, b) {
+			a[2] = b[0]
+		}
+		function d(a, b) {
+			a[1] = b[0]
+		}
+		function e(a, b) {
+			a[4] = b[0], b.length === 2 && (a[5] = b[1])
+		}
+		var f = [1, 0, 0, 1, 0, 0],
+			g = "(?:[-+]?\\d+(?:\\.\\d+)?(?:e[-+]?\\d+)?)",
+			h = "(?:\\s+,?\\s*|,\\s*)",
+			i = "(?:(skewX)\\s*\\(\\s*(" + g + ")\\s*\\))",
+			j = "(?:(skewY)\\s*\\(\\s*(" + g + ")\\s*\\))",
+			k = "(?:(rotate)\\s*\\(\\s*(" + g + ")(?:" + h + "(" + g + ")" + h + "(" + g + "))?\\s*\\))",
+			l = "(?:(scale)\\s*\\(\\s*(" + g + ")(?:" + h + "(" + g + "))?\\s*\\))",
+			m = "(?:(translate)\\s*\\(\\s*(" + g + ")(?:" + h + "(" + g + "))?\\s*\\))",
+			n = "(?:(matrix)\\s*\\(\\s*(" + g + ")" + h + "(" + g + ")" + h + "(" + g + ")" + h + "(" + g + ")" + h + "(" + g + ")" + h + "(" + g + ")\\s*\\))",
+			o = "(?:" + n + "|" + m + "|" + l + "|" + k + "|" + i + "|" + j + ")",
+			p = "(?:" + o + "(?:" + h + o + ")*)",
+			q = "^\\s*(?:" + p + "?)\\s*$",
+			r = new RegExp(q),
+			s = new RegExp(o);
+		return function (g) {
+			var h = f.concat();
+			return !g || g && !r.test(g) ? h : (g.replace(s, function (f) {
+				var g = (new RegExp(o)).exec(f).filter(function (a) {
+					return a !== "" && a != null
+				}),
+					i = g[1],
+					j = g.slice(2).map(parseFloat);
+				switch (i) {
+				case "translate":
+					e(h, j);
+					break;
+				case "rotate":
+					a(h, j);
+					break;
+				case "scale":
+					b(h, j);
+					break;
+				case "skewX":
+					c(h, j);
+					break;
+				case "skewY":
+					d(h, j);
+					break;
+				case "matrix":
+					h = j
+				}
+			}), h)
+		}
+	}(), m.parseSVGDocument = function () {
+		function a(a, b) {
+			while (a && (a = a.parentNode)) if (b.test(a.nodeName)) return !0;
+			return !1
+		}
+		var b = /^(path|circle|polygon|polyline|ellipse|rect|line|image)$/,
+			c = "(?:[-+]?\\d+(?:\\.\\d+)?(?:e[-+]?\\d+)?)",
+			d = new RegExp("^\\s*(" + c + "+)\\s*,?\\s*(" + c + "+)\\s*,?\\s*(" + c + "+)\\s*,?\\s*(" + c + "+)\\s*$");
+		return function (c, e) {
+			if (!c) return;
+			var f = new Date,
+				h = m.util.toArray(c.getElementsByTagName("*"));
+			if (h.length === 0) {
+				h = c.selectNodes("//*[name(.)!='svg']");
+				var i = [];
+				for (var j = 0, k = h.length; j < k; j++) i[j] = h[j];
+				h = i
+			}
+			var l = h.filter(function (c) {
+				return b.test(c.tagName) && !a(c, /^(?:pattern|defs)$/)
+			});
+			if (!l || l && !l.length) return;
+			var n = c.getAttribute("viewBox"),
+				o = c.getAttribute("width"),
+				q = c.getAttribute("height"),
+				r = null,
+				s = null,
+				t, u;
+			n && (n = n.match(d)) && (t = parseInt(n[1], 10), u = parseInt(n[2], 10), r = parseInt(n[3], 10), s = parseInt(n[4], 10)), r = o ? parseFloat(o) : r, s = q ? parseFloat(q) : s;
+			var v = {
+				width: r,
+				height: s
+			};
+			m.gradientDefs = m.getGradientDefs(c), m.cssRules = g(c), m.parseElements(l, function (a) {
+				m.documentParsingTime = new Date - f, e && e(a, v)
+			}, p(v))
+		}
+	}();
+	var r = {
+		has: function (a, b) {
+			b(!1)
+		},
+		get: function (a, b) {},
+		set: function (a, b) {}
+	};
+	n(m, {
+		parseAttributes: b,
+		parseElements: f,
+		parseStyleAttribute: d,
+		parsePointsAttribute: c,
+		getCSSRules: g,
+		loadSVGFromURL: i,
+		loadSVGFromString: k,
+		createSVGFontFacesMarkup: l
+	})
+}(typeof exports != "undefined" ? exports : this), function () {
+	function a(a) {
+		var b = a.getAttribute("style");
+		if (b) {
+			var c = b.split(/\s*;\s*/);
+			for (var d = c.length; d--;) {
+				var e = c[d].split(/\s*:\s*/),
+					f = e[0].trim(),
+					g = e[1].trim();
+				if (f === "stop-color") return g
+			}
+		}
+	}
+	function b(a, b) {
+		for (var c in b) {
+			if (typeof b[c] == "string" && /^\d+%$/.test(b[c])) {
+				var d = parseFloat(b[c], 10);
+				if (c === "x1" || c === "x2") b[c] = a.width * d / 100;
+				else if (c === "y1" || c === "y2") b[c] = a.height * d / 100
+			}
+			if (c === "x1" || c === "x2") b[c] -= a.width / 2;
+			else if (c === "y1" || c === "y2") b[c] -= a.height / 2
+		}
+	}
+	function c(a) {
+		var b = a.getElementsByTagName("linearGradient"),
+			c = a.getElementsByTagName("radialGradient"),
+			d, e = {};
+		for (var f = b.length; f--;) d = b[f], e[d.id] = d;
+		for (var f = c.length; f--;) d = c[f], e[d.id] = d;
+		return e
+	}
+	fabric.Gradient = {
+		create: function (a, b) {
+			b || (b = {});
+			var c = b.x1 || 0,
+				d = b.y1 || 0,
+				e = b.x2 || a.canvas.width,
+				f = b.y2 || 0,
+				g = b.colorStops,
+				h = a.createLinearGradient(c, d, e, f);
+			for (var i in g) {
+				var j = g[i];
+				h.addColorStop(parseFloat(i), j)
+			}
+			return h
+		},
+		fromElement: function (c, d, e) {
+			var f = c.getElementsByTagName("stop"),
+				c, g, h = {},
+				i, j = {
+					x1: c.getAttribute("x1") || 0,
+					y1: c.getAttribute("y1") || 0,
+					x2: c.getAttribute("x2") || "100%",
+					y2: c.getAttribute("y2") || 0
+				};
+			for (var k = f.length; k--;) c = f[k], g = c.getAttribute("offset"), g = parseFloat(g) / (/%$/.test(g) ? 100 : 1), h[g] = a(c) || c.getAttribute("stop-color");
+			return b(e, j), fabric.Gradient.create(d, {
+				x1: j.x1,
+				y1: j.y1,
+				x2: j.x2,
+				y2: j.y2,
+				colorStops: h
+			})
+		},
+		forObject: function (a, c, d) {
+			d || (d = {}), b(a, d);
+			var e = fabric.Gradient.create(c, {
+				x1: d.x1,
+				y1: d.y1,
+				x2: d.x2,
+				y2: d.y2,
+				colorStops: d.colorStops
+			});
+			return e
+		}
+	}, fabric.getGradientDefs = c
+}(), function (a) {
+	function b(a, b) {
+		arguments.length > 0 && this.init(a, b)
+	}
+	var c = a.fabric || (a.fabric = {});
+	if (c.Point) {
+		c.warn("fabric.Point is already defined");
+		return
+	}
+	c.Point = b, b.prototype = {
+		constructor: b,
+		init: function (a, b) {
+			this.x = a, this.y = b
+		},
+		add: function (a) {
+			return new b(this.x + a.x, this.y + a.y)
+		},
+		addEquals: function (a) {
+			return this.x += a.x, this.y += a.y, this
+		},
+		scalarAdd: function (a) {
+			return new b(this.x + a, this.y + a)
+		},
+		scalarAddEquals: function (a) {
+			return this.x += a, this.y += a, this
+		},
+		subtract: function (a) {
+			return new b(this.x - a.x, this.y - a.y)
+		},
+		subtractEquals: function (a) {
+			return this.x -= a.x, this.y -= a.y, this
+		},
+		scalarSubtract: function (a) {
+			return new b(this.x - a, this.y - a)
+		},
+		scalarSubtractEquals: function (a) {
+			return this.x -= a, this.y -= a, this
+		},
+		multiply: function (a) {
+			return new b(this.x * a, this.y * a)
+		},
+		multiplyEquals: function (a) {
+			return this.x *= a, this.y *= a, this
+		},
+		divide: function (a) {
+			return new b(this.x / a, this.y / a)
+		},
+		divideEquals: function (a) {
+			return this.x /= a, this.y /= a, this
+		},
+		eq: function (a) {
+			return this.x == a.x && this.y == a.y
+		},
+		lt: function (a) {
+			return this.x < a.x && this.y < a.y
+		},
+		lte: function (a) {
+			return this.x <= a.x && this.y <= a.y
+		},
+		gt: function (a) {
+			return this.x > a.x && this.y > a.y
+		},
+		gte: function (a) {
+			return this.x >= a.x && this.y >= a.y
+		},
+		lerp: function (a, c) {
+			return new b(this.x + (a.x - this.x) * c, this.y + (a.y - this.y) * c)
+		},
+		distanceFrom: function (a) {
+			var b = this.x - a.x,
+				c = this.y - a.y;
+			return Math.sqrt(b * b + c * c)
+		},
+		min: function (a) {
+			return new b(Math.min(this.x, a.x), Math.min(this.y, a.y))
+		},
+		max: function (a) {
+			return new b(Math.max(this.x, a.x), Math.max(this.y, a.y))
+		},
+		toString: function () {
+			return this.x + "," + this.y
+		},
+		setXY: function (a, b) {
+			this.x = a, this.y = b
+		},
+		setFromPoint: function (a) {
+			this.x = a.x, this.y = a.y
+		},
+		swap: function (a) {
+			var b = this.x,
+				c = this.y;
+			this.x = a.x, this.y = a.y, a.x = b, a.y = c
+		}
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	function b(a) {
+		arguments.length > 0 && this.init(a)
+	}
+	var c = a.fabric || (a.fabric = {});
+	if (c.Intersection) {
+		c.warn("fabric.Intersection is already defined");
+		return
+	}
+	c.Intersection = b, c.Intersection.prototype = {
+		init: function (a) {
+			this.status = a, this.points = []
+		},
+		appendPoint: function (a) {
+			this.points.push(a)
+		},
+		appendPoints: function (a) {
+			this.points = this.points.concat(a)
+		}
+	}, c.Intersection.intersectLineLine = function (a, d, e, f) {
+		var g, h = (f.x - e.x) * (a.y - e.y) - (f.y - e.y) * (a.x - e.x),
+			i = (d.x - a.x) * (a.y - e.y) - (d.y - a.y) * (a.x - e.x),
+			j = (f.y - e.y) * (d.x - a.x) - (f.x - e.x) * (d.y - a.y);
+		if (j != 0) {
+			var k = h / j,
+				l = i / j;
+			0 <= k && k <= 1 && 0 <= l && l <= 1 ? (g = new b("Intersection"), g.points.push(new c.Point(a.x + k * (d.x - a.x), a.y + k * (d.y - a.y)))) : g = new b("No Intersection")
+		} else h == 0 || i == 0 ? g = new b("Coincident") : g = new b("Parallel");
+		return g
+	}, c.Intersection.intersectLinePolygon = function (a, c, d) {
+		var e = new b("No Intersection"),
+			f = d.length;
+		for (var g = 0; g < f; g++) {
+			var h = d[g],
+				i = d[(g + 1) % f],
+				j = b.intersectLineLine(a, c, h, i);
+			e.appendPoints(j.points)
+		}
+		return e.points.length > 0 && (e.status = "Intersection"), e
+	}, c.Intersection.intersectPolygonPolygon = function (a, c) {
+		var d = new b("No Intersection"),
+			e = a.length;
+		for (var f = 0; f < e; f++) {
+			var g = a[f],
+				h = a[(f + 1) % e],
+				i = b.intersectLinePolygon(g, h, c);
+			d.appendPoints(i.points)
+		}
+		return d.points.length > 0 && (d.status = "Intersection"), d
+	}, c.Intersection.intersectPolygonRectangle = function (a, d, e) {
+		var f = d.min(e),
+			g = d.max(e),
+			h = new c.Point(g.x, f.y),
+			i = new c.Point(f.x, g.y),
+			j = b.intersectLinePolygon(f, h, a),
+			k = b.intersectLinePolygon(h, g, a),
+			l = b.intersectLinePolygon(g, i, a),
+			m = b.intersectLinePolygon(i, f, a),
+			n = new b("No Intersection");
+		return n.appendPoints(j.points), n.appendPoints(k.points), n.appendPoints(l.points), n.appendPoints(m.points), n.points.length > 0 && (n.status = "Intersection"), n
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	function b(a) {
+		a ? this._tryParsingColor(a) : this.setSource([0, 0, 0, 1])
+	}
+	var c = a.fabric || (a.fabric = {});
+	if (c.Color) {
+		c.warn("fabric.Color is already defined.");
+		return
+	}
+	c.Color = b, c.Color.prototype = {
+		_tryParsingColor: function (a) {
+			var c = b.sourceFromHex(a);
+			c || (c = b.sourceFromRgb(a)), c && this.setSource(c)
+		},
+		getSource: function () {
+			return this._source
+		},
+		setSource: function (a) {
+			this._source = a
+		},
+		toRgb: function () {
+			var a = this.getSource();
+			return "rgb(" + a[0] + "," + a[1] + "," + a[2] + ")"
+		},
+		toRgba: function () {
+			var a = this.getSource();
+			return "rgba(" + a[0] + "," + a[1] + "," + a[2] + "," + a[3] + ")"
+		},
+		toHex: function () {
+			var a = this.getSource(),
+				b = a[0].toString(16);
+			b = b.length == 1 ? "0" + b : b;
+			var c = a[1].toString(16);
+			c = c.length == 1 ? "0" + c : c;
+			var d = a[2].toString(16);
+			return d = d.length == 1 ? "0" + d : d, b.toUpperCase() + c.toUpperCase() + d.toUpperCase()
+		},
+		getAlpha: function () {
+			return this.getSource()[3]
+		},
+		setAlpha: function (a) {
+			var b = this.getSource();
+			return b[3] = a, this.setSource(b), this
+		},
+		toGrayscale: function () {
+			var a = this.getSource(),
+				b = parseInt((a[0] * .3 + a[1] * .59 + a[2] * .11).toFixed(0), 10),
+				c = a[3];
+			return this.setSource([b, b, b, c]), this
+		},
+		toBlackWhite: function (a) {
+			var b = this.getSource(),
+				c = (b[0] * .3 + b[1] * .59 + b[2] * .11).toFixed(0),
+				d = b[3],
+				a = a || 127;
+			return c = Number(c) < Number(a) ? 0 : 255, this.setSource([c, c, c, d]), this
+		},
+		overlayWith: function (a) {
+			a instanceof b || (a = new b(a));
+			var c = [],
+				d = this.getAlpha(),
+				e = .5,
+				f = this.getSource(),
+				g = a.getSource();
+			for (var h = 0; h < 3; h++) c.push(Math.round(f[h] * (1 - e) + g[h] * e));
+			return c[3] = d, this.setSource(c), this
+		}
+	}, c.Color.reRGBa = /^rgba?\((\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(\d+(?:\.\d+)?))?\)$/, c.Color.reHex = /^#?([0-9a-f]{6}|[0-9a-f]{3})$/i, c.Color.fromRgb = function (a) {
+		return b.fromSource(b.sourceFromRgb(a))
+	}, c.Color.sourceFromRgb = function (a) {
+		var c = a.match(b.reRGBa);
+		if (c) return [parseInt(c[1], 10), parseInt(c[2], 10), parseInt(c[3], 10), c[4] ? parseFloat(c[4]) : 1]
+	}, c.Color.fromRgba = b.fromRgb, c.Color.fromHex = function (a) {
+		return b.fromSource(b.sourceFromHex(a))
+	}, c.Color.sourceFromHex = function (a) {
+		if (a.match(b.reHex)) {
+			var c = a.slice(a.indexOf("#") + 1),
+				d = c.length === 3,
+				e = d ? c.charAt(0) + c.charAt(0) : c.substring(0, 2),
+				f = d ? c.charAt(1) + c.charAt(1) : c.substring(2, 4),
+				g = d ? c.charAt(2) + c.charAt(2) : c.substring(4, 6);
+			return [parseInt(e, 16), parseInt(f, 16), parseInt(g, 16), 1]
+		}
+	}, c.Color.fromSource = function (a) {
+		var c = new b;
+		return c.setSource(a), c
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	if (fabric.StaticCanvas) {
+		fabric.warn("fabric.StaticCanvas is already defined.");
+		return
+	}
+	var b = fabric.util.object.extend,
+		c = fabric.util.getElementOffset,
+		d = fabric.util.removeFromArray,
+		e = fabric.util.removeListener,
+		f = new Error("Could not initialize `canvas` element");
+	fabric.StaticCanvas = function (a, b) {
+		b || (b = {}), this._initStatic(a, b), fabric.StaticCanvas.activeInstance = this
+	}, b(fabric.StaticCanvas.prototype, fabric.Observable), b(fabric.StaticCanvas.prototype, {
+		backgroundColor: "rgba(0, 0, 0, 0)",
+		backgroundImage: "",
+		backgroundImageOpacity: 1,
+		backgroundImageStretch: !0,
+		includeDefaultValues: !0,
+		stateful: !0,
+		renderOnAddition: !0,
+		clipTo: null,
+		CANVAS_WIDTH: 600,
+		CANVAS_HEIGHT: 600,
+		onBeforeScaleRotate: function (a) {},
+		onFpsUpdate: null,
+		_initStatic: function (a, b) {
+			this._objects = [], this._createLowerCanvas(a), this._initOptions(b), b.overlayImage && this.setOverlayImage(b.overlayImage, this.renderAll.bind(this)), b.backgroundImage && this.setBackgroundImage(b.backgroundImage, this.renderAll.bind(this)), this.calcOffset()
+		},
+		calcOffset: function () {
+			return this._offset = $(this.lowerCanvasEl).offset(), this
+		},
+		setOverlayImage: function (a, b) {
+			return fabric.util.loadImage(a, function (a) {
+				b && (a = b(a)),
+				this.overlayImage = a
+			}, this)
+		},
+		setBackgroundImage: function (a, b, c) {
+			return fabric.util.loadImage(a, function (a) {
+				this.backgroundImage = a, c && c.backgroundOpacity && (this.backgroundOpacity = c.backgroundOpacity), c && c.backgroundStretch && (this.backgroundStretch = c.backgroundStretch), b && b(a)
+			}, this)
+		},
+		_createCanvasElement: function () {
+			var a = fabric.document.createElement("canvas");
+			a.style || (a.style = {});
+			if (!a) throw f;
+			return this._initCanvasElement(a), a
+		},
+		_initCanvasElement: function (a) {
+			typeof a.getContext == "undefined" && typeof G_vmlCanvasManager != "undefined" && G_vmlCanvasManager.initElement && G_vmlCanvasManager.initElement(a);
+			if (typeof a.getContext == "undefined") throw f
+		},
+		_initOptions: function (a) {
+			for (var b in a) this[b] = a[b];
+			this.width = parseInt(this.lowerCanvasEl.width, 10) || 0, this.height = parseInt(this.lowerCanvasEl.height, 10) || 0, this.lowerCanvasEl.style.width = this.width + "px", this.lowerCanvasEl.style.height = this.height + "px"
+		},
+		_createLowerCanvas: function (a) {
+			this.lowerCanvasEl = fabric.util.getById(a) || this._createCanvasElement(), this._initCanvasElement(this.lowerCanvasEl), fabric.util.addClass(this.lowerCanvasEl, "lower-canvas"), this.interactive && this._applyCanvasStyle(this.lowerCanvasEl), this.contextContainer = this.lowerCanvasEl.getContext("2d")
+		},
+		getWidth: function () {
+			return this.width
+		},
+		getHeight: function () {
+			return this.height
+		},
+		setWidth: function (a) {
+			return this._setDimension("width", a)
+		},
+		setHeight: function (a) {
+			return this._setDimension("height", a)
+		},
+		setDimensions: function (a) {
+			for (var b in a) this._setDimension(b, a[b]);
+			return this
+		},
+		_setDimension: function (a, b) {
+			return this.lowerCanvasEl[a] = b, this.lowerCanvasEl.style[a] = b + "px", this.upperCanvasEl && (this.upperCanvasEl[a] = b, this.upperCanvasEl.style[a] = b + "px"), this.wrapperEl && (this.wrapperEl.style[a] = b + "px"), this[a] = b, this.calcOffset(), this.renderAll(), this
+		},
+		getElement: function () {
+			return this.lowerCanvasEl
+		},
+		getActiveObject: function () {
+			return null
+		},
+		getActiveGroup: function () {
+			return null
+		},
+		_draw: function (a, b) {
+			b && b.render(a)
+		},
+		add: function () {
+			this._objects.push.apply(this._objects, arguments);
+			for (var a = arguments.length; a--;) this.stateful && arguments[a].setupState(), arguments[a].setCoords();
+			return this.renderOnAddition && this.renderAll(), this
+		},
+		insertAt: function (a, b, c) {
+			return c ? this._objects[b] = a : this._objects.splice(b, 0, a), this.stateful && a.setupState(), a.setCoords(), this.renderAll(), this
+		},
+		getObjects: function () {
+			return this._objects
+		},
+		clearContext: function (a) {
+			return a.clearRect(0, 0, this.width, this.height), this
+		},
+		getContext: function () {
+			return this.contextContainer
+		},
+		clear: function () {
+			return this._objects.length = 0, this.clearContext(this.contextContainer), this.contextTop && this.clearContext(this.contextTop), this.renderAll(), this
+		},
+		renderAll: function (a) {
+			var b = this[a === !0 && this.interactive ? "contextTop" : "contextContainer"];
+			this.contextTop && this.clearContext(this.contextTop), (a === !1 || typeof a == "undefined") && this.clearContext(b);
+			var c = this._objects.length,
+				d = this.getActiveGroup(),
+				e = new Date;
+			this.clipTo && (b.save(), b.beginPath(), this.clipTo(b), b.clip()), b.fillStyle = this.backgroundColor, b.fillRect(0, 0, this.width, this.height), typeof this.backgroundImage == "object" && (b.save(), b.globalAlpha = this.backgroundImageOpacity, this.backgroundImageStretch ? b.drawImage(this.backgroundImage, 0, 0, this.width, this.height) : b.drawImage(this.backgroundImage, 0, 0), b.restore());
+			if (c) for (var f = 0; f < c; ++f)(!d || d && this._objects[f] && !d.contains(this._objects[f])) && this._draw(b, this._objects[f]);
+			this.clipTo && b.restore(), d && this._draw(this.contextTop, d), this.overlayImage && (this.contextTop || this.contextContainer).drawImage(this.overlayImage, 0, this.height - this.overlayImage.height, this.overlayImage.width, this.overlayImage.height);
+			if (this.onFpsUpdate) {
+				var g = new Date - e;
+				this.onFpsUpdate(~~ (1e3 / g))
+			}
+			return this.fire("after:render"), this
+		},
+		renderTop: function () {
+			this.clearContext(this.contextTop || this.contextContainer), this.overlayImage && (this.contextTop || this.contextContainer).drawImage(this.overlayImage, 0, this.height - this.overlayImage.height, this.overlayImage.width, this.overlayImage.height), this.selection && this._groupSelector && this._drawSelection();
+			var a = this.getActiveGroup();
+			return a && a.render(this.contextTop), this.fire("after:render"), this
+		},
+		toDataURL: function (a) {
+			this.renderAll(!0);
+			var b = (this.upperCanvasEl || this.lowerCanvasEl).toDataURL("image/" + a);
+			return this.renderAll(), b
+		},
+		toContext: function () {
+			this.renderAll(!0);
+			var b = (this.contextTop || this.contextContainer);
+			return b
+		},
+		toDataURLWithMultiplier: function (a, b) {
+			var c = this.getWidth(),
+				d = this.getHeight(),
+				e = c * b,
+				f = d * b,
+				g = this.getActiveObject();
+			this.setWidth(e).setHeight(f), this.contextTop.scale(b, b), g && this.deactivateAll(), this.width = c, this.height = d, this.renderAll(!0);
+			var h = this.toDataURL(a);
+			return this.contextTop.scale(1 / b, 1 / b), this.setWidth(c).setHeight(d), g && this.setActiveObject(g), this.renderAll(), h
+		},
+		getCenter: function () {
+			return {
+				top: this.getHeight() / 2,
+				left: this.getWidth() / 2
+			}
+		},
+		centerObjectH: function (a) {
+			return a.set("left", this.getCenter().left), this.renderAll(), this
+		},
+		centerObjectV: function (a) {
+			return a.set("top", this.getCenter().top), this.renderAll(), this
+		},
+		centerObject: function (a) {
+			return this.centerObjectH(a).centerObjectV(a)
+		},
+		toDatalessJSON: function () {
+			return this.toDatalessObject()
+		},
+		toObject: function () {
+			return this._toObjectMethod("toObject")
+		},
+		toDatalessObject: function () {
+			return this._toObjectMethod("toDatalessObject")
+		},
+		_toObjectMethod: function (a) {
+			var b = {
+				objects: this._objects.map(function (b) {
+					if (!this.includeDefaultValues) {
+						var c = b.includeDefaultValues;
+						b.includeDefaultValues = !1
+					}
+					var d = b[a]();
+					return this.includeDefaultValues || (b.includeDefaultValues = c), d
+				}, this),
+				background: this.backgroundColor
+			};
+			return this.backgroundImage && (b.backgroundImage = this.backgroundImage.src, b.backgroundImageOpacity = this.backgroundImageOpacity, b.backgroundImageStretch = this.backgroundImageStretch), b
+		},
+		toSVG: function () {
+			var a = ['<?xml version="1.0" standalone="no" ?>', '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN" ', '"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">', "<svg ", 'xmlns="http://www.w3.org/2000/svg" ', 'xmlns:xlink="http://www.w3.org/1999/xlink" ', 'version="1.1" ', 'width="', this.width, '" ', 'height="', this.height, '" ', 'xml:space="preserve">', "<desc>Created with Fabric.js ", fabric.version, "</desc>", fabric.createSVGFontFacesMarkup(this.getObjects())];
+			this.backgroundImage && a.push('<image x="0" y="0" ', 'width="', this.width, '" height="', this.height, '" preserveAspectRatio="', this.backgroundImageStretch ? "none" : "defer", '" xlink:href="', this.backgroundImage.src, '" style="opacity:', this.backgroundImageOpacity, '"></image>');
+			for (var b = 0, c = this.getObjects(), d = c.length; b < d; b++) a.push(c[b].toSVG());
+			return a.push("</svg>"), a.join("")
+		},
+		isEmpty: function () {
+			return this._objects.length === 0
+		},
+		remove: function (a) {
+			return d(this._objects, a), this.getActiveObject() === a && this.discardActiveObject(), this.renderAll(), a
+		},
+		sendToBack: function (a) {
+			return d(this._objects, a), this._objects.unshift(a), this.renderAll()
+		},
+		bringToFront: function (a) {
+			return d(this._objects, a), this._objects.push(a), this.renderAll()
+		},
+		sendBackwards: function (a) {
+			var b = this._objects.indexOf(a),
+				c = b;
+			if (b !== 0) {
+				for (var e = b - 1; e >= 0; --e) if (a.intersectsWithObject(this._objects[e]) || a.isContainedWithinObject(this._objects[e])) {
+					c = e;
+					break
+				}
+				d(this._objects, a), this._objects.splice(c, 0, a)
+			}
+			return this.renderAll()
+		},
+		bringForward: function (a) {
+			var b = this.getObjects(),
+				c = b.indexOf(a),
+				e = c;
+			if (c !== b.length - 1) {
+				for (var f = c + 1, g = this._objects.length; f < g; ++f) if (a.intersectsWithObject(b[f]) || a.isContainedWithinObject(this._objects[f])) {
+					e = f;
+					break
+				}
+				d(b, a), b.splice(e, 0, a)
+			}
+			this.renderAll()
+		},
+		item: function (a) {
+			return this.getObjects()[a]
+		},
+		complexity: function () {
+			return this.getObjects().reduce(function (a, b) {
+				return a += b.complexity ? b.complexity() : 0, a
+			}, 0)
+		},
+		forEachObject: function (a, b) {
+			var c = this.getObjects(),
+				d = c.length;
+			while (d--) a.call(b, c[d], d, c);
+			return this
+		},
+		dispose: function () {
+			return this.clear(), this.interactive && (e(this.upperCanvasEl, "mousedown", this._onMouseDown), e(this.upperCanvasEl, "mousemove", this._onMouseMove), e(fabric.window, "resize", this._onResize)), this
+		},
+		_resizeImageToFit: function (a) {
+			var b = a.width || a.offsetWidth,
+				c = this.getWidth() / b;
+			b && (a.width = b * c)
+		}
+	}), fabric.StaticCanvas.prototype.toString = function () {
+		return "#<fabric.Canvas (" + this.complexity() + "): { objects: " + this.getObjects().length + " }>"
+	}, b(fabric.StaticCanvas, {
+		EMPTY_JSON: '{"objects": [], "background": "white"}',
+		toGrayscale: function (a) {
+			var b = a.getContext("2d"),
+				c = b.getImageData(0, 0, a.width, a.height),
+				d = c.data,
+				e = c.width,
+				f = c.height,
+				g, h, i, j;
+			for (i = 0; i < e; i++) for (j = 0; j < f; j++) g = i * 4 * f + j * 4, h = (d[g] + d[g + 1] + d[g + 2]) / 3, d[g] = h, d[g + 1] = h, d[g + 2] = h;
+			b.putImageData(c, 0, 0)
+		},
+		supports: function (a) {
+			var b = fabric.document.createElement("canvas");
+			typeof G_vmlCanvasManager != "undefined" && G_vmlCanvasManager.initElement(b);
+			if (!b || !b.getContext) return null;
+			var c = b.getContext("2d");
+			if (!c) return null;
+			switch (a) {
+			case "getImageData":
+				return typeof c.getImageData != "undefined";
+			case "toDataURL":
+				return typeof b.toDataURL != "undefined";
+			default:
+				return null
+			}
+		}
+	}), fabric.StaticCanvas.prototype.toJSON = fabric.StaticCanvas.prototype.toObject
+}(typeof exports != "undefined" ? exports : this), function () {
+	function a() {}
+	var b = fabric.util.object.extend,
+		c = fabric.util.getPointer,
+		d = fabric.util.addListener,
+		e = fabric.util.removeListener,
+		f = {
+			tr: "ne-resize",
+			br: "se-resize",
+			bl: "sw-resize",
+			tl: "nw-resize",
+			ml: "w-resize",
+			mt: "n-resize",
+			mr: "e-resize",
+			mb: "s-resize",
+			mtr: "crosshair"
+		},
+		g = fabric.util.array.min,
+		h = fabric.util.array.max,
+		i = Math.sqrt,
+		j = Math.pow,
+		k = Math.atan2,
+		l = Math.abs,
+		m = Math.min,
+		n = Math.max,
+		o = .5;
+	fabric.Canvas = function (a, b) {
+		b || (b = {}), this._initStatic(a, b), this._initInteractive(), fabric.Canvas.activeInstance = this
+	}, a.prototype = fabric.StaticCanvas.prototype, fabric.Canvas.prototype = new a;
+	var p = {
+		interactive: !0,
+		selection: !0,
+		selectionColor: "rgba(100, 100, 255, 0.3)",
+		selectionBorderColor: "rgba(255, 255, 255, 0.3)",
+		selectionLineWidth: 1,
+		freeDrawingColor: "rgb(0, 0, 0)",
+		freeDrawingLineWidth: 1,
+		HOVER_CURSOR: "move",
+		CURSOR: "default",
+		CONTAINER_CLASS: "canvas-container",
+		_initInteractive: function () {
+			this._currentTransform = null, this._groupSelector = null, this._freeDrawingXPoints = [], this._freeDrawingYPoints = [], this._initWrapperElement(), this._createUpperCanvas(), this._initEvents(), this.calcOffset()
+		},
+		_initEvents: function () {
+			var a = this;
+			this._onMouseDown = function (b) {
+				a.__onMouseDown(b), d(fabric.document, "mouseup", a._onMouseUp), fabric.isTouchSupported && d(fabric.document, "touchend", a._onMouseUp), d(fabric.document, "mousemove", a._onMouseMove), fabric.isTouchSupported && d(fabric.document, "touchmove", a._onMouseMove), e(a.upperCanvasEl, "mousemove", a._onMouseMove), fabric.isTouchSupported && e(a.upperCanvasEl, "touchmove", a._onMouseMove)
+			}, this._onMouseUp = function (b) {
+				a.__onMouseUp(b), e(fabric.document, "mouseup", a._onMouseUp), fabric.isTouchSupported && e(fabric.document, "touchend", a._onMouseUp), e(fabric.document, "mousemove", a._onMouseMove), fabric.isTouchSupported && e(fabric.document, "touchmove", a._onMouseMove), d(a.upperCanvasEl, "mousemove", a._onMouseMove), fabric.isTouchSupported && d(a.upperCanvasEl, "touchmove", a._onMouseMove)
+			}, this._onMouseMove = function (b) {
+				b.preventDefault && b.preventDefault(), a.__onMouseMove(b)
+			}, this._onResize = function (b) {
+				a.calcOffset()
+			}, d(fabric.window, "resize", this._onResize), fabric.isTouchSupported ? (d(this.upperCanvasEl, "touchstart", this._onMouseDown), d(this.upperCanvasEl, "touchmove", this._onMouseMove)) : (d(this.upperCanvasEl, "mousedown", this._onMouseDown), d(this.upperCanvasEl, "mousemove", this._onMouseMove))
+		},
+		__onMouseUp: function (a) {
+			if (this.isDrawingMode && this._isCurrentlyDrawing) {
+				this._finalizeDrawingPath();
+				return
+			}
+			if (this._currentTransform) {
+				var b = this._currentTransform,
+					c = b.target;
+				c._scaling && (c._scaling = !1);
+				var d = this._objects.length;
+				while (d--) this._objects[d].setCoords();
+				this.stateful && c.hasStateChanged() && (c.isMoving = !1, this.fire("object:modified", {
+					target: c
+				}))
+			}
+			this._currentTransform = null, this._groupSelector && this._findSelectedObjects(a);
+			var e = this.getActiveGroup();
+			e && (e.setObjectsCoords(), e.set("isMoving", !1), this._setCursor(this.CURSOR)), this._groupSelector = null, this.renderAll(), this._setCursorFromEvent(a, c), this._setCursor("");
+			var f = this;
+			setTimeout(function () {
+				f._setCursorFromEvent(a, c)
+			}, 50), this.fire("mouse:up", {
+				target: c,
+				e: a
+			})
+		},
+		__onMouseDown: function (a) {
+			var b = "which" in a ? a.which == 1 : a.button == 1;
+			if (!b && !fabric.isTouchSupported) return;
+			if (this.isDrawingMode) {
+				this._prepareForDrawing(a), this._captureDrawingPath(a);
+				return
+			}
+			if (this._currentTransform) return;
+			var c = this.findTarget(a),
+				d = this.getPointer(a),
+				e = this.getActiveGroup(),
+				f;
+			if (this._shouldClearSelection(a)) this._groupSelector = {
+				ex: d.x,
+				ey: d.y,
+				top: 0,
+				left: 0
+			}, this.deactivateAllWithDispatch();
+			else {
+				this.stateful && c.saveState(), (f = c._findTargetCorner(a, this._offset)) && this.onBeforeScaleRotate(c), this._setupCurrentTransform(a, c);
+				var g = a.shiftKey && (e || this.getActiveObject()) && this.selection;
+				g ? this._handleGroupLogic(a, c) : (c !== this.getActiveGroup() && this.deactivateAll(), this.setActiveObject(c, a))
+			}
+			this.renderAll(), this.fire("mouse:down", {
+				target: c,
+				e: a
+			})
+		},
+		__onMouseMove: function (a) {
+			this.calcOffset();
+			if (this.isDrawingMode) {
+				this._isCurrentlyDrawing && this._captureDrawingPath(a);
+				return
+			}
+			var b = this._groupSelector;
+			if (b !== null) {
+				var d = c(a);
+				b.left = d.x - this._offset.left - b.ex, b.top = d.y - this._offset.top - b.ey, this.renderTop()
+			} else if (!this._currentTransform) {
+				var e = this.upperCanvasEl.style,
+					f = this.findTarget(a);
+				if (!f) {
+					for (var g = this._objects.length; g--;) this._objects[g] && !this._objects[g].active && this._objects[g].setActive(!1);
+					e.cursor = this.CURSOR
+				} else this._setCursorFromEvent(a, f), f.isActive() && f.setCornersVisibility && f.setCornersVisibility(!0)
+			} else {
+				var d = c(a),
+					h = d.x,
+					i = d.y;
+				this._currentTransform.target.isMoving = !0, this._currentTransform.action === "rotate" ? (a.shiftKey || (this._rotateObject(h, i), this.fire("object:rotating", {
+					target: this._currentTransform.target
+				})), this._currentTransform.target.hasRotatingPoint || (this._scaleObject(h, i), this.fire("object:scaling", {
+					target: this._currentTransform.target
+				}))) : this._currentTransform.action === "scale" ? (this._scaleObject(h, i), this.fire("object:scaling", {
+					target: this._currentTransform.target
+				})) : this._currentTransform.action === "scaleX" ? (this._scaleObject(h, i, "x"), this.fire("object:scaling", {
+					target: this._currentTransform.target
+				})) : this._currentTransform.action === "scaleY" ? (this._scaleObject(h, i, "y"), this.fire("object:scaling", {
+					target: this._currentTransform.target
+				})) : (this._translateObject(h, i), this.fire("object:moving", {
+					target: this._currentTransform.target
+				})), this.renderAll()
+			}
+			this.fire("mouse:move", {
+				target: f,
+				e: a
+			})
+		},
+		containsPoint: function (a, b) {
+			var c = this.getPointer(a),
+				d = this._normalizePointer(b, c),
+				e = d.x,
+				f = d.y,
+				g = b._getImageLines(b.oCoords),
+				h = b._findCrossPoints(e, f, g);
+			return h && h % 2 === 1 || b._findTargetCorner(a, this._offset) ? !0 : !1
+		},
+		_normalizePointer: function (a, b) {
+			var c = this.getActiveGroup(),
+				d = b.x,
+				e = b.y,
+				f = c && a.type !== "group" && c.contains(a);
+			return f && (d -= c.left, e -= c.top), {
+				x: d,
+				y: e
+			}
+		},
+		_shouldClearSelection: function (a) {
+			var b = this.findTarget(a),
+				c = this.getActiveGroup();
+			return !b || b && c && !c.contains(b) && c !== b && !a.shiftKey
+		},
+		_setupCurrentTransform: function (a, b) {
+			var d = "drag",
+				e, f = c(a);
+			if (e = b._findTargetCorner(a, this._offset)) d = e === "ml" || e === "mr" ? "scaleX" : e === "mt" || e === "mb" ? "scaleY" : e === "mtr" ? "rotate" : b.hasRotatingPoint ? "scale" : "rotate";
+			this._currentTransform = {
+				target: b,
+				action: d,
+				scaleX: b.scaleX,
+				scaleY: b.scaleY,
+				offsetX: f.x - b.left,
+				offsetY: f.y - b.top,
+				ex: f.x,
+				ey: f.y,
+				left: b.left,
+				top: b.top,
+				theta: b.theta,
+				width: b.width * b.scaleX
+			}, this._currentTransform.original = {
+				left: b.left,
+				top: b.top
+			}
+		},
+		_handleGroupLogic: function (a, b) {
+			if (b.isType("group")) {
+				b = this.findTarget(a, !0);
+				if (!b || b.isType("group")) return
+			}
+			var c = this.getActiveGroup();
+			if (c) c.contains(b) ? (c.remove(b), b.setActive(!1), c.size() === 1 && this.discardActiveGroup()) : c.add(b), this.fire("selection:created", {
+				target: c,
+				e: a
+			}), c.setActive(!0);
+			else {
+				if (this._activeObject && b !== this._activeObject) {
+					var d = new fabric.Group([this._activeObject, b]);
+					this.setActiveGroup(d), c = this.getActiveGroup()
+				}
+				b.setActive(!0)
+			}
+			c && c.saveCoords()
+		},
+		_prepareForDrawing: function (a) {
+			this._isCurrentlyDrawing = !0, this.discardActiveObject().renderAll();
+			var b = this.getPointer(a);
+			this._freeDrawingXPoints.length = this._freeDrawingYPoints.length = 0, this._freeDrawingXPoints.push(b.x), this._freeDrawingYPoints.push(b.y), this.contextTop.beginPath(), this.contextTop.moveTo(b.x, b.y), this.contextTop.strokeStyle = this.freeDrawingColor, this.contextTop.lineWidth = this.freeDrawingLineWidth, this.contextTop.lineCap = this.contextTop.lineJoin = "round"
+		},
+		_captureDrawingPath: function (a) {
+			var b = this.getPointer(a);
+			this._freeDrawingXPoints.push(b.x), this._freeDrawingYPoints.push(b.y), this.contextTop.lineTo(b.x, b.y), this.contextTop.stroke()
+		},
+		_finalizeDrawingPath: function () {
+			this.contextTop.closePath(), this._isCurrentlyDrawing = !1;
+			var a = g(this._freeDrawingXPoints),
+				b = g(this._freeDrawingYPoints),
+				c = h(this._freeDrawingXPoints),
+				d = h(this._freeDrawingYPoints),
+				e = this.contextTop,
+				f = [],
+				i, j, k = this._freeDrawingXPoints,
+				l = this._freeDrawingYPoints;
+			f.push("M ", k[0] - a, " ", l[0] - b, " ");
+			for (var m = 1; i = k[m], j = l[m]; m++) f.push("L ", i - a, " ", j - b, " ");
+			f = f.join("");
+			if (f === "M 0 0 L 0 0 ") return;
+			var n = new fabric.Path(f);
+			n.fill = null, n.stroke = this.freeDrawingColor, n.strokeWidth = this.freeDrawingLineWidth, this.add(n), n.set("left", a + (c - a) / 2).set("top", b + (d - b) / 2).setCoords(), this.renderAll(), this.fire("path:created", {
+				path: n
+			})
+		},
+		_translateObject: function (a, b) {
+			var c = this._currentTransform.target;
+			c.lockMovementX || c.set("left", a - this._currentTransform.offsetX), c.lockMovementY || c.set("top", b - this._currentTransform.offsetY)
+		},
+		_scaleObject: function (a, b, c) {
+			var d = this._currentTransform,
+				e = this._offset,
+				f = d.target;
+			if (f.lockScalingX && f.lockScalingY) return;
+			var g = i(j(d.ey - d.top - e.top, 2) + j(d.ex - d.left - e.left, 2)),
+				h = i(j(b - d.top - e.top, 2) + j(a - d.left - e.left, 2));
+			f._scaling = !0, c ? c === "x" && !f.lockUniScaling ? f.lockScalingX || f.set("scaleX", d.scaleX * h / g) : c === "y" && !f.lockUniScaling && (f.lockScalingY || f.set("scaleY", d.scaleY * h / g)) : (f.lockScalingX || f.set("scaleX", d.scaleX * h / g), f.lockScalingY || f.set("scaleY", d.scaleY * h / g))
+		},
+		_rotateObject: function (a, b) {
+			var c = this._currentTransform,
+				d = this._offset;
+			if (c.target.lockRotation) return;
+			var e = k(c.ey - c.top - d.top, c.ex - c.left - d.left),
+				f = k(b - c.top - d.top, a - c.left - d.left);
+			c.target.set("theta", f - e + c.theta)
+		},
+		_setCursor: function (a) {
+			this.upperCanvasEl.style.cursor = a
+		},
+		_setCursorFromEvent: function (a, b) {
+			var c = this.upperCanvasEl.style;
+			if (!b) return c.cursor = this.CURSOR, !1;
+			var d = this.getActiveGroup(),
+				e = !! b._findTargetCorner && (!d || !d.contains(b)) && b._findTargetCorner(a, this._offset);
+			if (!e) c.cursor = this.HOVER_CURSOR;
+			else {
+				if (!(e in f)) return c.cursor = this.CURSOR, !1;
+				c.cursor = f[e]
+			}
+			return !0
+		},
+		_drawSelection: function () {
+			var a = this._groupSelector,
+				b = a.left,
+				c = a.top,
+				d = l(b),
+				e = l(c);
+			this.contextTop.fillStyle = this.selectionColor, this.contextTop.fillRect(a.ex - (b > 0 ? 0 : -b), a.ey - (c > 0 ? 0 : -c), d, e), this.contextTop.lineWidth = this.selectionLineWidth, this.contextTop.strokeStyle = this.selectionBorderColor, this.contextTop.strokeRect(a.ex + o - (b > 0 ? 0 : d), a.ey + o - (c > 0 ? 0 : e), d, e)
+		},
+		_findSelectedObjects: function (a) {
+			var b, c, d = [],
+				e = this._groupSelector.ex,
+				f = this._groupSelector.ey,
+				g = e + this._groupSelector.left,
+				h = f + this._groupSelector.top,
+				i, j = new fabric.Point(m(e, g), m(f, h)),
+				k = new fabric.Point(n(e, g), n(f, h));
+			for (var l = 0, o = this._objects.length; l < o; ++l) {
+				i = this._objects[l];
+				if (!i) continue;
+				(i.intersectsWithRect(j, k) || i.isContainedWithinRect(j, k)) && this.selection && i.selectable && (i.setActive(!0), d.push(i))
+			}
+			if (d.length === 1) this.setActiveObject(d[0], a);
+			else if (d.length > 1) {
+				var d = new fabric.Group(d);
+				this.setActiveGroup(d), d.saveCoords(), this.fire("selection:created", {
+					target: d
+				})
+			}
+			this.renderAll()
+		},
+		findTarget: function (a, b) {
+			var c, d = this.getPointer(a),
+				e = this.getActiveGroup();
+			if (e && !b && this.containsPoint(a, e)) return c = e, c;
+			for (var f = this._objects.length; f--;) if (this._objects[f] && this.containsPoint(a, this._objects[f])) {
+				c = this._objects[f], this.relatedTarget = c;
+				break
+			}
+			if (c && c.selectable) return c
+		},
+		getPointer: function (a) {
+			var b = c(a);
+			return {
+				x: b.x - this._offset.left,
+				y: b.y - this._offset.top
+			}
+		},
+		_createUpperCanvas: function () {
+			this.upperCanvasEl = this._createCanvasElement(), this.upperCanvasEl.className = "upper-canvas", this.wrapperEl.appendChild(this.upperCanvasEl), this._applyCanvasStyle(this.upperCanvasEl), this.contextTop = this.upperCanvasEl.getContext("2d")
+		},
+		_initWrapperElement: function () {
+			this.wrapperEl = fabric.util.wrapElement(this.lowerCanvasEl, "div", {
+				"class": this.CONTAINER_CLASS
+			}), fabric.util.setStyle(this.wrapperEl, {
+				width: this.getWidth() + "px",
+				height: this.getHeight() + "px",
+				position: "relative"
+			}), fabric.util.makeElementUnselectable(this.wrapperEl)
+		},
+		_applyCanvasStyle: function (a) {
+			var b = this.getWidth() || a.width,
+				c = this.getHeight() || a.height;
+			fabric.util.setStyle(a, {
+				position: "absolute",
+				width: b + "px",
+				height: c + "px",
+				left: 0,
+				top: 0
+			}), a.width = b, a.height = c, fabric.util.makeElementUnselectable(a)
+		},
+		getSelectionContext: function () {
+			return this.contextTop
+		},
+		getSelectionElement: function () {
+			return this.upperCanvasEl
+		},
+		setActiveObject: function (a, b) {
+			return this._activeObject && this._activeObject.setActive(!1), this._activeObject = a, a.setActive(!0), this.renderAll(), this.fire("object:selected", {
+				target: a,
+				e: b
+			}), this
+		},
+		getActiveObject: function () {
+			return this._activeObject
+		},
+		discardActiveObject: function () {
+			return this._activeObject && this._activeObject.setActive(!1), this._activeObject = null, this
+		},
+		setActiveGroup: function (a) {
+			return this._activeGroup = a, this
+		},
+		getActiveGroup: function () {
+			return this._activeGroup
+		},
+		discardActiveGroup: function () {
+			var a = this.getActiveGroup();
+			return a && a.destroy(), this.setActiveGroup(null)
+		},
+		deactivateAll: function () {
+			var a = this.getObjects(),
+				b = 0,
+				c = a.length;
+			for (; b < c; b++) a[b].setActive(!1);
+			return this.discardActiveGroup(), this.discardActiveObject(), this
+		},
+		deactivateAllWithDispatch: function () {
+			var a = this.getActiveGroup() || this.getActiveObject();
+			return a && this.fire("before:selection:cleared", {
+				target: a
+			}), this.deactivateAll(), a && this.fire("selection:cleared"), this
+		}
+	};
+	fabric.Canvas.prototype.toString = fabric.StaticCanvas.prototype.toString, b(fabric.Canvas.prototype, p);
+	for (var q in fabric.StaticCanvas) q !== "prototype" && (fabric.Canvas[q] = fabric.StaticCanvas[q]);
+	fabric.isTouchSupported && (fabric.Canvas.prototype._setCursorFromEvent = function () {}), fabric.Element = fabric.Canvas
+}(), fabric.util.object.extend(fabric.StaticCanvas.prototype, {
+	FX_DURATION: 500,
+	fxCenterObjectH: function (a, b) {
+		b = b || {};
+		var c = function () {},
+			d = b.onComplete || c,
+			e = b.onChange || c,
+			f = this;
+		return fabric.util.animate({
+			startValue: a.get("left"),
+			endValue: this.getCenter().left,
+			duration: this.FX_DURATION,
+			onChange: function (b) {
+				a.set("left", b), f.renderAll(), e()
+			},
+			onComplete: function () {
+				a.setCoords(), d()
+			}
+		}), this
+	},
+	fxCenterObjectV: function (a, b) {
+		b = b || {};
+		var c = function () {},
+			d = b.onComplete || c,
+			e = b.onChange || c,
+			f = this;
+		return fabric.util.animate({
+			startValue: a.get("top"),
+			endValue: this.getCenter().top,
+			duration: this.FX_DURATION,
+			onChange: function (b) {
+				a.set("top", b), f.renderAll(), e()
+			},
+			onComplete: function () {
+				a.setCoords(), d()
+			}
+		}), this
+	},
+	fxRemove: function (a, b) {
+		b = b || {};
+		var c = function () {},
+			d = b.onComplete || c,
+			e = b.onChange || c,
+			f = this;
+		return fabric.util.animate({
+			startValue: a.get("opacity"),
+			endValue: 0,
+			duration: this.FX_DURATION,
+			onStart: function () {
+				a.setActive(!1)
+			},
+			onChange: function (b) {
+				a.set("opacity", b), f.renderAll(), e()
+			},
+			onComplete: function () {
+				f.remove(a), d()
+			}
+		}), this
+	}
+}), fabric.util.object.extend(fabric.StaticCanvas.prototype, {
+	loadFromDatalessJSON: function (a, b) {
+		if (!a) return;
+		var c = typeof a == "string" ? JSON.parse(a) : a;
+		if (!c || c && !c.objects) return;
+		this.clear(), this.backgroundColor = c.background, this._enlivenDatalessObjects(c.objects, b)
+	},
+	_enlivenDatalessObjects: function (a, b) {
+		function c(a, c) {
+			d.insertAt(a, c, !0), a.setCoords(), ++e === f && b && b()
+		}
+		var d = this,
+			e = 0,
+			f = a.length;
+		f === 0 && b && b();
+		try {
+			a.forEach(function (a, b) {
+				var d = a.paths ? "paths" : "path",
+					e = a[d];
+				delete a[d];
+				if (typeof e != "string") switch (a.type) {
+				case "image":
+					fabric[fabric.util.string.capitalize(a.type)].fromObject(a, function (a) {
+						c(a, b)
+					});
+					break;
+				default:
+					var f = fabric[fabric.util.string.camelize(fabric.util.string.capitalize(a.type))];
+					f && f.fromObject && (e && (a[d] = e), c(f.fromObject(a), b))
+				} else if (a.type === "image") fabric.util.loadImage(e, function (d) {
+					var f = new fabric.Image(d);
+					f.setSourcePath(e), fabric.util.object.extend(f, a), f.setAngle(a.angle), c(f, b)
+				});
+				else if (a.type === "text") {
+					a.path = e;
+					var g = fabric.Text.fromObject(a),
+						h = function () {
+							Object.prototype.toString.call(fabric.window.opera) === "[object Opera]" ? setTimeout(function () {
+								c(g, b)
+							}, 500) : c(g, b)
+						};
+					fabric.util.getScript(e, h)
+				} else fabric.loadSVGFromURL(e, function (d, f) {
+					if (d.length > 1) var g = new fabric.PathGroup(d, a);
+					else var g = d[0];
+					g.setSourcePath(e), g instanceof fabric.PathGroup || (fabric.util.object.extend(g, a), typeof a.angle != "undefined" && g.setAngle(a.angle)), c(g, b)
+				})
+			}, this)
+		} catch (g) {
+			fabric.log(g.message)
+		}
+	},
+	loadFromJSON: function (a, b) {
+		if (!a) return;
+		var c = JSON.parse(a);
+		if (!c || c && !c.objects) return;
+		this.clear();
+		var d = this;
+		return this._enlivenObjects(c.objects, function () {
+			d.backgroundColor = c.background, c.backgroundImage && (d.setBackgroundImage(c.backgroundImage), d.backgroundImageOpacity = c.backgroundImageOpacity, d.backgroundImageStretch = c.backgroundImageStretch), b && b()
+		}), this
+	},
+	_enlivenObjects: function (a, b) {
+		var c = 0,
+			d = a.filter(function (a) {
+				return a.type === "image"
+			}).length,
+			e = this;
+		a.forEach(function (a, f) {
+			if (!a.type) return;
+			switch (a.type) {
+			case "image":
+			case "font":
+				fabric[fabric.util.string.capitalize(a.type)].fromObject(a, function (a) {
+					e.insertAt(a, f, !0), ++c === d && b && b()
+				});
+				break;
+			default:
+				var g = fabric[fabric.util.string.camelize(fabric.util.string.capitalize(a.type))];
+				g && g.fromObject && e.insertAt(g.fromObject(a), f, !0)
+			}
+		}), d === 0 && b && b()
+	},
+	_toDataURL: function (a, b) {
+		this.clone(function (c) {
+			b(c.toDataURL(a))
+		})
+	},
+	_toDataURLWithMultiplier: function (a, b, c) {
+		this.clone(function (d) {
+			c(d.toDataURLWithMultiplier(a, b))
+		})
+	},
+	clone: function (a) {
+		var b = JSON.stringify(this);
+		this.cloneWithoutData(function (c) {
+			c.loadFromJSON(b, function () {
+				a && a(c)
+			})
+		})
+	},
+	cloneWithoutData: function (a) {
+		var b = fabric.document.createElement("canvas");
+		b.width = this.getWidth(), b.height = this.getHeight();
+		var c = this.__clone || (this.__clone = new fabric.Canvas(b));
+		c.clipTo = this.clipTo, a && a(c)
+	}
+}), function (a) {
+	var b = a.fabric || (a.fabric = {}),
+		c = b.util.object.extend,
+		d = b.util.object.clone,
+		e = b.util.toFixed,
+		f = b.util.string.capitalize,
+		g = b.util.getPointer,
+		h = b.util.degreesToRadians,
+		i = Array.prototype.slice;
+	if (b.Object) return;
+	b.Object = b.util.createClass({
+		type: "object",
+		includeDefaultValues: !0,
+		NUM_FRACTION_DIGITS: 2,
+		MIN_SCALE_LIMIT: .1,
+		stateProperties: "top left width height scaleX scaleY flipX flipY theta angle opacity cornersize fill overlayFill stroke strokeWidth fillRule borderScaleFactor transformMatrix selectable".split(" "),
+		top: 0,
+		left: 0,
+		width: 0,
+		height: 0,
+		scaleX: 1,
+		scaleY: 1,
+		flipX: !1,
+		flipY: !1,
+		theta: 0,
+		opacity: 1,
+		angle: 0,
+		cornersize: 12,
+		padding: 0,
+		borderColor: "rgba(102,153,255,0.75)",
+		cornerColor: "rgba(102,153,255,0.5)",
+		fill: "rgb(0,0,0)",
+		fillRule: "source-over",
+		overlayFill: null,
+		stroke: null,
+		strokeWidth: 1,
+		borderOpacityWhenMoving: .4,
+		borderScaleFactor: 1,
+		transformMatrix: null,
+		selectable: !0,
+		hasControls: !0,
+		hasBorders: !0,
+		hasRotatingPoint: !1,
+		callSuper: function (a) {
+			var b = this.constructor.superclass.prototype[a];
+			return arguments.length > 1 ? b.apply(this, i.call(arguments, 1)) : b.call(this)
+		},
+		initialize: function (a) {
+			a && this.setOptions(a)
+		},
+		setOptions: function (a) {
+			var b = this.stateProperties.length,
+				c;
+			while (b--) c = this.stateProperties[b], c in a && this.set(c, a[c])
+		},
+		transform: function (a) {
+			a.globalAlpha = this.opacity, a.translate(this.left, this.top), a.rotate(this.theta), a.scale(this.scaleX * (this.flipX ? -1 : 1), this.scaleY * (this.flipY ? -1 : 1))
+		},
+		toObject: function () {
+			var a = {
+				type: this.type,
+				left: e(this.left, this.NUM_FRACTION_DIGITS),
+				top: e(this.top, this.NUM_FRACTION_DIGITS),
+				width: e(this.width, this.NUM_FRACTION_DIGITS),
+				height: e(this.height, this.NUM_FRACTION_DIGITS),
+				fill: this.fill,
+				overlayFill: this.overlayFill,
+				stroke: this.stroke,
+				strokeWidth: this.strokeWidth,
+				scaleX: e(this.scaleX, this.NUM_FRACTION_DIGITS),
+				scaleY: e(this.scaleY, this.NUM_FRACTION_DIGITS),
+				angle: e(this.getAngle(), this.NUM_FRACTION_DIGITS),
+				flipX: this.flipX,
+				flipY: this.flipY,
+				opacity: e(this.opacity, this.NUM_FRACTION_DIGITS),
+				selectable: this.selectable
+			};
+			return this.includeDefaultValues || (a = this._removeDefaultValues(a)), a
+		},
+		toDatalessObject: function () {
+			return this.toObject()
+		},
+		getSvgStyles: function () {
+			return ["stroke: ", this.stroke ? this.stroke : "none", "; ", "stroke-width: ", this.strokeWidth ? this.strokeWidth : "0", "; ", "fill: ", this.fill ? this.fill : "none", "; ", "opacity: ", this.opacity ? this.opacity : "1", ";"].join("")
+		},
+		getSvgTransform: function () {
+			var a = this.getAngle();
+			return ["translate(", e(this.left, 2), " ", e(this.top, 2), ")", a !== 0 ? " rotate(" + e(a, 2) + ")" : "", this.scaleX === 1 && this.scaleY === 1 ? "" : " scale(" + e(this.scaleX, 2) + " " + e(this.scaleY, 2) + ")"].join("")
+		},
+		_removeDefaultValues: function (a) {
+			var c = b.Object.prototype.options;
+			return c && this.stateProperties.forEach(function (b) {
+				a[b] === c[b] && delete a[b]
+			}), a
+		},
+		isActive: function () {
+			return !!this.active
+		},
+		setActive: function (a) {
+			return this.active = !! a, this
+		},
+		toString: function () {
+			return "#<fabric." + f(this.type) + ">"
+		},
+		set: function (a, b) {
+			var c = (a === "scaleX" || a === "scaleY") && b < this.MIN_SCALE_LIMIT;
+			c && (b = this.MIN_SCALE_LIMIT);
+			if (typeof a == "object") for (var d in a) this.set(d, a[d]);
+			else a === "angle" ? this.setAngle(b) : this[a] = b;
+			return this
+		},
+		toggle: function (a) {
+			var b = this.get(a);
+			return typeof b == "boolean" && this.set(a, !b), this
+		},
+		setSourcePath: function (a) {
+			return this.sourcePath = a, this
+		},
+		get: function (a) {
+			return a === "angle" ? this.getAngle() : this[a]
+		},
+		render: function (a, b) {
+			if (this.width === 0 || this.height === 0) return;
+			a.save();
+			var c = this.transformMatrix;
+			c && a.setTransform(c[0], c[1], c[2], c[3], c[4], c[5]), b || this.transform(a), this.stroke && (a.lineWidth = this.strokeWidth, a.strokeStyle = this.stroke), this.overlayFill ? a.fillStyle = this.overlayFill : this.fill && (a.fillStyle = this.fill), this._render(a, b), this.active && !b && (this.drawBorders(a), this.hideCorners || this.drawCorners(a)), a.restore()
+		},
+		getWidth: function () {
+			return this.width * this.scaleX
+		},
+		getHeight: function () {
+			return this.height * this.scaleY
+		},
+		scale: function (a) {
+			return this.scaleX = a, this.scaleY = a, this
+		},
+		scaleToWidth: function (a) {
+			return this.scale(a / this.width)
+		},
+		scaleToHeight: function (a) {
+			return this.scale(a / this.height)
+		},
+		setOpacity: function (a) {
+			return this.set("opacity", a), this
+		},
+		getAngle: function () {
+			return this.theta * 180 / Math.PI
+		},
+		setAngle: function (a) {
+			return this.theta = a / 180 * Math.PI, this.angle = a, this
+		},
+		setCoords: function () {
+			this.currentWidth = this.width * this.scaleX, this.currentHeight = this.height * this.scaleY, this._hypotenuse = Math.sqrt(Math.pow(this.currentWidth / 2, 2) + Math.pow(this.currentHeight / 2, 2)), this._angle = Math.atan(this.currentHeight / this.currentWidth);
+			var a = Math.cos(this._angle + this.theta) * this._hypotenuse,
+				b = Math.sin(this._angle + this.theta) * this._hypotenuse,
+				c = this.theta,
+				d = Math.sin(c),
+				e = Math.cos(c),
+				f = {
+					x: this.left - a,
+					y: this.top - b
+				},
+				g = {
+					x: f.x + this.currentWidth * e,
+					y: f.y + this.currentWidth * d
+				},
+				h = {
+					x: g.x - this.currentHeight * d,
+					y: g.y + this.currentHeight * e
+				},
+				i = {
+					x: f.x - this.currentHeight * d,
+					y: f.y + this.currentHeight * e
+				},
+				j = {
+					x: f.x - this.currentHeight / 2 * d,
+					y: f.y + this.currentHeight / 2 * e
+				},
+				k = {
+					x: f.x + this.currentWidth / 2 * e,
+					y: f.y + this.currentWidth / 2 * d
+				},
+				l = {
+					x: g.x - this.currentHeight / 2 * d,
+					y: g.y + this.currentHeight / 2 * e
+				},
+				m = {
+					x: i.x + this.currentWidth / 2 * e,
+					y: i.y + this.currentWidth / 2 * d
+				},
+				n = {
+					x: f.x + this.currentWidth / 2 * e,
+					y: f.y + this.currentWidth / 2 * d
+				};
+			return this.oCoords = {
+				tl: f,
+				tr: g,
+				br: h,
+				bl: i,
+				ml: j,
+				mt: k,
+				mr: l,
+				mb: m,
+				mtr: n
+			}, this._setCornerCoords(), this
+		},
+		drawBorders: function (a) {
+			if (!this.hasBorders) return;
+			var b = this.padding,
+				c = b * 2;
+			a.save(), a.globalAlpha = this.isMoving ? this.borderOpacityWhenMoving : 1, a.strokeStyle = this.borderColor;
+			var d = 1 / (this.scaleX < this.MIN_SCALE_LIMIT ? this.MIN_SCALE_LIMIT : this.scaleX),
+				e = 1 / (this.scaleY < this.MIN_SCALE_LIMIT ? this.MIN_SCALE_LIMIT : this.scaleY);
+			a.lineWidth = 1 / this.borderScaleFactor, a.scale(d, e);
+			var f = this.getWidth(),
+				g = this.getHeight();
+			a.strokeRect(~~ (-(f / 2) - b) + .5, ~~ (-(g / 2) - b) + .5, ~~ (f + c), ~~ (g + c));
+			if (this.hasRotatingPoint && !this.hideCorners && !this.lockRotation) {
+				var h = -g / 2,
+					i = -f / 2;
+				a.beginPath(), a.moveTo(0, h), a.lineTo(0, h - 40), a.closePath(), a.stroke()
+			}
+			return a.restore(), this
+		},
+		drawCorners: function (a) {
+			if (!this.hasControls) return;
+			var b = this.cornersize,
+				c = b / 2,
+				d = this.padding,
+				e = -(this.width / 2),
+				f = -(this.height / 2),
+				g, h, i = b / this.scaleX,
+				j = b / this.scaleY,
+				k = (d + c) / this.scaleY,
+				l = (d + c) / this.scaleX,
+				m = (d + c - b) / this.scaleX,
+				n = (d + c - b) / this.scaleY,
+				o = this.height;
+			return a.save(), a.globalAlpha = this.isMoving ? this.borderOpacityWhenMoving : 1, a.fillStyle = this.cornerColor, g = e - l, h = f - k, a.fillRect(g, h, i, j), g = e + this.width - l, h = f - k, a.fillRect(g, h, i, j), g = e - l, h = f + o + n, a.fillRect(g, h, i, j), g = e + this.width + m, h = f + o + n, a.fillRect(g, h, i, j), g = e + this.width / 2 - l, h = f - k, a.fillRect(g, h, i, j), g = e + this.width / 2 - l, h = f + o + n, a.fillRect(g, h, i, j), g = e + this.width + m, h = f + o / 2 - k, a.fillRect(g, h, i, j), g = e - l, h = f + o / 2 - k, a.fillRect(g, h, i, j), this.hasRotatingPoint && (g = e + this.width / 2 - l, h = f - 45 / this.scaleY, a.fillRect(g, h, i, j)), a.restore(), this
+		},
+		clone: function (a) {
+			return this.constructor.fromObject ? this.constructor.fromObject(this.toObject(), a) : new b.Object(this.toObject())
+		},
+		cloneAsImage: function (a) {
+			if (b.Image) {
+				var c = new Image;
+				c.onload = function () {
+					a && a(new b.Image(c), d), c = c.onload = null
+				};
+				var d = {
+					angle: this.get("angle"),
+					flipX: this.get("flipX"),
+					flipY: this.get("flipY")
+				};
+				this.set("angle", 0).set("flipX", !1).set("flipY", !1), this.toDataURL(function (a) {
+					c.src = a
+				})
+			}
+			return this
+		},
+		toDataURL: function (a) {
+			function c(b) {
+				b.left = d.width / 2, b.top = d.height / 2, b.setActive(!1), e.add(b);
+				var c = e.toDataURL("png");
+				e.dispose(), e = b = null, a && a(c)
+			}
+			var d = b.document.createElement("canvas");
+			!d.getContext && typeof G_vmlCanvasManager != "undefined" && G_vmlCanvasManager.initElement(d), d.width = this.getWidth(), d.height = this.getHeight(), b.util.wrapElement(d, "div");
+			var e = new b.Canvas(d);
+			e.backgroundColor = "transparent", e.renderAll(), this.constructor.async ? this.clone(c) : c(this.clone())
+		},
+		hasStateChanged: function () {
+			return this.stateProperties.some(function (a) {
+				return this[a] !== this.originalState[a]
+			}, this)
+		},
+		saveState: function () {
+			return this.stateProperties.forEach(function (a) {
+				this.originalState[a] = this.get(a)
+			}, this), this
+		},
+		setupState: function () {
+			this.originalState = {}, this.saveState()
+		},
+		intersectsWithRect: function (a, c) {
+			var d = this.oCoords,
+				e = new b.Point(d.tl.x, d.tl.y),
+				f = new b.Point(d.tr.x, d.tr.y),
+				g = new b.Point(d.bl.x, d.bl.y),
+				h = new b.Point(d.br.x, d.br.y),
+				i = b.Intersection.intersectPolygonRectangle([e, f, h, g], a, c);
+			return i.status === "Intersection"
+		},
+		intersectsWithObject: function (a) {
+			function c(a) {
+				return {
+					tl: new b.Point(a.tl.x, a.tl.y),
+					tr: new b.Point(a.tr.x, a.tr.y),
+					bl: new b.Point(a.bl.x, a.bl.y),
+					br: new b.Point(a.br.x, a.br.y)
+				}
+			}
+			var d = c(this.oCoords),
+				e = c(a.oCoords),
+				f = b.Intersection.intersectPolygonPolygon([d.tl, d.tr, d.br, d.bl], [e.tl, e.tr, e.br, e.bl]);
+			return f.status === "Intersection"
+		},
+		isContainedWithinObject: function (a) {
+			return this.isContainedWithinRect(a.oCoords.tl, a.oCoords.br)
+		},
+		isContainedWithinRect: function (a, c) {
+			var d = this.oCoords,
+				e = new b.Point(d.tl.x, d.tl.y),
+				f = new b.Point(d.tr.x, d.tr.y),
+				g = new b.Point(d.bl.x, d.bl.y),
+				h = new b.Point(d.br.x, d.br.y);
+			return e.x > a.x && f.x < c.x && e.y > a.y && g.y < c.y
+		},
+		isType: function (a) {
+			return this.type === a
+		},
+		_findTargetCorner: function (a, b) {
+			if (!this.hasControls) return !1;
+			var c = g(a),
+				d = c.x - b.left,
+				e = c.y - b.top,
+				f, h;
+			for (var i in this.oCoords) {
+				h = this._getImageLines(this.oCoords[i].corner, i), f = this._findCrossPoints(d, e, h);
+				if (f % 2 == 1 && f != 0) return this.__corner = i, i
+			}
+			return !1
+		},
+		_findCrossPoints: function (a, b, c) {
+			var d, e, f, g, h, i, j = 0,
+				k;
+			for (var l in c) {
+				k = c[l];
+				if (k.o.y < b && k.d.y < b) continue;
+				if (k.o.y >= b && k.d.y >= b) continue;
+				k.o.x == k.d.x && k.o.x >= a ? (h = k.o.x, i = b) : (d = 0, e = (k.d.y - k.o.y) / (k.d.x - k.o.x), f = b - d * a, g = k.o.y - e * k.o.x, h = -(f - g) / (d - e), i = f + d * h), h >= a && (j += 1);
+				if (j == 2) break
+			}
+			return j
+		},
+		_getImageLines: function (a, b) {
+			return {
+				topline: {
+					o: a.tl,
+					d: a.tr
+				},
+				rightline: {
+					o: a.tr,
+					d: a.br
+				},
+				bottomline: {
+					o: a.br,
+					d: a.bl
+				},
+				leftline: {
+					o: a.bl,
+					d: a.tl
+				}
+			}
+		},
+		_setCornerCoords: function () {
+			var a = this.oCoords,
+				b = h(45 - this.getAngle()),
+				c = Math.sqrt(2 * Math.pow(this.cornersize, 2)) / 2,
+				d = c * Math.cos(b),
+				e = c * Math.sin(b),
+				f = Math.sin(this.theta),
+				g = Math.cos(this.theta);
+			a.tl.corner = {
+				tl: {
+					x: a.tl.x - e,
+					y: a.tl.y - d
+				},
+				tr: {
+					x: a.tl.x + d,
+					y: a.tl.y - e
+				},
+				bl: {
+					x: a.tl.x - d,
+					y: a.tl.y + e
+				},
+				br: {
+					x: a.tl.x + e,
+					y: a.tl.y + d
+				}
+			}, a.tr.corner = {
+				tl: {
+					x: a.tr.x - e,
+					y: a.tr.y - d
+				},
+				tr: {
+					x: a.tr.x + d,
+					y: a.tr.y - e
+				},
+				br: {
+					x: a.tr.x + e,
+					y: a.tr.y + d
+				},
+				bl: {
+					x: a.tr.x - d,
+					y: a.tr.y + e
+				}
+			}, a.bl.corner = {
+				tl: {
+					x: a.bl.x - e,
+					y: a.bl.y - d
+				},
+				bl: {
+					x: a.bl.x - d,
+					y: a.bl.y + e
+				},
+				br: {
+					x: a.bl.x + e,
+					y: a.bl.y + d
+				},
+				tr: {
+					x: a.bl.x + d,
+					y: a.bl.y - e
+				}
+			}, a.br.corner = {
+				tr: {
+					x: a.br.x + d,
+					y: a.br.y - e
+				},
+				bl: {
+					x: a.br.x - d,
+					y: a.br.y + e
+				},
+				br: {
+					x: a.br.x + e,
+					y: a.br.y + d
+				},
+				tl: {
+					x: a.br.x - e,
+					y: a.br.y - d
+				}
+			}, a.ml.corner = {
+				tl: {
+					x: a.ml.x - e,
+					y: a.ml.y - d
+				},
+				tr: {
+					x: a.ml.x + d,
+					y: a.ml.y - e
+				},
+				bl: {
+					x: a.ml.x - d,
+					y: a.ml.y + e
+				},
+				br: {
+					x: a.ml.x + e,
+					y: a.ml.y + d
+				}
+			}, a.mt.corner = {
+				tl: {
+					x: a.mt.x - e,
+					y: a.mt.y - d
+				},
+				tr: {
+					x: a.mt.x + d,
+					y: a.mt.y - e
+				},
+				bl: {
+					x: a.mt.x - d,
+					y: a.mt.y + e
+				},
+				br: {
+					x: a.mt.x + e,
+					y: a.mt.y + d
+				}
+			}, a.mr.corner = {
+				tl: {
+					x: a.mr.x - e,
+					y: a.mr.y - d
+				},
+				tr: {
+					x: a.mr.x + d,
+					y: a.mr.y - e
+				},
+				bl: {
+					x: a.mr.x - d,
+					y: a.mr.y + e
+				},
+				br: {
+					x: a.mr.x + e,
+					y: a.mr.y + d
+				}
+			}, a.mb.corner = {
+				tl: {
+					x: a.mb.x - e,
+					y: a.mb.y - d
+				},
+				tr: {
+					x: a.mb.x + d,
+					y: a.mb.y - e
+				},
+				bl: {
+					x: a.mb.x - d,
+					y: a.mb.y + e
+				},
+				br: {
+					x: a.mb.x + e,
+					y: a.mb.y + d
+				}
+			}, a.mtr.corner = {
+				tl: {
+					x: a.mtr.x - e + f * 40,
+					y: a.mtr.y - d - g * 40
+				},
+				tr: {
+					x: a.mtr.x + d + f * 40,
+					y: a.mtr.y - e - g * 40
+				},
+				bl: {
+					x: a.mtr.x - d + f * 40,
+					y: a.mtr.y + e - g * 40
+				},
+				br: {
+					x: a.mtr.x + e + f * 40,
+					y: a.mtr.y + d - g * 40
+				}
+			}
+		},
+		toGrayscale: function () {
+			var a = this.get("fill");
+			return a && this.set("overlayFill", (new b.Color(a)).toGrayscale().toRgb()), this
+		},
+		complexity: function () {
+			return 0
+		},
+		toJSON: function () {
+			return this.toObject()
+		},
+		setGradientFill: function (a, c) {
+			this.set("fill", b.Gradient.forObject(this, a, c))
+		},
+		animate: function (a, c, d) {
+			var e = this;
+			"from" in d || (d.from = this.get(a)), /[+-]/.test(c.charAt(0)) && (c = this.get(a) + parseFloat(c)), b.util.animate({
+				startValue: d.from,
+				endValue: c,
+				byValue: d.by,
+				easing: d.easing,
+				duration: d.duration,
+				onChange: function (b) {
+					e.set(a, b), d.onChange && d.onChange()
+				},
+				onComplete: function () {
+					e.setCoords(), d.onComplete && d.onComplete()
+				}
+			})
+		}
+	}), b.Object.prototype.rotate = b.Object.prototype.setAngle;
+	var j = b.Object.prototype;
+	for (var k = j.stateProperties.length; k--;) {
+		var l = j.stateProperties[k],
+			m = l.charAt(0).toUpperCase() + l.slice(1),
+			n = "set" + m,
+			o = "get" + m;
+		j[o] || (j[o] = function (a) {
+			return new Function('return this.get("' + a + '")')
+		}(l)), j[n] || (j[n] = function (a) {
+			return new Function("value", 'return this.set("' + a + '", value)')
+		}(l))
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	var b = a.fabric || (a.fabric = {}),
+		c = b.util.object.extend,
+		d = b.Object.prototype.set,
+		e = {
+			x1: 1,
+			x2: 1,
+			y1: 1,
+			y2: 1
+		};
+	if (b.Line) {
+		b.warn("fabric.Line is already defined");
+		return
+	}
+	b.Line = b.util.createClass(b.Object, {
+		type: "line",
+		initialize: function (a, b) {
+			a || (a = [0, 0, 0, 0]), this.callSuper("initialize", b), this.set("x1", a[0]), this.set("y1", a[1]), this.set("x2", a[2]), this.set("y2", a[3]), this._setWidthHeight()
+		},
+		_setWidthHeight: function () {
+			this.set("width", this.x2 - this.x1 || 1), this.set("height", this.y2 - this.y1 || 1), this.set("left", this.x1 + this.width / 2), this.set("top", this.y1 + this.height / 2)
+		},
+		set: function (a, b) {
+			return d.call(this, a, b), a in e && this._setWidthHeight(), this
+		},
+		_render: function (a) {
+			a.beginPath(), a.moveTo(this.width === 1 ? 0 : -this.width / 2, this.height === 1 ? 0 : -this.height / 2), a.lineTo(this.width === 1 ? 0 : this.width / 2, this.height === 1 ? 0 : this.height / 2), a.lineWidth = this.strokeWidth;
+			var b = a.strokeStyle;
+			a.strokeStyle = a.fillStyle, a.stroke(), a.strokeStyle = b
+		},
+		complexity: function () {
+			return 1
+		},
+		toObject: function () {
+			return c(this.callSuper("toObject"), {
+				x1: this.get("x1"),
+				y1: this.get("y1"),
+				x2: this.get("x2"),
+				y2: this.get("y2")
+			})
+		},
+		toSVG: function () {
+			return ["<line ", 'x1="', this.get("x1"), '" ', 'y1="', this.get("y1"), '" ', 'x2="', this.get("x2"), '" ', 'y2="', this.get("y2"), '" ', 'style="', this.getSvgStyles(), '" ', "/>"].join("")
+		}
+	}), b.Line.ATTRIBUTE_NAMES = "x1 y1 x2 y2 stroke stroke-width transform".split(" "), b.Line.fromElement = function (a, d) {
+		var e = b.parseAttributes(a, b.Line.ATTRIBUTE_NAMES),
+			f = [e.x1 || 0, e.y1 || 0, e.x2 || 0, e.y2 || 0];
+		return new b.Line(f, c(e, d))
+	}, b.Line.fromObject = function (a) {
+		var c = [a.x1, a.y1, a.x2, a.y2];
+		return new b.Line(c, a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	function b(a) {
+		return "radius" in a && a.radius > 0
+	}
+	var c = a.fabric || (a.fabric = {}),
+		d = Math.PI * 2,
+		e = c.util.object.extend;
+	if (c.Circle) {
+		c.warn("fabric.Circle is already defined.");
+		return
+	}
+	c.Circle = c.util.createClass(c.Object, {
+		type: "circle",
+		initialize: function (a) {
+			a = a || {}, this.set("radius", a.radius || 0), this.callSuper("initialize", a);
+			var b = this.get("radius") * 2 * this.get("scaleX");
+			this.set("width", b).set("height", b)
+		},
+		toObject: function () {
+			return e(this.callSuper("toObject"), {
+				radius: this.get("radius")
+			})
+		},
+		toSVG: function () {
+			return '<circle cx="0" cy="0" r="' + this.radius + '" style="' + this.getSvgStyles() + '" transform="' + this.getSvgTransform() + '" />'
+		},
+		_render: function (a, b) {
+			a.beginPath(), a.globalAlpha *= this.opacity, a.arc(b ? this.left : 0, b ? this.top : 0, this.radius, 0, d, !1), a.closePath(), this.fill && a.fill(), this.stroke && a.stroke()
+		},
+		getRadiusX: function () {
+			return this.get("radius") * this.get("scaleX")
+		},
+		getRadiusY: function () {
+			return this.get("radius") * this.get("scaleY")
+		},
+		complexity: function () {
+			return 1
+		}
+	}), c.Circle.ATTRIBUTE_NAMES = "cx cy r fill fill-opacity opacity stroke stroke-width transform".split(" "), c.Circle.fromElement = function (a, d) {
+		d || (d = {});
+		var f = c.parseAttributes(a, c.Circle.ATTRIBUTE_NAMES);
+		if (!b(f)) throw Error("value of `r` attribute is required and can not be negative");
+		return "left" in f && (f.left -= d.width / 2 || 0), "top" in f && (f.top -= d.height / 2 || 0), new c.Circle(e(f, d))
+	}, c.Circle.fromObject = function (a) {
+		return new c.Circle(a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	var b = a.fabric || (a.fabric = {});
+	if (b.Triangle) {
+		b.warn("fabric.Triangle is already defined");
+		return
+	}
+	b.Triangle = b.util.createClass(b.Object, {
+		type: "triangle",
+		initialize: function (a) {
+			a = a || {}, this.callSuper("initialize", a), this.set("width", a.width || 100).set("height", a.height || 100)
+		},
+		_render: function (a) {
+			var b = this.width / 2,
+				c = this.height / 2;
+			a.beginPath(), a.moveTo(-b, c), a.lineTo(0, -c), a.lineTo(b, c), a.closePath(), this.fill && a.fill(), this.stroke && a.stroke()
+		},
+		complexity: function () {
+			return 1
+		},
+		toSVG: function () {
+			var a = this.width / 2,
+				b = this.height / 2,
+				c = [-a + " " + b, "0 " + -b, a + " " + b].join(",");
+			return '<polygon points="' + c + '" style="' + this.getSvgStyles() + '" transform="' + this.getSvgTransform() + '" />'
+		}
+	}), b.Triangle.fromObject = function (a) {
+		return new b.Triangle(a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	var b = a.fabric || (a.fabric = {}),
+		c = Math.PI * 2,
+		d = b.util.object.extend;
+	if (b.Ellipse) {
+		b.warn("fabric.Ellipse is already defined.");
+		return
+	}
+	b.Ellipse = b.util.createClass(b.Object, {
+		type: "ellipse",
+		initialize: function (a) {
+			a = a || {}, this.callSuper("initialize", a), this.set("rx", a.rx || 0), this.set("ry", a.ry || 0), this.set("width", this.get("rx") * 2), this.set("height", this.get("ry") * 2)
+		},
+		toObject: function () {
+			return d(this.callSuper("toObject"), {
+				rx: this.get("rx"),
+				ry: this.get("ry")
+			})
+		},
+		toSVG: function () {
+			return ["<ellipse ", 'rx="', this.get("rx"), '" ', 'ry="', this.get("ry"), '" ', 'style="', this.getSvgStyles(), '" ', 'transform="', this.getSvgTransform(), '" ', "/>"].join("")
+		},
+		render: function (a, b) {
+			if (this.rx === 0 || this.ry === 0) return;
+			return this.callSuper("render", a, b)
+		},
+		_render: function (a, b) {
+			a.beginPath(), a.save(), a.globalAlpha *= this.opacity, a.transform(1, 0, 0, this.ry / this.rx, 0, 0), a.arc(b ? this.left : 0, b ? this.top : 0, this.rx, 0, c, !1), this.stroke && a.stroke(), this.fill && a.fill(), a.restore()
+		},
+		complexity: function () {
+			return 1
+		}
+	}), b.Ellipse.ATTRIBUTE_NAMES = "cx cy rx ry fill fill-opacity opacity stroke stroke-width transform".split(" "), b.Ellipse.fromElement = function (a, c) {
+		c || (c = {});
+		var e = b.parseAttributes(a, b.Ellipse.ATTRIBUTE_NAMES);
+		return "left" in e && (e.left -= c.width / 2 || 0), "top" in e && (e.top -= c.height / 2 || 0), new b.Ellipse(d(e, c))
+	}, b.Ellipse.fromObject = function (a) {
+		return new b.Ellipse(a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	function b(a) {
+		return a.left = a.left || 0, a.top = a.top || 0, a
+	}
+	var c = a.fabric || (a.fabric = {});
+	if (c.Rect) {
+		console.warn("fabric.Rect is already defined");
+		return
+	}
+	c.Rect = c.util.createClass(c.Object, {
+		type: "rect",
+		options: {
+			rx: 0,
+			ry: 0
+		},
+		initialize: function (a) {
+			this._initStateProperties(), this.callSuper("initialize", a), this._initRxRy()
+		},
+		_initStateProperties: function () {
+			this.stateProperties = this.stateProperties.concat(["rx", "ry"])
+		},
+		_initRxRy: function () {
+			this.rx && !this.ry ? this.ry = this.rx : this.ry && !this.rx && (this.rx = this.ry)
+		},
+		_render: function (a) {
+			var b = this.rx || 0,
+				c = this.ry || 0,
+				d = -this.width / 2,
+				e = -this.height / 2,
+				f = this.width,
+				g = this.height;
+			a.beginPath(), a.globalAlpha *= this.opacity, this.group && a.translate(this.x || 0, this.y || 0), a.moveTo(d + b, e), a.lineTo(d + f - b, e), a.bezierCurveTo(d + f, e, d + f, e + c, d + f, e + c), a.lineTo(d + f, e + g - c), a.bezierCurveTo(d + f, e + g, d + f - b, e + g, d + f - b, e + g), a.lineTo(d + b, e + g), a.bezierCurveTo(d, e + g, d, e + g - c, d, e + g - c), a.lineTo(d, e + c), a.bezierCurveTo(d, e, d + b, e, d + b, e), a.closePath(), this.fill && a.fill(), this.stroke && a.stroke()
+		},
+		_normalizeLeftTopProperties: function (a) {
+			return a.left && this.set("left", a.left + this.getWidth() / 2), this.set("x", a.left || 0), a.top && this.set("top", a.top + this.getHeight() / 2), this.set("y", a.top || 0), this
+		},
+		complexity: function () {
+			return 1
+		},
+		toObject: function () {
+			return c.util.object.extend(this.callSuper("toObject"), {
+				rx: this.get("rx") || 0,
+				ry: this.get("ry") || 0
+			})
+		},
+		toSVG: function () {
+			return '<rect x="' + -1 * this.width / 2 + '" y="' + -1 * this.height / 2 + '" rx="' + this.get("rx") + '" ry="' + this.get("ry") + '" width="' + this.width + '" height="' + this.height + '" style="' + this.getSvgStyles() + '" transform="' + this.getSvgTransform() + '" />'
+		}
+	}), c.Rect.ATTRIBUTE_NAMES = "x y width height rx ry fill fill-opacity opacity stroke stroke-width transform".split(" "), c.Rect.fromElement = function (a, d) {
+		if (!a) return null;
+		var e = c.parseAttributes(a, c.Rect.ATTRIBUTE_NAMES);
+		e = b(e);
+		var f = new c.Rect(c.util.object.extend(d ? c.util.object.clone(d) : {}, e));
+		return f._normalizeLeftTopProperties(e), f
+	}, c.Rect.fromObject = function (a) {
+		return new c.Rect(a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	var b = a.fabric || (a.fabric = {}),
+		c = b.util.toFixed;
+	if (b.Polyline) {
+		b.warn("fabric.Polyline is already defined");
+		return
+	}
+	b.Polyline = b.util.createClass(b.Object, {
+		type: "polyline",
+		initialize: function (a, b) {
+			b = b || {}, this.set("points", a), this.callSuper("initialize", b), this._calcDimensions()
+		},
+		_calcDimensions: function () {
+			return b.Polygon.prototype._calcDimensions.call(this)
+		},
+		toObject: function () {
+			return b.Polygon.prototype.toObject.call(this)
+		},
+		toSVG: function () {
+			var a = [];
+			for (var b = 0, d = this.points.length; b < d; b++) a.push(c(this.points[b].x, 2), ",", c(this.points[b].y, 2), " ");
+			return ["<polyline ", 'points="', a.join(""), '" ', 'style="', this.getSvgStyles(), '" ', 'transform="', this.getSvgTransform(), '" ', "/>"].join("")
+		},
+		_render: function (a) {
+			var b;
+			a.beginPath();
+			for (var c = 0, d = this.points.length; c < d; c++) b = this.points[c], a.lineTo(b.x, b.y);
+			this.fill && a.fill(), this.stroke && a.stroke()
+		},
+		complexity: function () {
+			return this.get("points").length
+		}
+	}), b.Polyline.ATTRIBUTE_NAMES = "fill fill-opacity opacity stroke stroke-width transform".split(" "), b.Polyline.fromElement = function (a, c) {
+		if (!a) return null;
+		c || (c = {});
+		var d = b.parsePointsAttribute(a.getAttribute("points")),
+			e = b.parseAttributes(a, b.Polyline.ATTRIBUTE_NAMES);
+		for (var f = 0, g = d.length; f < g; f++) d[f].x -= c.width / 2 || 0, d[f].y -= c.height / 2 || 0;
+		return new b.Polyline(d, b.util.object.extend(e, c))
+	}, b.Polyline.fromObject = function (a) {
+		var c = a.points;
+		return new b.Polyline(c, a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	function b(a) {
+		return a.x
+	}
+	function c(a) {
+		return a.y
+	}
+	var d = a.fabric || (a.fabric = {}),
+		e = d.util.object.extend,
+		f = d.util.array.min,
+		g = d.util.array.max,
+		h = d.util.toFixed;
+	if (d.Polygon) {
+		d.warn("fabric.Polygon is already defined");
+		return
+	}
+	d.Polygon = d.util.createClass(d.Object, {
+		type: "polygon",
+		initialize: function (a, b) {
+			b = b || {}, this.points = a, this.callSuper("initialize", b), this._calcDimensions()
+		},
+		_calcDimensions: function () {
+			var a = this.points,
+				b = f(a, "x"),
+				c = f(a, "y"),
+				d = g(a, "x"),
+				e = g(a, "y");
+			this.width = d - b, this.height = e - c, this.minX = b, this.minY = c
+		},
+		toObject: function () {
+			return e(this.callSuper("toObject"), {
+				points: this.points.concat()
+			})
+		},
+		toSVG: function () {
+			var a = [];
+			for (var b = 0, c = this.points.length; b < c; b++) a.push(h(this.points[b].x, 2), ",", h(this.points[b].y, 2), " ");
+			return ["<polygon ", 'points="', a.join(""), '" ', 'style="', this.getSvgStyles(), '" ', 'transform="', this.getSvgTransform(), '" ', "/>"].join("")
+		},
+		_render: function (a) {
+			var b;
+			a.beginPath();
+			for (var c = 0, d = this.points.length; c < d; c++) b = this.points[c], a.lineTo(b.x, b.y);
+			this.fill && a.fill(), this.stroke && (a.closePath(), a.stroke())
+		},
+		complexity: function () {
+			return this.points.length
+		}
+	}), d.Polygon.ATTRIBUTE_NAMES = "fill fill-opacity opacity stroke stroke-width transform".split(" "), d.Polygon.fromElement = function (a, b) {
+		if (!a) return null;
+		b || (b = {});
+		var c = d.parsePointsAttribute(a.getAttribute("points")),
+			f = d.parseAttributes(a, d.Polygon.ATTRIBUTE_NAMES);
+		for (var g = 0, h = c.length; g < h; g++) c[g].x -= b.width / 2 || 0, c[g].y -= b.height / 2 || 0;
+		return new d.Polygon(c, e(f, b))
+	}, d.Polygon.fromObject = function (a) {
+		return new d.Polygon(a.points, a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	function b(a, b, e, f) {
+		var g = f[0],
+			h = f[1],
+			i = f[2],
+			j = f[3],
+			k = f[4],
+			l = f[5],
+			m = f[6],
+			n = c(l, m, g, h, j, k, i, b, e);
+		for (var o = 0; o < n.length; o++) {
+			var p = d.apply(this, n[o]);
+			a.bezierCurveTo.apply(a, p)
+		}
+	}
+	function c(a, b, c, d, e, f, g, i, l) {
+		k = j.call(arguments);
+		if (h[k]) return h[k];
+		var m = g * (Math.PI / 180),
+			n = Math.sin(m),
+			o = Math.cos(m);
+		c = Math.abs(c), d = Math.abs(d);
+		var p = o * (i - a) * .5 + n * (l - b) * .5,
+			q = o * (l - b) * .5 - n * (i - a) * .5,
+			r = p * p / (c * c) + q * q / (d * d);
+		r > 1 && (r = Math.sqrt(r), c *= r, d *= r);
+		var s = o / c,
+			t = n / c,
+			u = -n / d,
+			v = o / d,
+			w = s * i + t * l,
+			x = u * i + v * l,
+			y = s * a + t * b,
+			z = u * a + v * b,
+			A = (y - w) * (y - w) + (z - x) * (z - x),
+			B = 1 / A - .25;
+		B < 0 && (B = 0);
+		var C = Math.sqrt(B);
+		f == e && (C = -C);
+		var D = .5 * (w + y) - C * (z - x),
+			E = .5 * (x + z) + C * (y - w),
+			F = Math.atan2(x - E, w - D),
+			G = Math.atan2(z - E, y - D),
+			H = G - F;
+		H < 0 && f == 1 ? H += 2 * Math.PI : H > 0 && f == 0 && (H -= 2 * Math.PI);
+		var I = Math.ceil(Math.abs(H / (Math.PI * .5 + .001))),
+			J = [];
+		for (var K = 0; K < I; K++) {
+			var L = F + K * H / I,
+				M = F + (K + 1) * H / I;
+			J[K] = [D, E, L, M, c, d, n, o]
+		}
+		return h[k] = J
+	}
+	function d(a, b, c, d, e, f, g, h) {
+		k = j.call(arguments);
+		if (i[k]) return i[k];
+		var l = h * e,
+			m = -g * f,
+			n = g * e,
+			o = h * f,
+			p = .5 * (d - c),
+			q = 8 / 3 * Math.sin(p * .5) * Math.sin(p * .5) / Math.sin(p),
+			r = a + Math.cos(c) - q * Math.sin(c),
+			s = b + Math.sin(c) + q * Math.cos(c),
+			t = a + Math.cos(d),
+			u = b + Math.sin(d),
+			v = t + q * Math.sin(d),
+			w = u - q * Math.cos(d);
+		return i[k] = [l * r + m * s, n * r + o * s, l * v + m * w, n * v + o * w, l * t + m * u, n * t + o * u]
+	}
+	function e(a) {
+		return a[0] === "H" ? a[1] : a[a.length - 2]
+	}
+	function f(a) {
+		return a[0] === "V" ? a[1] : a[a.length - 1]
+	}
+	var g = {
+		m: 2,
+		l: 2,
+		h: 1,
+		v: 1,
+		c: 6,
+		s: 4,
+		q: 4,
+		t: 2,
+		a: 7
+	},
+		h = {},
+		i = {},
+		j = Array.prototype.join,
+		k;
+	"use strict";
+	var l = a.fabric || (a.fabric = {}),
+		m = l.util.array.min,
+		n = l.util.array.max,
+		o = l.util.object.extend,
+		p = Object.prototype.toString;
+	if (l.Path) {
+		l.warn("fabric.Path is already defined");
+		return
+	}
+	if (!l.Object) {
+		l.warn("fabric.Path requires fabric.Object");
+		return
+	}
+	l.Path = l.util.createClass(l.Object, {
+		type: "path",
+		initialize: function (a, b) {
+			b = b || {}, this.setOptions(b);
+			if (!a) throw Error("`path` argument is required");
+			var c = p.call(a) === "[object Array]";
+			this.path = c ? a : a.match && a.match(/[a-zA-Z][^a-zA-Z]*/g);
+			if (!this.path) return;
+			c || this._initializeFromArray(b), b.sourcePath && this.setSourcePath(b.sourcePath)
+		},
+		_initializeFromArray: function (a) {
+			var b = "width" in a,
+				c = "height" in a;
+			this.path = this._parsePath();
+			if (!b || !c) o(this, this._parseDimensions()), b && (this.width = a.width), c && (this.height = a.height)
+		},
+		_render: function (a) {
+			var c, d = 0,
+				e = 0,
+				f = 0,
+				g = 0,
+				h, i, j = -(this.width / 2),
+				k = -(this.height / 2);
+			for (var l = 0, m = this.path.length; l < m; ++l) {
+				c = this.path[l];
+				switch (c[0]) {
+				case "l":
+					d += c[1], e += c[2], a.lineTo(d + j, e + k);
+					break;
+				case "L":
+					d = c[1], e = c[2], a.lineTo(d + j, e + k);
+					break;
+				case "h":
+					d += c[1], a.lineTo(d + j, e + k);
+					break;
+				case "H":
+					d = c[1], a.lineTo(d + j, e + k);
+					break;
+				case "v":
+					e += c[1], a.lineTo(d + j, e + k);
+					break;
+				case "V":
+					e = c[1], a.lineTo(d + j, e + k);
+					break;
+				case "m":
+					d += c[1], e += c[2], a.moveTo(d + j, e + k);
+					break;
+				case "M":
+					d = c[1], e = c[2], a.moveTo(d + j, e + k);
+					break;
+				case "c":
+					h = d + c[5], i = e + c[6], f = d + c[3], g = e + c[4], a.bezierCurveTo(d + c[1] + j, e + c[2] + k, f + j, g + k, h + j, i + k), d = h, e = i;
+					break;
+				case "C":
+					d = c[5], e = c[6], f = c[3], g = c[4], a.bezierCurveTo(c[1] + j, c[2] + k, f + j, g + k, d + j, e + k);
+					break;
+				case "s":
+					h = d + c[3], i = e + c[4], f = 2 * d - f, g = 2 * e - g, a.bezierCurveTo(f + j, g + k, d + c[1] + j, e + c[2] + k, h + j, i + k), d = h, e = i;
+					break;
+				case "S":
+					h = c[3], i = c[4], f = 2 * d - f, g = 2 * e - g, a.bezierCurveTo(f + j, g + k, c[1] + j, c[2] + k, h + j, i + k), d = h, e = i;
+					break;
+				case "q":
+					d += c[3], e += c[4], a.quadraticCurveTo(c[1] + j, c[2] + k, d + j, e + k);
+					break;
+				case "Q":
+					d = c[3], e = c[4], f = c[1], g = c[2], a.quadraticCurveTo(f + j, g + k, d + j, e + k);
+					break;
+				case "T":
+					h = d, i = e, d = c[1], e = c[2], f = -f + 2 * h, g = -g + 2 * i, a.quadraticCurveTo(f + j, g + k, d + j, e + k);
+					break;
+				case "a":
+					b(a, d + j, e + k, [c[1], c[2], c[3], c[4], c[5], c[6] + d + j, c[7] + e + k]), d += c[6], e += c[7];
+					break;
+				case "A":
+					b(a, d + j, e + k, [c[1], c[2], c[3], c[4], c[5], c[6] + j, c[7] + k]), d = c[6], e = c[7];
+					break;
+				case "z":
+				case "Z":
+					a.closePath()
+				}
+			}
+		},
+		render: function (a, b) {
+			a.save();
+			var c = this.transformMatrix;
+			c && a.transform(c[0], c[1], c[2], c[3], c[4], c[5]), b || this.transform(a), this.overlayFill ? a.fillStyle = this.overlayFill : this.fill && (a.fillStyle = this.fill), this.stroke && (a.strokeStyle = this.stroke), a.beginPath(), this._render(a), this.fill && a.fill(), this.stroke && (a.strokeStyle = this.stroke, a.lineWidth = this.strokeWidth, a.lineCap = a.lineJoin = "round", a.stroke()), !b && this.active && (this.drawBorders(a), this.hideCorners || this.drawCorners(a)), a.restore()
+		},
+		toString: function () {
+			return "#<fabric.Path (" + this.complexity() + '): { "top": ' + this.top + ', "left": ' + this.left + " }>"
+		},
+		toObject: function () {
+			var a = o(this.callSuper("toObject"), {
+				path: this.path
+			});
+			return this.sourcePath && (a.sourcePath = this.sourcePath), this.transformMatrix && (a.transformMatrix = this.transformMatrix), a
+		},
+		toDatalessObject: function () {
+			var a = this.toObject();
+			return this.sourcePath && (a.path = this.sourcePath), delete a.sourcePath, a
+		},
+		toSVG: function () {
+			var a = [];
+			for (var b = 0, c = this.path.length; b < c; b++) a.push(this.path[b].join(" "));
+			var d = a.join(" ");
+			return ['<g transform="', this.getSvgTransform(), '">', "<path ", 'width="', this.width, '" height="', this.height, '" ', 'd="', d, '" ', 'style="', this.getSvgStyles(), '" ', 'transform="translate(', -this.width / 2, " ", -this.height / 2, ')" />', "</g>"].join("")
+		},
+		complexity: function () {
+			return this.path.length
+		},
+		_parsePath: function () {
+			var a = [],
+				b, c, d;
+			for (var e = 0, f, h, i = this.path.length; e < i; e++) {
+				b = this.path[e], c = b.slice(1).trim().replace(/(\d)-/g, "$1###-").split(/\s|,|###/), h = [b.charAt(0)];
+				for (var f = 0, j = c.length; f < j; f++) d = parseFloat(c[f]), isNaN(d) || h.push(d);
+				var k = h[0].toLowerCase(),
+					l = g[k];
+				if (h.length - 1 > l) for (var m = 1, n = h.length; m < n; m += l) a.push([h[0]].concat(h.slice(m, m + l)));
+				else a.push(h)
+			}
+			return a
+		},
+		_parseDimensions: function () {
+			var a = [],
+				b = [],
+				c, d, g = !1,
+				h, i;
+			this.path.forEach(function (j, k) {
+				j[0] !== "H" && (c = k === 0 ? e(j) : e(this.path[k - 1])), j[0] !== "V" && (d = k === 0 ? f(j) : f(this.path[k - 1])), j[0] === j[0].toLowerCase() && (g = !0), h = g ? c + e(j) : j[0] === "V" ? c : e(j), i = g ? d + f(j) : j[0] === "H" ? d : f(j);
+				var l = parseInt(h, 10);
+				isNaN(l) || a.push(l), l = parseInt(i, 10), isNaN(l) || b.push(l)
+			}, this);
+			var j = m(a),
+				k = m(b),
+				l = 0,
+				o = 0,
+				p = {
+					top: k - o,
+					left: j - l,
+					bottom: n(b) - o,
+					right: n(a) - l
+				};
+			return p.width = p.right - p.left, p.height = p.bottom - p.top, p
+		}
+	}), l.Path.fromObject = function (a) {
+		return new l.Path(a.path, a)
+	}, l.Path.ATTRIBUTE_NAMES = "d fill fill-opacity opacity fill-rule stroke stroke-width transform".split(" "), l.Path.fromElement = function (a, b) {
+		var c = l.parseAttributes(a, l.Path.ATTRIBUTE_NAMES);
+		return new l.Path(c.d, o(c, b))
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	function b(a) {
+		for (var b = 0, d = a.length; b < d; b++) if (!(a[b] instanceof c.Object)) {
+			var e = h(i(a[b].type));
+			a[b] = c[e].fromObject(a[b])
+		}
+		return a
+	}
+	var c = a.fabric || (a.fabric = {}),
+		d = c.util.object.extend,
+		e = c.util.array.invoke,
+		f = c.Object.prototype.set,
+		g = c.Object.prototype.toObject,
+		h = c.util.string.camelize,
+		i = c.util.string.capitalize;
+	if (c.PathGroup) {
+		c.warn("fabric.PathGroup is already defined");
+		return
+	}
+	c.PathGroup = c.util.createClass(c.Path, {
+		type: "path-group",
+		forceFillOverwrite: !1,
+		initialize: function (a, b) {
+			b = b || {}, this.paths = a || [];
+			for (var c = this.paths.length; c--;) this.paths[c].group = this;
+			this.setOptions(b), this.setCoords(), b.sourcePath && this.setSourcePath(b.sourcePath)
+		},
+		render: function (a) {
+			if (this.stub) a.save(), this.transform(a), this.stub.render(a, !1), this.active && (this.drawBorders(a), this.drawCorners(a)), a.restore();
+			else {
+				a.save();
+				var b = this.transformMatrix;
+				b && a.transform(b[0], b[1], b[2], b[3], b[4], b[5]), this.transform(a);
+				for (var c = 0, d = this.paths.length; c < d; ++c) this.paths[c].render(a, !0);
+				this.active && (this.drawBorders(a), this.hideCorners || this.drawCorners(a)), a.restore()
+			}
+		},
+		set: function (a, b) {
+			if (a !== "fill" && a !== "overlayFill" || !this.isSameColor()) f.call(this, a, b);
+			else {
+				this[a] = b;
+				var c = this.paths.length;
+				while (c--) this.paths[c].set(a, b)
+			}
+			return this
+		},
+		toObject: function () {
+			return d(g.call(this), {
+				paths: e(this.getObjects(), "clone"),
+				sourcePath: this.sourcePath
+			})
+		},
+		toDatalessObject: function () {
+			var a = this.toObject();
+			return this.sourcePath && (a.paths = this.sourcePath), a
+		},
+		toSVG: function () {
+			var a = this.getObjects(),
+				b = ["<g ", 'width="', this.width, '" ', 'height="', this.height, '" ', 'style="', this.getSvgStyles(), '" ', 'transform="', this.getSvgTransform(), '" ', ">"];
+			for (var c = 0, d = a.length; c < d; c++) b.push(a[c].toSVG());
+			return b.push("</g>"), b.join("")
+		},
+		toString: function () {
+			return "#<fabric.PathGroup (" + this.complexity() + "): { top: " + this.top + ", left: " + this.left + " }>"
+		},
+		isSameColor: function () {
+			var a = this.getObjects()[0].get("fill");
+			return this.getObjects().every(function (b) {
+				return b.get("fill") === a
+			})
+		},
+		complexity: function () {
+			return this.paths.reduce(function (a, b) {
+				return a + (b && b.complexity ? b.complexity() : 0)
+			}, 0)
+		},
+		toGrayscale: function () {
+			var a = this.paths.length;
+			while (a--) this.paths[a].toGrayscale();
+			return this
+		},
+		getObjects: function () {
+			return this.paths
+		}
+	}), c.PathGroup.fromObject = function (a) {
+		var d = b(a.paths);
+		return new c.PathGroup(d, a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	var b = a.fabric || (a.fabric = {}),
+		c = b.util.object.extend,
+		d = b.util.array.min,
+		e = b.util.array.max,
+		f = b.util.array.invoke,
+		g = b.util.removeFromArray;
+	if (b.Group) return;
+	b.Group = b.util.createClass(b.Object, {
+		type: "group",
+		initialize: function (a, b) {
+			this.objects = a || [], this.originalState = {}, this.callSuper("initialize"), this._calcBounds(), this._updateObjectsCoords(), b && c(this, b), this._setOpacityIfSame(), this.setCoords(!0), this.saveCoords(), this.activateAllObjects()
+		},
+		_updateObjectsCoords: function () {
+			var a = this.left,
+				b = this.top;
+			this.forEachObject(function (c) {
+				var d = c.get("left"),
+					e = c.get("top");
+				c.set("originalLeft", d), c.set("originalTop", e), c.set("left", d - a), c.set("top", e - b), c.setCoords(), c.hideCorners = !0
+			}, this)
+		},
+		toString: function () {
+			return "#<fabric.Group: (" + this.complexity() + ")>"
+		},
+		getObjects: function () {
+			return this.objects
+		},
+		add: function (a) {
+			return this._restoreObjectsState(), this.objects.push(a), a.setActive(!0), this._calcBounds(), this._updateObjectsCoords(), this
+		},
+		remove: function (a) {
+			return this._restoreObjectsState(), g(this.objects, a), a.setActive(!1), this._calcBounds(), this._updateObjectsCoords(), this
+		},
+		size: function () {
+			return this.getObjects().length
+		},
+		set: function (a, b) {
+			if (typeof b == "function") this.set(a, b(this[a]));
+			else if (a === "fill" || a === "opacity") {
+				var c = this.objects.length;
+				this[a] = b;
+				while (c--) this.objects[c].set(a, b)
+			} else this[a] = b;
+			return this
+		},
+		contains: function (a) {
+			return this.objects.indexOf(a) > -1
+		},
+		toObject: function () {
+			return c(this.callSuper("toObject"), {
+				objects: f(this.objects, "clone")
+			})
+		},
+		render: function (a) {
+			a.save(), this.transform(a);
+			var b = Math.max(this.scaleX, this.scaleY);
+			for (var c = 0, d = this.objects.length, e; e = this.objects[c]; c++) {
+				var f = e.borderScaleFactor;
+				e.borderScaleFactor = b, e.render(a), e.borderScaleFactor = f
+			}
+			this.hideBorders || this.drawBorders(a), this.hideCorners || this.drawCorners(a), a.restore(), this.setCoords()
+		},
+		item: function (a) {
+			return this.getObjects()[a]
+		},
+		complexity: function () {
+			return this.getObjects().reduce(function (a, b) {
+				return a += typeof b.complexity == "function" ? b.complexity() : 0, a
+			}, 0)
+		},
+		_restoreObjectsState: function () {
+			return this.objects.forEach(this._restoreObjectState, this), this
+		},
+		_restoreObjectState: function (a) {
+			var b = this.get("left"),
+				c = this.get("top"),
+				d = this.getAngle() * (Math.PI / 180),
+				e = a.get("originalLeft"),
+				f = a.get("originalTop"),
+				g = Math.cos(d) * a.get("top") + Math.sin(d) * a.get("left"),
+				h = -Math.sin(d) * a.get("top") + Math.cos(d) * a.get("left");
+			return a.setAngle(a.getAngle() + this.getAngle()), a.set("left", b + h * this.get("scaleX")), a.set("top", c + g * this.get("scaleY")), a.set("scaleX", a.get("scaleX") * this.get("scaleX")), a.set("scaleY", a.get("scaleY") * this.get("scaleY")), a.setCoords(), a.hideCorners = !1, a.setActive(!1), a.setCoords(), this
+		},
+		destroy: function () {
+			return this._restoreObjectsState()
+		},
+		saveCoords: function () {
+			return this._originalLeft = this.get("left"), this._originalTop = this.get("top"), this
+		},
+		hasMoved: function () {
+			return this._originalLeft !== this.get("left") || this._originalTop !== this.get("top")
+		},
+		setObjectsCoords: function () {
+			return this.forEachObject(function (a) {
+				a.setCoords()
+			}), this
+		},
+		activateAllObjects: function () {
+			return this.setActive(!0)
+		},
+		setActive: function (a) {
+			return this.forEachObject(function (b) {
+				b.setActive(a)
+			}), this
+		},
+		forEachObject: b.StaticCanvas.prototype.forEachObject,
+		_setOpacityIfSame: function () {
+			var a = this.getObjects(),
+				b = a[0] ? a[0].get("opacity") : 1,
+				c = a.every(function (a) {
+					return a.get("opacity") === b
+				});
+			c && (this.opacity = b)
+		},
+		_calcBounds: function () {
+			var a = [],
+				b = [],
+				c, f, g, h, i, j, k, l = 0,
+				m = this.objects.length;
+			for (; l < m; ++l) {
+				i = this.objects[l], i.setCoords();
+				for (var n in i.oCoords) a.push(i.oCoords[n].x), b.push(i.oCoords[n].y)
+			}
+			c = d(a), g = e(a), f = d(b), h = e(b), j = g - c || 0, k = h - f || 0, this.width = j, this.height = k, this.left = c + j / 2 || 0, this.top = f + k / 2 || 0
+		},
+		containsPoint: function (a) {
+			var b = this.get("width") / 2,
+				c = this.get("height") / 2,
+				d = this.get("left"),
+				e = this.get("top");
+			return d - b < a.x && d + b > a.x && e - c < a.y && e + c > a.y
+		},
+		toGrayscale: function () {
+			var a = this.objects.length;
+			while (a--) this.objects[a].toGrayscale()
+		}
+	}), b.Group.fromObject = function (a) {
+		return new b.Group(a.objects, a)
+	}
+}(typeof exports != "undefined" ? exports : this), function (a) {
+	var b = fabric.util.object.extend;
+	a.fabric || (a.fabric = {});
+	if (a.fabric.Image) {
+		fabric.warn("fabric.Image is already defined.");
+		return
+	}
+	if (!fabric.Object) {
+		fabric.warn("fabric.Object is required for fabric.Image initialization");
+		return
+	}
+	fabric.Image = fabric.util.createClass(fabric.Object, {
+		active: !1,
+		bordervisibility: !1,
+		cornervisibility: !1,
+		type: "image",
+		filters: [],
+		initialize: function (a, b) {
+			b || (b = {}), this.callSuper("initialize", b), this._initElement(a), this._originalImage = this.getElement(), this._initConfig(b), b.filters && (this.filters = b.filters, this.applyFilters())
+		},
+		getElement: function () {
+			return this._element
+		},
+		setElement: function (a) {
+			return this._element = a, this._initConfig(), this
+		},
+		getOriginalSize: function () {
+			var a = this.getElement();
+			return {
+				width: a.width,
+				height: a.height
+			}
+		},
+		setBorderVisibility: function (a) {
+			this._resetWidthHeight(), this._adjustWidthHeightToBorders(showBorder), this.setCoords()
+		},
+		setCornersVisibility: function (a) {
+			this.cornervisibility = !! a
+		},
+		render: function (a, b) {
+			a.save(), b || this.transform(a), this._render(a), this.active && !b && (this.drawBorders(a), this.hideCorners || this.drawCorners(a)), a.restore()
+		},
+		toObject: function () {
+			return b(this.callSuper("toObject"), {
+				src: this._originalImage.src || this._originalImage._src,
+				filters: this.filters.concat()
+			})
+		},
+		toSVG: function () {
+			return '<g transform="' + this.getSvgTransform() + '"><image xlink:href="' + this.getSvgSrc() + '" style="' + this.getSvgStyles() + '" transform="translate(' + -this.width / 2 + " " + -this.height / 2 + ')" width="' + this.width + '" height="' + this.height + '"/></g>'
+		},
+		getSrc: function () {
+			return this.getElement().src || this.getElement()._src
+		},
+		toString: function () {
+			return '#<fabric.Image: { src: "' + this.getSrc() + '" }>'
+		},
+		clone: function (a) {
+			this.constructor.fromObject(this.toObject(), a)
+		},
+		applyFilters: function (a) {
+			if (this.filters.length === 0) {
+				this.setElement(this._originalImage), a && a();
+				return
+			}
+			var b = typeof Buffer != "undefined" && typeof window == "undefined",
+				c = this._originalImage,
+				d = fabric.document.createElement("canvas"),
+				e = b ? new(require("canvas").Image) : fabric.document.createElement("img"),
+				f = this;
+			!d.getContext && typeof G_vmlCanvasManager != "undefined" && G_vmlCanvasManager.initElement(d), d.width = c.width, d.height = c.height, d.getContext("2d").drawImage(c, 0, 0), this.filters.forEach(function (a) {
+				a && a.applyTo(d)
+			}), e.onload = function () {
+				f.setElement(e), a && a(), e.onload = d = c = null
+			}, e.width = c.width, e.height = c.height;
+			if (b) {
+				var g = d.toDataURL("image/png").replace(/data:image\/png;base64,/, "");
+				e.src = new Buffer(g, "base64"), f.setElement(e), a && a()
+			} else e.src = d.toDataURL("image/png");
+			return this
+		},
+		_render: function (a) {
+			var b = this.getOriginalSize();
+			a.drawImage(this.getElement(), -b.width / 2, -b.height / 2, b.width, b.height)
+		},
+		_adjustWidthHeightToBorders: function (a) {
+			a ? (this.currentBorder = this.borderwidth, this.width += 2 * this.currentBorder, this.height += 2 * this.currentBorder) : this.currentBorder = 0
+		},
+		_resetWidthHeight: function () {
+			var a = this.getElement();
+			this.set("width", a.width), this.set("height", a.height)
+		},
+		_initElement: function (a) {
+			this.setElement(fabric.util.getById(a)), fabric.util.addClass(this.getElement(), fabric.Image.CSS_CANVAS)
+		},
+		_initConfig: function (a) {
+			this.setOptions(a || {}), this._setBorder(), this._setWidthHeight()
+		},
+		_initFilters: function (a) {
+			a.filters && a.filters.length && (this.filters = a.filters.map(function (a) {
+				return fabric.Image.filters[a.type].fromObject(a)
+			}))
+		},
+		_setBorder: function () {
+			this.bordervisibility ? this.currentBorder = this.borderwidth : this.currentBorder = 0
+		},
+		_setWidthHeight: function () {
+			var a = 2 * this.currentBorder;
+			this.width = (this.getElement().width || 0) + a, this.height = (this.getElement().height || 0) + a
+		},
+		complexity: function () {
+			return 1
+		}
+	}), fabric.Image.CSS_CANVAS = "canvas-img", fabric.Image.prototype.getSvgSrc = fabric.Image.prototype.getSrc, fabric.Image.fromObject = function (a, b) {
+		var c = fabric.document.createElement("img"),
+			d = a.src;
+		a.width && (c.width = a.width), a.height && (c.height = a.height), c.onload = function () {
+			fabric.Image.prototype._initFilters.call(a, a);
+			var d = new fabric.Image(c, a);
+			b && b(d), c = c.onload = null
+		}, c.src = d
+	}, fabric.Image.fromURL = function (a, b, c) {
+		var d = fabric.document.createElement("img");
+		d.onload = function () {
+			b && b(new fabric.Image(d, c)), d = d.onload = null
+		}, d.src = a
+	}, fabric.Image.ATTRIBUTE_NAMES = "x y width height fill fill-opacity opacity stroke stroke-width transform xlink:href".split(" "), fabric.Image.fromElement = function (a, c, d) {
+		d || (d = {});
+		var e = fabric.parseAttributes(a, fabric.Image.ATTRIBUTE_NAMES);
+		fabric.Image.fromURL(e["xlink:href"], c, b(e, d))
+	}, fabric.Image.async = !0
+}(typeof exports != "undefined" ? exports : this), fabric.util.object.extend(fabric.Object.prototype, {
+	_getAngleValueForStraighten: function () {
+		var a = this.get("angle");
+		return a > -225 && a <= -135 ? -180 : a > -135 && a <= -45 ? -90 : a > -45 && a <= 45 ? 0 : a > 45 && a <= 135 ? 90 : a > 135 && a <= 225 ? 180 : a > 225 && a <= 315 ? 270 : a > 315 ? 360 : 0
+	},
+	straighten: function () {
+		var a = this._getAngleValueForStraighten();
+		return this.setAngle(a), this
+	},
+	fxStraighten: function (a) {
+		a = a || {};
+		var b = function () {},
+			c = a.onComplete || b,
+			d = a.onChange || b,
+			e = this;
+		return fabric.util.animate({
+			startValue: this.get("angle"),
+			endValue: this._getAngleValueForStraighten(),
+			duration: this.FX_DURATION,
+			onChange: function (a) {
+				e.setAngle(a), d()
+			},
+			onComplete: function () {
+				e.setCoords(), c()
+			},
+			onStart: function () {
+				e.setActive(!1)
+			}
+		}), this
+	}
+}), fabric.util.object.extend(fabric.StaticCanvas.prototype, {
+	straightenObject: function (a) {
+		return a.straighten(), this.renderAll(), this
+	},
+	fxStraightenObject: function (a) {
+		return a.fxStraighten({
+			onChange: this.renderAll.bind(this)
+		}), this
+	}
+}), fabric.Image.filters = {}, fabric.Image.filters.Grayscale = fabric.util.createClass({
+	type: "Grayscale",
+	applyTo: function (a) {
+		var b = a.getContext("2d"),
+			c = b.getImageData(0, 0, a.width, a.height),
+			d = c.data,
+			e = c.width,
+			f = c.height,
+			g, h, i, j;
+		for (i = 0; i < e; i++) for (j = 0; j < f; j++) g = i * 4 * f + j * 4, h = (d[g] + d[g + 1] + d[g + 2]) / 3, d[g] = h, d[g + 1] = h, d[g + 2] = h;
+		b.putImageData(c, 0, 0)
+	},
+	toJSON: function () {
+		return {
+			type: this.type
+		}
+	}
+}), fabric.Image.filters.Grayscale.fromObject = function () {
+	return new fabric.Image.filters.Grayscale
+}, fabric.Image.filters.RemoveWhite = fabric.util.createClass({
+	type: "RemoveWhite",
+	initialize: function (a) {
+		a || (a = {}), this.threshold = a.threshold || 30, this.distance = a.distance || 20
+	},
+	applyTo: function (a) {
+		var b = a.getContext("2d"),
+			c = b.getImageData(0, 0, a.width, a.height),
+			d = c.data,
+			e = this.threshold,
+			f = this.distance,
+			g = 255 - e,
+			h = Math.abs,
+			i, j, k;
+		for (var l = 0, m = d.length; l < m; l += 4) i = d[l], j = d[l + 1], k = d[l + 2], i > g && j > g && k > g && h(i - j) < f && h(i - k) < f && h(j - k) < f && (d[l + 3] = 1);
+		b.putImageData(c, 0, 0)
+	},
+	toJSON: function () {
+		return {
+			type: this.type,
+			threshold: this.threshold,
+			distance: this.distance
+		}
+	}
+}), fabric.Image.filters.RemoveWhite.fromObject = function (a) {
+	return new fabric.Image.filters.RemoveWhite(a)
+}, fabric.Image.filters.Invert = fabric.util.createClass({
+	type: "Invert",
+	applyTo: function (a) {
+		var b = a.getContext("2d"),
+			c = b.getImageData(0, 0, a.width, a.height),
+			d = c.data,
+			e = d.length,
+			f;
+		for (f = 0; f < e; f += 4) d[f] = 255 - d[f], d[f + 1] = 255 - d[f + 1], d[f + 2] = 255 - d[f + 2];
+		b.putImageData(c, 0, 0)
+	},
+	toJSON: function () {
+		return {
+			type: this.type
+		}
+	}
+}), fabric.Image.filters.Invert.fromObject = function () {
+	return new fabric.Image.filters.Invert
+}, function (a) {
+	var b = a.fabric || (a.fabric = {}),
+		c = b.util.object.extend,
+		d = b.util.object.clone,
+		e = b.util.toFixed;
+	if (b.Text) {
+		b.warn("fabric.Text is already defined");
+		return
+	}
+	if (!b.Object) {
+		b.warn("fabric.Text requires fabric.Object");
+		return
+	}
+	b.Text = b.util.createClass(b.Object, {
+		fontSize: 40,
+		fontWeight: 400,
+		fontFamily: "Arial",
+		textDecoration: "",
+		textShadow: null,
+		textAlign: "left",
+		fontStyle: "",
+		bold: false,
+		italic: false,
+		lineHeight: 1.6,
+		strokeStyle: "",
+		strokeWidth: 0,
+		backgroundColor: "",
+		path: null,
+		type: "text",
+		initialize: function (a, b) {
+			this._initStateProperties(), this.text = a, this.setOptions(b), this.theta = this.angle * Math.PI / 180, this.width = this.getWidth(), this.setCoords()
+		},
+		_initStateProperties: function () {
+			this.stateProperties = this.stateProperties.concat(), this.stateProperties.push("fontFamily", "fontWeight", "fontSize", "path", "text", "textDecoration", "textShadow", "textAlign", "fontStyle", "lineHeight", "strokeStyle", "strokeWidth", "backgroundColor", "bold", "italic"), b.util.removeFromArray(this.stateProperties, "width")
+		},
+		toString: function () {
+			return "#<fabric.Text (" + this.complexity() + '): { "text": "' + this.text + '", "fontFamily": "' + this.fontFamily + '" }>'
+		},
+		_getTextHeight: function (a) {
+			var b = $('<span style="font: ' + a + '">Hg</span>'),
+				c = $('<div style="display: inline-block; width: 1px; height: 0px;"></div>'),
+				d = $("<div></div>");
+			d.append(b, c);
+			var e = $("body");
+			e.append(d);
+			try {
+				var f = {};
+				c.css({
+					verticalAlign: "baseline"
+				}), f.ascent = c.offset().top - b.offset().top, c.css({
+					verticalAlign: "bottom"
+				}), f.height = c.offset().top - b.offset().top, f.descent = f.height - f.ascent
+			} finally {
+				d.remove()
+			}
+			return f
+		},
+		_render: function (a) {
+			a.fillStyle = this.fill, a.font = (this.bold ? 'bold ' : '') + (this.italic ? 'italic ' : '') + this.fontSize + "px " + this.fontFamily, a.textAlign = 'left', this.transform(a), this.width = 0,
+			a.strokeStyle = this.strokeStyle, a.lineWidth = this.strokeWidth;
+			var b = this._getTextHeight(a.font);
+			var c = b.height,
+				d = this.text.split("\n");
+			this.height = c * d.length;
+			
+			if(this.text.length == 0){
+				this.setCoords();
+				return;
+			}
+			
+			var charCode = this.text.charCodeAt(0);
+			if(charCode >= 1536)
+				a.textAlign = 'right';
+			
+			for (var e = 0; e < d.length; e++) {
+				var f = a.measureText(d[e]).width;
+				if(f > this.width)
+					this.width = f;
+				
+				if(this.strokeWidth > 0)
+					a.strokeText(d[e], (a.textAlign == 'right' ? 1 : -1) * this.width / 2, (e + 1) * c - this.height / 2 - b.descent);
+				a.fillText(d[e], (a.textAlign == 'right' ? 1 : -1) * this.width / 2, (e + 1) * c - this.height / 2 - b.descent);
+			}
+			
+			this.setCoords();
+		},
+		render: function (a, b) {
+			a.save(), this._render(a), !b && this.active && (this.drawBorders(a), this.hideCorners || this.drawCorners(a)), a.restore()
+		},
+		toObject: function () {
+			return c(this.callSuper("toObject"), {
+				text: this.text,
+				fontSize: this.fontSize,
+				fontWeight: this.fontWeight,
+				fontFamily: this.fontFamily,
+				fontStyle: this.fontStyle,
+				lineHeight: this.lineHeight,
+				textDecoration: this.textDecoration,
+				textShadow: this.textShadow,
+				textAlign: this.textAlign,
+				path: this.path,
+				strokeStyle: this.strokeStyle,
+				strokeWidth: this.strokeWidth,
+				backgroundColor: this.backgroundColor
+			})
+		},
+		toSVG: function () {
+			var a = this.text.split(/\r?\n/),
+				b = -this._fontAscent - this._fontAscent / 5 * this.lineHeight,
+				c = -(this.width / 2),
+				d = this.height / 2 - a.length * this.fontSize - this._totalLineHeight,
+				f = this._getSVGTextAndBg(b, c, a),
+				g = this._getSVGShadows(b, a);
+			return d += this._fontAscent / 5 * this.lineHeight, ['<g transform="', this.getSvgTransform(), '">', f.textBgRects.join(""), "<text ", this.fontFamily ? "font-family=\"'" + this.fontFamily + "'\" " : "", this.fontSize ? 'font-size="' + this.fontSize + '" ' : "", this.fontStyle ? 'font-style="' + this.fontStyle + '" ' : "", this.fontWeight ? 'font-weight="' + this.fontWeight + '" ' : "", this.textDecoration ? 'text-decoration="' + this.textDecoration + '" ' : "", 'style="', this.getSvgStyles(), '" ', 'transform="translate(', e(c, 2), " ", e(d, 2), ')">', g.join(""), f.textSpans.join(""), "</text>", "</g>"].join("")
+		},
+		_getSVGShadows: function (a, c) {
+			var d = [],
+				f, g, h, i, j = 1;
+			for (f = 0, h = this._shadows.length; f < h; f++) for (g = 0, i = c.length; g < i; g++) if (c[g] !== "") {
+				var k = this._boundaries && this._boundaries[g] ? this._boundaries[g].left : 0;
+				d.push('<tspan x="', e(k + j + this._shadowOffsets[f][0], 2), g === 0 ? '" y' : '" dy', '="', e(a + (g === 0 ? this._shadowOffsets[f][1] : 0), 2), '" ', this._getFillAttributes(this._shadows[f].color), ">", b.util.string.escapeXml(c[g]), "</tspan>"), j = 1
+			} else j++;
+			return d
+		},
+		_getSVGTextAndBg: function (a, c, d) {
+			var f = [],
+				g = [],
+				h, i, j, k = 1;
+			for (h = 0, j = d.length; h < j; h++) {
+				d[h] !== "" ? (i = this._boundaries && this._boundaries[h] ? e(this._boundaries[h].left, 2) : 0, f.push('<tspan x="', i, '" ', h === 0 ? "y" : "dy", '="', e(a * k, 2), '" ', this._getFillAttributes(this.fill), ">", b.util.string.escapeXml(d[h]), "</tspan>"), k = 1) : k++;
+				if (!this.backgroundColor) continue;
+				g.push("<rect ", this._getFillAttributes(this.backgroundColor), ' x="', e(c + this._boundaries[h].left, 2), '" y="', e(a * h - this.height / 2, 2), '" width="', e(this._boundaries[h].width, 2), '" height="', e(this._boundaries[h].height, 2), '"></rect>')
+			}
+			return {
+				textSpans: f,
+				textBgRects: g
+			}
+		},
+		_getFillAttributes: function (a) {
+			var c = a ? new b.Color(a) : "";
+			return !c || !c.getSource() || c.getAlpha() === 1 ? 'fill="' + a + '"' : 'opacity="' + c.getAlpha() + '" fill="' + c.setAlpha(1).toRgb() + '"'
+		},
+		setColor: function (a) {
+			return this.set("fill", a), this
+		},
+		setFontsize: function (a) {
+			return this.set("fontSize", a), this.setCoords(), this
+		},
+		getText: function () {
+			return this.text
+		},
+		setText: function (a) {
+			return this.set("text", a), this.setCoords(), this
+		},
+		set: function (a, b) {
+			if (typeof a == "object") for (var c in a) this.set(c, a[c]);
+			else this[a] = b, a === "fontFamily" && this.path && (this.path = this.path.replace(/(.*?)([^\/]*)(\.font\.js)/, "$1" + b + "$3"));
+			return this
+		}
+	}), b.Text.fromObject = function (a) {
+		return new b.Text(a.text, d(a))
+	}, b.Text.fromElement = function (a) {}
+}(typeof exports != "undefined" ? exports : this), function () {
+	function request(a, b, c) {
+		var d = URL.parse(a),
+			e = HTTP.createClient(80, d.hostname),
+			f = e.request("GET", d.pathname, {
+				host: d.hostname
+			});
+		e.addListener("error", function (a) {
+			a.errno === process.ECONNREFUSED ? fabric.log("ECONNREFUSED: connection refused to " + e.host + ":" + e.port) : fabric.log(a.message)
+		}), f.end(), f.on("response", function (a) {
+			var d = "";
+			b && a.setEncoding(b), a.on("end", function () {
+				c(d)
+			}), a.on("data", function (b) {
+				a.statusCode == 200 && (d += b)
+			})
+		})
+	}
+	if (typeof document != "undefined" && typeof window != "undefined") return;
+	var XML = require("o3-xml"),
+		URL = require("url"),
+		HTTP = require("http"),
+		Canvas = require("canvas"),
+		Image = require("canvas").Image;
+	fabric.util.loadImage = function (a, b) {
+		request(a, "binary", function (c) {
+			var d = new Image;
+			d.src = new Buffer(c, "binary"), d._src = a, b(d)
+		})
+	}, fabric.loadSVGFromURL = function (a, b) {
+		a = a.replace(/^\n\s*/, "").replace(/\?.*$/, "").trim(), request(a, "", function (a) {
+			var c = XML.parseFromString(a);
+			fabric.parseSVGDocument(c.documentElement, function (a, c) {
+				b(a, c)
+			})
+		})
+	}, fabric.util.getScript = function (url, callback) {
+		request(url, "", function (body) {
+			eval(body), callback && callback()
+		})
+	}, fabric.Image.fromObject = function (a, b) {
+		fabric.util.loadImage(a.src, function (c) {
+			var d = new fabric.Image(c);
+			d._initConfig(a), d._initFilters(a), b(d)
+		})
+	}, fabric.createCanvasForNode = function (a, b) {
+		var c = fabric.document.createElement("canvas"),
+			d = new Canvas(a || 600, b || 600);
+		c.style = {}, c.width = d.width, c.height = d.height;
+		var e = fabric.Canvas || fabric.StaticCanvas,
+			f = new e(c);
+		return f.contextContainer = d.getContext("2d"), f.nodeCanvas = d, f
+	}, fabric.StaticCanvas.prototype.createPNGStream = function () {
+		return this.nodeCanvas.createPNGStream()
+	}, fabric.Canvas && fabric.Canvas.prototype.createPNGStream;
+	var origSetWidth = fabric.StaticCanvas.prototype.setWidth;
+	fabric.StaticCanvas.prototype.setWidth = function (a) {
+		return origSetWidth.call(this), this.nodeCanvas.width = a, this
+	}, fabric.Canvas && (fabric.Canvas.prototype.setWidth = fabric.StaticCanvas.prototype.setWidth);
+	var origSetHeight = fabric.StaticCanvas.prototype.setHeight;
+	fabric.StaticCanvas.prototype.setHeight = function (a) {
+		return origSetHeight.call(this), this.nodeCanvas.height = a, this
+	}, fabric.Canvas && (fabric.Canvas.prototype.setHeight = fabric.StaticCanvas.prototype.setHeight)
+}()

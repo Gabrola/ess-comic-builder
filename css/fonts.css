@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'Droid Serif';
+  font-style: normal;
+  font-weight: normal;
+  src: url('http://themes.googleusercontent.com/static/fonts/droidserif/v3/0AKsP294HTD-nvJgucYTaIbN6UDyHWBl620a-IRfuBk.woff') format('woff');
+}
+@font-face {
+  font-family: 'Droid Sans';
+  font-style: normal;
+  font-weight: normal;
+  src: url('http://themes.googleusercontent.com/static/fonts/droidsans/v3/s-BiyweUPV0v-yRb-cjciBsxEYwM7FgeyaSgU71cLG0.woff') format('woff');
+}
+@font-face {
+  font-family: 'Lekton';
+  font-style: normal;
+  font-weight: 400;
+  src: url('http://themes.googleusercontent.com/static/fonts/lekton/v3/Gv78TXgMRvGbTrqT_eA_TQ.woff') format('woff');
+}
+@font-face {
+  font-family: 'Molengo';
+  font-style: normal;
+  font-weight: normal;
+  src: url('http://themes.googleusercontent.com/static/fonts/molengo/v4/z1JWuCBrQt_Ta83eqIo6Dg.woff') format('woff');
+}
+@font-face {
+  font-family: 'Impact';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Impact'), url('fonts/impact.woff') format('woff');
+}
